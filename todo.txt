@@ -1,0 +1,5 @@
+
+userValidator
+
+User field validating logic, add your custom validation here. The default is email validation logic. 
+Expects to return an error message [String] to be display if validation fails or [null] if validation succeeds
