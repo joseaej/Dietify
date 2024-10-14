@@ -59,7 +59,7 @@ Drawer get _drawersettings => Drawer(
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  MyAppBar({required this.scaffoldKey});
+  const MyAppBar({super.key, required this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {

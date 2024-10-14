@@ -38,6 +38,7 @@ class LoginScreen extends StatelessWidget {
         recoverPasswordDescription:
             'Ingresa tu usuario y te enviaremos un enlace para restablecer tu contraseña.El correo puede tardar varios minutos',
         recoverPasswordSuccess: 'Contraseña cambiada con exito',
+
       ),
       onRecoverPassword: (_) => Future(() => null),
       theme: LoginTheme(

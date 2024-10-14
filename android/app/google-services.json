@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "878716108634",
+    "project_id": "dietify-f1c9a",
+    "storage_bucket": "dietify-f1c9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878716108634:android:5e8fad81233165de783d63",
+        "android_client_info": {
+          "package_name": "com.example.dietify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6A47Ir3_opyxMRrNOPn6Tq-gnMDe_jqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
