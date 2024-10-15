@@ -1,11 +1,11 @@
 import 'package:dietify/home.dart';
+import 'package:dietify/utils/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     const inputBorder = BorderRadius.vertical(
@@ -16,8 +16,12 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       title: 'Dietify',
       logo: const AssetImage('images/aguacate.png'),
-      onLogin: (_) => Future(() => null),
-      onSignup: (_) => Future(() => null),
+      onLogin: (loginData) async {
+        return AuthService().signInAccount(loginData);
+      },
+      onSignup: (signupData) async {
+        return AuthService().registerAccount(signupData);
+      },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Home(),

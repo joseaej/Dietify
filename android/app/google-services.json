@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "878716108634",
+    "firebase_url": "https://dietify-f1c9a-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "dietify-f1c9a",
     "storage_bucket": "dietify-f1c9a.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.dietify"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "878716108634-bjlrko6cgeu1ud2dpb302spqeah36jef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dietify",
+            "certificate_hash": "3f4d8f9491bb76388b3d567c2fad7a9b52d6a430"
+          }
+        },
+        {
+          "client_id": "878716108634-4h35hrjmr771mqbc5n4gpi3jid2b60nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC6A47Ir3_opyxMRrNOPn6Tq-gnMDe_jqQ"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878716108634-4h35hrjmr771mqbc5n4gpi3jid2b60nj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "878716108634-nlja098mo4ub262d6t4r9mcvrhgkv1f7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dietify"
+              }
+            }
+          ]
         }
       }
     }
