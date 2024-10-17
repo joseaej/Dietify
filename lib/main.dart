@@ -1,5 +1,8 @@
-import 'package:dietify/login_page.dart';
-import 'package:dietify/utils/firebase_options.dart';
+// ignore_for_file: prefer_const_constructors
+
+import 'package:dietify/AuthPages/sing_up_screen.dart';
+import 'package:dietify/AuthPages/stiles_login.dart';
+import 'package:dietify/services/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dietify',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.theme, 
+      home: SingUpScreen(),
     );
   }
 }
