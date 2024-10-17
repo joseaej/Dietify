@@ -30,34 +30,19 @@ class AppTheme {
           borderRadius: BorderRadius.circular(100.0),
         ),
       ),
-      inputDecorationTheme: InputDecorationTheme(
+      inputDecorationTheme: const InputDecorationTheme(
+        labelStyle: TextStyle(color: Colors.grey),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         filled: true,
-        fillColor: Colors.purple.withOpacity(.1),
-        contentPadding: EdgeInsets.zero,
-        errorStyle: const TextStyle(
-          backgroundColor: Colors.orange,
-          color: Colors.white,
+        fillColor: Color(0xFFF5F5DC),
+        contentPadding: EdgeInsets.all(16.0),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          borderSide: BorderSide(color: Colors.transparent),
         ),
-        labelStyle: const TextStyle(fontSize: 12),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue.shade700, width: 4),
-          borderRadius: inputBorder,
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue.shade400, width: 5),
-          borderRadius: inputBorder,
-        ),
-        errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red.shade700, width: 7),
-          borderRadius: inputBorder,
-        ),
-        focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red.shade400, width: 8),
-          borderRadius: inputBorder,
-        ),
-        disabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 5),
-          borderRadius: inputBorder,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          borderSide: BorderSide(color: Colors.transparent),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

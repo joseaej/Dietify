@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
 
 import 'package:dietify/AuthPages/stiles_login.dart';
 import 'package:dietify/home.dart';
 import 'package:dietify/services/authservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 
 class SingUpScreen extends StatefulWidget {
   const SingUpScreen({super.key});
@@ -15,7 +14,7 @@ class SingUpScreen extends StatefulWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.theme, 
+      theme: AppTheme.theme,
       home: SingUpScreen(),
     );
   }
@@ -55,71 +54,114 @@ class _SingUpScreenState extends State<SingUpScreen> {
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(226, 219, 122, 1),
                 borderRadius: BorderRadius.circular(40),
-                
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min, children: [
-                TextField(
-                  
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: !_passwordVisible,
-                  decoration: InputDecoration(
-                    labelText: 'Confirmar Contraseña',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+              child: Column(mainAxisSize: MainAxisSize.max, children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        child: TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.mail_outline_outlined),
+                            labelText: 'Email',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30.0)),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF5F5DC),
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 20.0),
+                          ),
+                          cursorColor: Colors.black,
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextField(
-                  controller: _confirmPassController,
-                  obscureText: !_confirmPassVisible,
-                  decoration: InputDecoration(
-                    labelText: 'Confirmar Contraseña',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _confirmPassVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 60,
+                        child: TextField(
+                          controller: _passwordController,
+                          maxLines: 1,
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Contraseña',
+                            prefixIcon: Icon(Icons.lock_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30.0)),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF5F5DC),
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 20.0),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _confirmPassVisible = !_confirmPassVisible;
-                        });
-                      },
-                    ),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 60,
+                        child: TextField(
+                          controller: _confirmPassController,
+                          obscureText: !_confirmPassVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmar Contraseña',
+                            prefixIcon: Icon(Icons.lock_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30.0)),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF5F5DC),
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 20.0),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _confirmPassVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  
+                                  _confirmPassVisible = !_confirmPassVisible;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 24.0),
-                ElevatedButton(
-                  onPressed: () => _SingUP(),
-                  child: Text('Registrarse'),
-                ),
-                SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
                     _SingIN();
                   },
                   child: Text('Acceder'),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () => _SingUP(),
+                  child: Text('Registrarse'),
                 ),
               ]),
             ),
