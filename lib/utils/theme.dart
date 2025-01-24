@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 const Color background = Color.fromARGB(255, 29, 29, 31);
 const Color backgroundTextField = Color.fromARGB(255, 34, 34, 37);
 const Color font = Colors.white;
+const Color darkfont = Colors.black;
 const Color orange = Color.fromARGB(255, 229, 154, 43);
 const Color lightBackground = Color.fromARGB(255, 255, 255, 255);
 const Color lightText = Color(0xFF000000);
@@ -16,6 +17,9 @@ const Color darkPrimary = Color(0xFF1E88E5);
 const Color errorColor = Color(0xFFD32F2F);
 const Color successColor = Color(0xFF4CAF50);
 const Color warningColor = Color(0xFFFFC107);
+const Color iconColor = orange;
+const Color borderColor = orange;
+const Color focusBorderColor = orange;
 
 // Tema claro
 ThemeData lightTheme = ThemeData(
