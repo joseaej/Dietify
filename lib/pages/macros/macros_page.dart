@@ -1,4 +1,8 @@
+import 'package:Dietify/pages/macros/macros_viewmodel.dart';
+import 'package:Dietify/utils/theme.dart';
+import 'package:Dietify/widgets/floating_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MacrosPage extends StatefulWidget {
   const MacrosPage({super.key});
@@ -12,9 +16,10 @@ class _MacrosPageState extends State<MacrosPage> {
   double _macroSliderValue = 84;
   double _sleepSliderValue = 85;
   double _waterSliderValue = 65;
-
+  late MacrosViewmodel macrosViewmodel;
   @override
   Widget build(BuildContext context) {
+    macrosViewmodel = Provider.of<MacrosViewmodel>(context);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -60,18 +65,22 @@ class _MacrosPageState extends State<MacrosPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${(_macroSliderValue / 100 * 2200).toInt()}',
+                  Text('${(macrosViewmodel.macros.currentCalories / 100 * 2200).toInt()}',
                       style: const TextStyle(fontSize: 16)),
                   const Text('of 2,200 calories'),
                 ],
               ),
               CircleAvatar(
+                backgroundColor: orange,
                 radius: 30,
-                child: Text('${_macroSliderValue.toInt()}%'),
+                child: Text('${_macroSliderValue.toInt()}%',style: TextStyle(color: font,fontSize: 16),),
               ),
             ],
           ),
           Slider(
+            inactiveColor: sliderOut,
+            activeColor: orange,
+            thumbColor: orange,
             value: _macroSliderValue,
             min: 0,
             max: 100,
@@ -124,6 +133,9 @@ class _MacrosPageState extends State<MacrosPage> {
           ),
           const SizedBox(height: 16),
           Slider(
+            inactiveColor: orange,
+            activeColor: orange,
+            thumbColor: orange,
             value: _sleepSliderValue,
             min: 0,
             max: 100,
@@ -175,13 +187,20 @@ class _MacrosPageState extends State<MacrosPage> {
               const Text('Water Intake',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               CircleAvatar(
+                backgroundColor: orange,
                 radius: 30,
-                child: Text('${_waterSliderValue.toInt()}%'),
+                child: Text('${_waterSliderValue.toInt()}%',style: TextStyle(color: font,fontSize: 16),),
               ),
             ],
           ),
           const SizedBox(height: 16),
+          floatingButton(Icon(Icons.water_drop_outlined), () {
+            macrosViewmodel.addWaterIntake();
+          }),
           Slider(
+            inactiveColor: orange,
+            activeColor: orange,
+            thumbColor: orange,
             value: _waterSliderValue,
             min: 0,
             max: 100,
@@ -212,19 +231,33 @@ class _MacrosPageState extends State<MacrosPage> {
     );
   }
 
-  Widget _buildCard({required Widget child}) {
-    return Material(
+  Widget _buildCard({required Widget child,}) {
+    return OutlinedButton(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        side: WidgetStateProperty.all<BorderSide>(
+          const BorderSide(color: Colors.transparent),
+        ),
+        backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+        foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+      ),
+      onPressed: () {
+    }, child: Material(
       color: Colors.transparent,
-      elevation: 2,
+      elevation: 6,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: Colors.white,
         ),
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(30),
         child: child,
       ),
-    );
+    ));
   }
 }

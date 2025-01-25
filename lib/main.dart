@@ -1,6 +1,7 @@
 import 'package:Dietify/models/macros.dart';
 import 'package:Dietify/pages/auth/signup_page.dart';
 import 'package:Dietify/pages/macros/macros_page.dart';
+import 'package:Dietify/pages/onboard/on_board1.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,10 +44,11 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            initialRoute: AuthHandler.route,
+            initialRoute: "/onboard1",
             routes: {
               "/login": (context) => LoginScreen(),
               "/signup": (context) => SignupPage(),
+              "/onboard1": (context) => OnBoardPage1(user: null,),
               "/home": (context) => MacrosPage(),
               "/macros": (context) => MacrosPage(),
               "/loading": (context) => LoginScreen(),

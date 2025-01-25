@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:Dietify/models/user.dart';
 import 'package:Dietify/pages/auth/auth_viewmodel.dart';
-import 'package:Dietify/widgets/formWidget.dart';
+import 'package:Dietify/pages/onboard/on_board1.dart';
+import 'package:Dietify/widgets/form_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/theme.dart';
@@ -15,6 +17,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  UserApp? user;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _username = TextEditingController();
@@ -99,12 +102,19 @@ class _SignupPageState extends State<SignupPage> {
         }
 
         try {
-          await AuthViewmodel.registerUser(
+          bool sucess = await AuthViewmodel.registerUser(
             context,
             _emailController.text.trim(),
             _passwordController.text.trim(),
             _username.text.trim(),
           );
+          if (sucess) {
+            user =  AuthViewmodel.createUser(_passwordController.text, _emailController.text);
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => OnBoardPage1(user: user,)),
+            );
+          }
+          
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: ${AuthViewmodel.error}')),
@@ -150,19 +160,30 @@ class _SignupPageState extends State<SignupPage> {
   );
 
   Row get _rowiconlogin => Row(
-    /*
+
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      IconButton(
-        onPressed: onGooglePressed,
-        icon: Image.asset("assets/images/google_icon.webp"),
-      ),
-      IconButton(
-        onPressed: onFacebookPressed,
-        icon: Image.asset("assets/images/facebook_icon.webp"),
-      ),
-    ],*/
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: onGooglePressed,
+              icon: Image.asset(
+                "assets/icons/google.png",
+                cacheWidth: 50,
+                cacheHeight: 50,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: onFacebookPressed,
+            icon: Image.asset(
+              "assets/icons/facebook.png",
+              cacheWidth: 50,
+              cacheHeight: 50,
+            ),
+          ),
+        ],
   );
 
   Row get _createaccount => Row(
@@ -188,4 +209,6 @@ class _SignupPageState extends State<SignupPage> {
   void onFacebookPressed() {
     // Handle Facebook login
   }
+
+
 }
