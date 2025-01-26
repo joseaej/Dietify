@@ -1,103 +1,138 @@
-import 'dart:developer';
-
-import 'package:Dietify/models/user.dart';
-import 'package:Dietify/pages/onboard/on_board_viewmodel.dart';
 import 'package:Dietify/utils/theme.dart';
-import 'package:Dietify/widgets/points.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sizer/sizer.dart';
 
-import '../../widgets/form_rectangular.dart';
-import '../../widgets/simple_button.dart';
-
-class OnBoardPage1 extends StatefulWidget {
-  final UserApp? user;
-  const OnBoardPage1({super.key, required this.user});
+class OnBoard1Page extends StatefulWidget {
+  const OnBoard1Page({super.key});
 
   @override
-  State<OnBoardPage1> createState() => _OnBoardPage1State();
+  State<OnBoard1Page> createState() => _OnBoard1PageState();
 }
 
-class _OnBoardPage1State extends State<OnBoardPage1> {
-  late UserApp? user;
-  final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-  OnBoardViewmodel viewmodel = OnBoardViewmodel();
-  @override
-  void initState() {
-    super.initState();
-    user = widget.user;
-  }
-
+class _OnBoard1PageState extends State<OnBoard1Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/person_fruits.jpg",
-          ),
-          const Text(
-            "Welcome to Dietify",
-            style: TextStyle(
-                fontSize: 35, fontWeight: FontWeight.bold, color: darkfont),
-          ),
-          const Text(
-            "Let's start by setting up your profile",
-            style: TextStyle(fontSize: 16),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(100, 20, 100, 0),
-            child: formRectangular("140 cm", "Height", _heightController,
-                cursorColor: orange),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
-            child: formRectangular("80 kg", "Weight", _weightController,
-                cursorColor: orange),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
-            child: formRectangular("20", "Age", _ageController,
-                cursorColor: orange),
-          ),
-            Expanded(
-            child: Stack(
-              children: [
-              Positioned(
-                bottom: 70,
-                left: 105,
-                child: simpleButton("Back", () {
-                  Navigator.pop(context);
-                },
-                  textcolor: font, buttoncolor: orange,size: const Size(100, 45)),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10.h),
+              Center(
+                child: SizedBox(
+                  height: 40.h,
+                  child: FadeIn(
+                    delay: Duration(milliseconds: 400),
+                    duration: Duration(milliseconds: 3000),
+                    child: cookingIcon),
+                ),
               ),
-              Positioned(
-                bottom: 70,
-                right: 105,
-                child: simpleButton("Next", () {
-                  bool succes=viewmodel.validateFields(_heightController.text, _weightController.text, _ageController.text);
-                  if(succes){
-                    user!.height = double.parse(_heightController.text);
-                    user!.weight = double.parse(_weightController.text);
-                    user!.age = double.parse(_ageController.text);
-                    log("User: ${user!.height} ${user!.weight} ${user!.age}, ${user!.email}");
-                    print("User: ${user!.height} ${user!.weight} ${user!.age}");
-                    Navigator.pushNamed(context, "/onboard2", arguments: viewmodel);
-                  }
-                },
-                  textcolor: font, buttoncolor: orange,size: const Size(100, 45)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                child: FadeIn(
+                  delay: Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: 3000),
+                  child: Text(
+                    "Welcome to Dietify",
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold,
+                      color: backgroundTextField
+                    ),
+                  ),
+                ),
               ),
-              ],
-            ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,30.0),
-              child: points(orange,lightGray,lightGray),
-            )
-        ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+                child: FadeIn(
+                  delay: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 3000),
+                  child: Wrap(
+                    children: [
+                      Text(
+                        "Achieve your health goals with",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        " Dietify",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: orange,
+                        ),
+                      ),
+                      Text(
+                        "your ultimate diet planner and tracker! Discover",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),Text(
+                        "personalized ",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: orange,
+                        ),
+                      ),
+                      Text(
+                       "meal plans, delicious recipes, and a" ,
+                       style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                       "supportive community" ,
+                       style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: orange,
+                        ),
+                      ),
+                      Text(
+                       " to keep you inspired" ,
+                       style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                       "every step of the way. " ,
+                       style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                       "Let's get started!" ,
+                       style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: orange,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
+
+  static const String assetName = 'assets/images/cooking.svg';
+  final Widget cookingIcon = SvgPicture.asset(
+    assetName,
+    semanticsLabel: 'Food',
+  );
 }

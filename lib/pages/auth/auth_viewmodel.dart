@@ -1,4 +1,4 @@
-import 'package:Dietify/pages/onboard/on_board1.dart';
+import 'package:Dietify/pages/onboard/on_board3.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class AuthViewmodel {
       //TODO cambiar navegacion
       await authProvider.saveUser(authProvider.supabase.auth.currentUser!.id);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => OnBoardPage1(user: null,)));
+          context, MaterialPageRoute(builder: (context) => OnBoardPage3(user: null,)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(authProvider.errorMessage)),
