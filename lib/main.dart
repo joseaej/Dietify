@@ -1,6 +1,6 @@
 import 'package:Dietify/models/macros.dart';
 import 'package:Dietify/pages/macros/macros_page.dart';
-import 'package:Dietify/pages/onboard/on_board1.dart';
+import 'package:Dietify/pages/macros/macros_viewmodel.dart';
 import 'package:Dietify/pages/onboard/on_boardcontainer.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'models/settings.dart';
+import 'pages/auth/signup_page.dart';
 import 'services/authservice.dart';
 import 'pages/auth/login_page.dart';
 
@@ -36,33 +37,34 @@ class MyApp extends StatelessWidget {
               create: (context) => Macros.defaultValues()),
           ChangeNotifierProvider<AuthProvider>(
               create: (context,) => AuthProvider(),),
+          ChangeNotifierProvider<MacrosViewmodel>(
+              create: (context,) => MacrosViewmodel(),),
         ],
-        child: Consumer<Settings>(
-          builder: (context, settings, child) {
-            return Sizer(
-              builder: (p0, p1, p2) {
+        child: Sizer(
+          builder: (context,orientation,devicetype) {
+            return Consumer<Settings>(
+              builder: (context, settings, child) {
                 return MaterialApp(
                   debugShowCheckedModeBanner: false,
                   title: 'Dietify',
                   theme: lightTheme,
                   darkTheme: darkTheme,
                   themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                  /*
+                  
                   initialRoute: "/onboardcontainer",
                   routes: {
                     "/": (context) => AuthHandler(),
                     "/login": (context) => LoginScreen(),
                     "/signup": (context) => SignupPage(),
-                    "/onboardcontainer": (context) => OnBoardcontainer(),
+                    "/onboardcontainer": (context) => OnBoardcontainer(user: null,),
                     "/home": (context) => MacrosPage(),
                     "/macros": (context) => MacrosPage(),
                     "/loading": (context) => LoginScreen(),
-                  },*/
-                  home: OnBoardcontainer(),
+                  },
                 );
               },
             );
-          },
+          }
         ),
       );
   }

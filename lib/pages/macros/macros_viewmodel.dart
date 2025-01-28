@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class MacrosViewmodel extends ChangeNotifier {
   Macros macros = Macros.defaultValues();
+  double weather_radius=10;
   /*
   final MacrosRepository _macrosRepository = MacrosRepository();
 
@@ -36,6 +37,7 @@ class MacrosViewmodel extends ChangeNotifier {
 
   void addWaterIntake() {
     macros.wheaterIntake += 250;
+    weather_radius = (macros.wheaterIntake*100)/2000;
   }
 
 }

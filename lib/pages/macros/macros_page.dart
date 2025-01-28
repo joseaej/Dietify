@@ -15,7 +15,6 @@ class _MacrosPageState extends State<MacrosPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   double _macroSliderValue = 84;
   double _sleepSliderValue = 85;
-  double _waterSliderValue = 65;
   late MacrosViewmodel macrosViewmodel;
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class _MacrosPageState extends State<MacrosPage> {
                   const SizedBox(height: 16),
                   _buildSleepTrackingCard(context),
                   const SizedBox(height: 16),
-                  _buildWaterIntakeCard(),
+                  _buildWaterIntakeCard(macrosViewmodel),
                 ],
               ),
             ),
@@ -176,7 +175,7 @@ class _MacrosPageState extends State<MacrosPage> {
     );
   }
 
-  Widget _buildWaterIntakeCard() {
+  Widget _buildWaterIntakeCard(MacrosViewmodel viewmodel) {
     return _buildCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,29 +186,17 @@ class _MacrosPageState extends State<MacrosPage> {
               const Text('Water Intake',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               CircleAvatar(
+                minRadius: 20.0,
                 backgroundColor: orange,
-                radius: 30,
-                child: Text('${_waterSliderValue.toInt()}%',style: TextStyle(color: font,fontSize: 16),),
+                radius: viewmodel.weather_radius,
+                child: Text('${viewmodel.macros.wheaterIntake}%',style: TextStyle(color: font,fontSize: 16),),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          floatingButton(Icon(Icons.water_drop_outlined), () {
+          floatingButton(Icon(Icons.water_drop_outlined,color: orange,), () {
             macrosViewmodel.addWaterIntake();
           }),
-          Slider(
-            inactiveColor: orange,
-            activeColor: orange,
-            thumbColor: orange,
-            value: _waterSliderValue,
-            min: 0,
-            max: 100,
-            onChanged: (value) {
-              setState(() {
-                _waterSliderValue = value;
-              });
-            },
-          ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

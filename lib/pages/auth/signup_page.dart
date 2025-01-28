@@ -2,7 +2,7 @@
 
 import 'package:Dietify/models/user.dart';
 import 'package:Dietify/pages/auth/auth_viewmodel.dart';
-import 'package:Dietify/pages/onboard/on_board3.dart';
+import 'package:Dietify/pages/onboard/on_boardcontainer.dart';
 import 'package:Dietify/widgets/form_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -111,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
           if (sucess) {
             user =  AuthViewmodel.createUser(_passwordController.text, _emailController.text);
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => OnBoardPage3(user: user,)),
+              MaterialPageRoute(builder: (context) => OnBoardcontainer(user: user,)),
             );
           }
           

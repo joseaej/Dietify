@@ -14,112 +14,82 @@ class OnBoard1Page extends StatefulWidget {
 class _OnBoard1PageState extends State<OnBoard1Page> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return SafeArea(
+      child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: isPortrait ? 5.w : 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10.h),
+              SizedBox(height: isPortrait ? 8.h : 3.h),
               Center(
                 child: SizedBox(
-                  height: 40.h,
+                  height: isPortrait ? 35.h : 25.h,
                   child: FadeIn(
-                    delay: Duration(milliseconds: 400),
-                    duration: Duration(milliseconds: 3000),
-                    child: cookingIcon),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                child: FadeIn(
-                  delay: Duration(milliseconds: 600),
-                  duration: Duration(milliseconds: 3000),
-                  child: Text(
-                    "Welcome to Dietify",
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.bold,
-                      color: backgroundTextField
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 3000),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: cookingIcon,
                     ),
                   ),
                 ),
               ),
+              SizedBox(height: isPortrait ? 4.h : 2.h),
               Padding(
-                padding: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+                padding: EdgeInsets.only(left: 3.w),
                 child: FadeIn(
-                  delay: Duration(milliseconds: 1000),
-                  duration: Duration(milliseconds: 3000),
-                  child: Wrap(
-                    children: [
-                      Text(
-                        "Achieve your health goals with",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
+                  delay: const Duration(milliseconds: 600),
+                  duration: const Duration(milliseconds: 3000),
+                  child: Text(
+                    "Welcome to Dietify",
+                    style: TextStyle(
+                      fontSize: isPortrait ? 22.sp : 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: backgroundTextField,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: isPortrait ? 2.h : 1.h),
+              Padding(
+                padding: EdgeInsets.only(left: 3.w),
+                child: FadeIn(
+                  delay: const Duration(milliseconds: 1000),
+                  duration: const Duration(milliseconds: 3000),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(text: "Achieve your health goals with "),
+                        TextSpan(
+                          text: "Dietify",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: orange),
                         ),
-                      ),
-                      Text(
-                        " Dietify",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: orange,
+                        const TextSpan(text: ", your ultimate diet planner! Discover "),
+                        TextSpan(
+                          text: "personalized ",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: orange),
                         ),
-                      ),
-                      Text(
-                        "your ultimate diet planner and tracker! Discover",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
+                        const TextSpan(text: "meal plans, delicious recipes, and a "),
+                        TextSpan(
+                          text: "\nsupportive community",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: orange),
                         ),
-                      ),Text(
-                        "personalized ",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: orange,
+                        const TextSpan(text: " to keep you inspired every step of the way. "),
+                        TextSpan(
+                          text: "\nLet's get started!",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: orange),
                         ),
-                      ),
-                      Text(
-                       "meal plans, delicious recipes, and a" ,
-                       style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                       "supportive community" ,
-                       style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: orange,
-                        ),
-                      ),
-                      Text(
-                       " to keep you inspired" ,
-                       style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                       "every step of the way. " ,
-                       style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                       "Let's get started!" ,
-                       style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: orange,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    style: TextStyle(
+                      fontSize: isPortrait ? 12.sp : 10.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: isPortrait ? 10 : 5,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
