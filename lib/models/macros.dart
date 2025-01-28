@@ -1,12 +1,15 @@
+import 'package:Dietify/models/goals.dart';
 import 'package:flutter/material.dart';
 
 class Macros extends ChangeNotifier {
-  final int currentCalories;
-  final int totalCalories;
-  final double percentage;
-  final MacroDetail fats;
-  final MacroDetail protein;
-  final MacroDetail carbs;
+  int currentCalories;
+  int totalCalories;
+  double percentage;
+  MacroDetail fats;
+  MacroDetail protein;
+  MacroDetail carbs;
+  double wheaterIntake;
+  Goals goals;
 
   Macros({
     required this.currentCalories,
@@ -15,6 +18,8 @@ class Macros extends ChangeNotifier {
     required this.fats,
     required this.protein,
     required this.carbs,
+    required this.wheaterIntake,
+    required this.goals,
   });
    Macros.defaultValues()
       : currentCalories = 1850,
@@ -22,7 +27,9 @@ class Macros extends ChangeNotifier {
         percentage = 84,
         fats = MacroDetail(amount: "80", label: "fats", percentage: "80%"),
         protein = MacroDetail(amount: "80", label: "protein", percentage: "80%"),
-        carbs = MacroDetail(amount: "80", label: "carbs", percentage: "80%");
+        carbs = MacroDetail(amount: "80", label: "carbs", percentage: "80%"),
+        wheaterIntake = 2.5,
+        goals = Goals(waterGoal: 2.5, sleepGoal: 8);
 
   int getCurrentCalories(){
     return currentCalories;

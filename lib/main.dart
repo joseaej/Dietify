@@ -1,9 +1,11 @@
 import 'package:Dietify/models/macros.dart';
-import 'package:Dietify/pages/auth/signup_page.dart';
 import 'package:Dietify/pages/macros/macros_page.dart';
+import 'package:Dietify/pages/onboard/on_board1.dart';
+import 'package:Dietify/pages/onboard/on_boardcontainer.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'models/settings.dart';
@@ -28,33 +30,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<Settings>(create: (context) => Settings()),
-        ChangeNotifierProvider<Macros>(
-            create: (context) => Macros.defaultValues()),
-        ChangeNotifierProvider<AuthProvider>(
-            create: (context,) => AuthProvider(),),
-      ],
-      child: Consumer<Settings>(
-        builder: (context, settings, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Dietify',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            initialRoute: AuthHandler.route,
-            routes: {
-              "/login": (context) => LoginScreen(),
-              "/signup": (context) => SignupPage(),
-              "/home": (context) => MacrosPage(),
-              "/macros": (context) => MacrosPage(),
-              "/loading": (context) => LoginScreen(),
-            },
-          );
-        },
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider<Settings>(create: (context) => Settings()),
+          ChangeNotifierProvider<Macros>(
+              create: (context) => Macros.defaultValues()),
+          ChangeNotifierProvider<AuthProvider>(
+              create: (context,) => AuthProvider(),),
+        ],
+        child: Consumer<Settings>(
+          builder: (context, settings, child) {
+            return Sizer(
+              builder: (p0, p1, p2) {
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Dietify',
+                  theme: lightTheme,
+                  darkTheme: darkTheme,
+                  themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                  /*
+                  initialRoute: "/onboardcontainer",
+                  routes: {
+                    "/": (context) => AuthHandler(),
+                    "/login": (context) => LoginScreen(),
+                    "/signup": (context) => SignupPage(),
+                    "/onboardcontainer": (context) => OnBoardcontainer(),
+                    "/home": (context) => MacrosPage(),
+                    "/macros": (context) => MacrosPage(),
+                    "/loading": (context) => LoginScreen(),
+                  },*/
+                  home: OnBoardcontainer(),
+                );
+              },
+            );
+          },
+        ),
+      );
   }
 }
 

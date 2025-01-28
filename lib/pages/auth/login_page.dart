@@ -1,6 +1,6 @@
 import 'package:Dietify/pages/auth/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/formWidget.dart';
+import '../../widgets/form_widget.dart';
 import 'signup_page.dart';
 import '../../utils/theme.dart';
 
@@ -151,24 +151,30 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   Row get _rowiconlogin => Row(
-    /*
+  
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          IconButton(
-            onPressed: onGooglePresed,
-            icon: Image.asset(
-              "assets/images/google_icon.webp",
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: onGooglePresed,
+              icon: Image.asset(
+                "assets/icons/google.png",
+                cacheWidth: 50,
+                cacheHeight: 50,
+              ),
             ),
           ),
           IconButton(
             onPressed: onFacebookPresed,
             icon: Image.asset(
-              "assets/images/facebook_icon.webp",
+              "assets/icons/facebook.png",
+              cacheWidth: 50,
+              cacheHeight: 50,
             ),
           ),
         ],
-         */
       );
 
   Row get _createaccount => Row(
@@ -190,11 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   void onGooglePresed() async {
-    // Handle Google login
   }
 
   void onFacebookPresed() {
-    // Handle Facebook login
   }
 
   void onCreatePressed() {
