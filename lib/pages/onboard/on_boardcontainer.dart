@@ -1,3 +1,4 @@
+import 'package:Dietify/pages/home/home_page.dart';
 import 'package:Dietify/pages/onboard/on_board1.dart';
 import 'package:Dietify/pages/onboard/on_board2.dart';
 import 'package:Dietify/pages/onboard/on_board3.dart';
@@ -10,7 +11,7 @@ import 'package:Dietify/models/user.dart';
 
 class OnBoardcontainer extends StatefulWidget {
   final UserApp? user;
-  const OnBoardcontainer({super.key,required this.user});
+  const OnBoardcontainer({super.key, required this.user});
 
   @override
   State<OnBoardcontainer> createState() => _OnBoardcontainerState();
@@ -25,31 +26,32 @@ class _OnBoardcontainerState extends State<OnBoardcontainer> {
     super.initState();
     user = widget.user;
   }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return   
+    SafeArea(
       child: Scaffold(
-        body: Stack(
+        body: Column(
         children: [
           Expanded(
             child: PageView(
-              pageSnapping: false,
-            
+              pageSnapping: true,
               onPageChanged: (value) {
-                if(value==2){
+                if (value == 2) {
                   setState(() {
                     lastPage = true;
                   });
-                }else{
+                } else {
                   setState(() {
                     lastPage = false;
                   });
                 }
-                if(value!=0){
+                if (value != 0) {
                   setState(() {
                     initPage = false;
                   });
-                }else{
+                } else {
                   setState(() {
                     initPage = true;
                   });
@@ -70,14 +72,23 @@ class _OnBoardcontainerState extends State<OnBoardcontainer> {
               children: [
                 SizedBox(
                   width: 20.w,
-                  child:
-                      TextButton(onPressed: () {
-                        if (initPage==true) {
-                          OnBoardViewmodel.controller.animateToPage(2, duration: Duration(milliseconds: 400), curve: Curves.easeIn);
-                        }else{
-                          OnBoardViewmodel.controller.previousPage(duration: Duration(milliseconds: 400), curve: Curves.easeIn);
-                        }
-                      }, child: Text((initPage==true)?"Skip":"Back",style: const TextStyle(color: orange),),),
+                  child: TextButton(
+                    onPressed: () {
+                      if (initPage == true) {
+                        OnBoardViewmodel.controller.animateToPage(2,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.easeIn);
+                      } else {
+                        OnBoardViewmodel.controller.previousPage(
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.easeIn);
+                      }
+                    },
+                    child: Text(
+                      (initPage == true) ? "Skip" : "Back",
+                      style: const TextStyle(color: orange),
+                    ),
+                  ),
                 ),
                 SmoothPageIndicator(
                   count: 3,
@@ -92,12 +103,19 @@ class _OnBoardcontainerState extends State<OnBoardcontainer> {
                   child: TextButton(
                     onPressed: () {
                       if (!lastPage) {
-                        OnBoardViewmodel.controller.nextPage(duration: Duration(microseconds: 500), curve: Curves.linear);
-                      }else{
-                        Navigator.of(context).pushReplacementNamed("/macros");
+                        OnBoardViewmodel.controller.nextPage(
+                            duration: Duration(microseconds: 500),
+                            curve: Curves.linear);
+                      } else {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HomePage(user: user,),
+                        ));
                       }
                     },
-                    child: Text((lastPage==true) ? "Done" : "Next", style: TextStyle(color: orange),),
+                    child: Text(
+                      (lastPage == true) ? "Done" : "Next",
+                      style: TextStyle(color: orange),
+                    ),
                   ),
                 ),
               ],

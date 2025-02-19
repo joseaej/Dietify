@@ -4,7 +4,7 @@ import 'package:Dietify/utils/theme.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/form_rectangular.dart';
+import '../../widgets/components/form_rectangular.dart';
 
 class OnBoardPage3 extends StatefulWidget {
   final UserApp? user;
@@ -43,7 +43,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                 duration: Duration(milliseconds: 3000),
                 child: Image.asset(
                   "assets/images/person_fruits.jpg",
-                  width: size.width * 0.8, // 80% of screen width
+                  width: size.width * 0.7,
                 ),
               ),
               FadeIn(
@@ -68,7 +68,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: size.height * 0.02), // Responsive spacing
+              SizedBox(height: size.height * 0.02),
               FadeIn(
                 delay: Duration(milliseconds: 1200),
                 duration: Duration(milliseconds: 2000),
@@ -79,7 +79,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                   cursorColor: orange,
                 ),
               ),
-              SizedBox(height: size.height * 0.02), // Responsive spacing
+              SizedBox(height: size.height * 0.02),
               FadeIn(
                 delay: Duration(milliseconds: 1200),
                 duration: Duration(milliseconds: 2000),
@@ -90,7 +90,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                   cursorColor: orange,
                 ),
               ),
-              SizedBox(height: size.height * 0.02), // Responsive spacing
+              SizedBox(height: size.height * 0.02),
               FadeIn(
                 delay: Duration(milliseconds: 1200),
                 duration: Duration(milliseconds: 2000),

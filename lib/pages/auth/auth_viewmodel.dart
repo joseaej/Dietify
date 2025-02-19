@@ -75,7 +75,7 @@ class AuthViewmodel {
     return true;
   }
 
-  static UserApp? createUser(String email, String password) {
-    return UserApp(email, password);
+  static UserApp? createUser(String email, String password,String username) {
+    return UserApp(email: email,password:  password,username: username);
   }
 }

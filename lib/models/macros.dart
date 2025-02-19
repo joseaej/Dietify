@@ -46,5 +46,6 @@ class MacroDetail {
     required this.label,
     required this.percentage,
   });
+  
 }
 

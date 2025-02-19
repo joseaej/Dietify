@@ -25,53 +25,65 @@ const Color focusBorderColor = orange;
 
 // Tema claro
 ThemeData lightTheme = ThemeData(
-    primaryColor: const Color.fromARGB(255, 0, 0, 0),
-    scaffoldBackgroundColor: lightBackground,
-    hintColor: Colors.grey[600],
-    primaryColorDark: Colors.blueGrey[700],
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(color: lightText),
-      bodyMedium: TextStyle(color: Colors.grey[800]),
-      headlineMedium: TextStyle(
-          color: const Color.fromARGB(255, 0, 0, 0),
-          fontWeight: FontWeight.bold),
+  primaryColor: Colors.black,
+  scaffoldBackgroundColor: lightBackground,
+  hintColor: Colors.grey[600],
+  primaryColorDark: Colors.blueGrey[700],
+  textTheme: TextTheme(
+    bodyLarge: TextStyle(color: lightText),
+    bodyMedium: TextStyle(color: Colors.grey[800]),
+    headlineMedium: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.white,
+    iconTheme: IconThemeData(color: Colors.black), // ICONOS NEGROS EN LIGHT
+    titleTextStyle:
+        TextStyle(color: lightText, fontSize: 20, fontWeight: FontWeight.bold),
+  ),
+  buttonTheme: ButtonThemeData(
+    buttonColor: Colors.black,
+    textTheme: ButtonTextTheme.primary,
+  ),
+  switchTheme: _switchTheme,
+  iconTheme: IconThemeData(color: Colors.black), // ICONOS NORMALES NEGROS
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
+      foregroundColor:
+          WidgetStateProperty.all(Colors.black), // ICONOS DE BOTONES NEGROS
     ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.white,
-      iconTheme: IconThemeData(color: lightText),
-      titleTextStyle: TextStyle(
-          color: lightText, fontSize: 20, fontWeight: FontWeight.bold),
-    ),
-    buttonTheme: ButtonThemeData(
-      buttonColor: const Color.fromARGB(255, 0, 0, 0),
-      textTheme: ButtonTextTheme.primary,
-    ),
-    switchTheme: _switchTheme);
+  ),
+);
 
 // Tema oscuro
 ThemeData darkTheme = ThemeData(
-    primaryColor: const Color.fromARGB(255, 255, 255, 255),
-    scaffoldBackgroundColor: background,
-    hintColor: background,
-    primaryColorDark: Colors.white,
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(color: darkText),
-      bodyMedium: TextStyle(color: Colors.grey[300]),
-      headlineMedium: TextStyle(
-          color: const Color.fromARGB(255, 255, 255, 255),
-          fontWeight: FontWeight.bold),
+  primaryColor: Colors.white,
+  scaffoldBackgroundColor: background,
+  hintColor: background,
+  primaryColorDark: Colors.white,
+  textTheme: TextTheme(
+    bodyLarge: TextStyle(color: darkText),
+    bodyMedium: TextStyle(color: Colors.grey[300]),
+    headlineMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: background,
+    iconTheme: IconThemeData(color: Colors.white), // ICONOS BLANCOS EN DARK
+    titleTextStyle:
+        TextStyle(color: darkText, fontSize: 20, fontWeight: FontWeight.bold),
+  ),
+  buttonTheme: ButtonThemeData(
+    buttonColor: Colors.white,
+    textTheme: ButtonTextTheme.primary,
+  ),
+  switchTheme: _switchTheme,
+  iconTheme: IconThemeData(color: Colors.white), // ICONOS NORMALES BLANCOS
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
+      foregroundColor:
+          WidgetStateProperty.all(Colors.white), // ICONOS DE BOTONES BLANCOS
     ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: background,
-      iconTheme: IconThemeData(color: darkText),
-      titleTextStyle:
-          TextStyle(color: darkText, fontSize: 20, fontWeight: FontWeight.bold),
-    ),
-    buttonTheme: ButtonThemeData(
-      buttonColor: const Color.fromARGB(255, 255, 255, 255),
-      textTheme: ButtonTextTheme.primary,
-    ),
-    switchTheme: _switchTheme);
+  ),
+);
 
 SwitchThemeData get _switchTheme =>
     SwitchThemeData(thumbColor: WidgetStateProperty.resolveWith((states) {

@@ -1,6 +1,6 @@
 import 'package:Dietify/pages/auth/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/form_widget.dart';
+import '../../widgets/components/form_widget.dart';
 import 'signup_page.dart';
 import '../../utils/theme.dart';
 

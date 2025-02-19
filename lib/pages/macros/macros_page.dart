@@ -1,11 +1,14 @@
+import 'package:Dietify/models/user.dart';
 import 'package:Dietify/pages/macros/macros_viewmodel.dart';
 import 'package:Dietify/utils/theme.dart';
-import 'package:Dietify/widgets/floating_button.dart';
+import 'package:Dietify/widgets/components/floating_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class MacrosPage extends StatefulWidget {
-  const MacrosPage({super.key});
+  UserApp? user;
+  MacrosPage({super.key, required this.user});
 
   @override
   State<MacrosPage> createState() => _MacrosPageState();
@@ -13,12 +16,17 @@ class MacrosPage extends StatefulWidget {
 
 class _MacrosPageState extends State<MacrosPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late UserApp? user;
   double _macroSliderValue = 84;
   double _sleepSliderValue = 85;
-  late MacrosViewmodel macrosViewmodel;
+  @override
+  void initState() {
+    user = widget.user;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    macrosViewmodel = Provider.of<MacrosViewmodel>(context);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -34,11 +42,11 @@ class _MacrosPageState extends State<MacrosPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildMacroNutrientsCard(),
+                  _buildMacroNutrientsCard(context),
                   const SizedBox(height: 16),
                   _buildSleepTrackingCard(context),
                   const SizedBox(height: 16),
-                  _buildWaterIntakeCard(macrosViewmodel),
+                  _buildWaterIntakeCard(context),
                 ],
               ),
             ),
@@ -48,7 +56,8 @@ class _MacrosPageState extends State<MacrosPage> {
     );
   }
 
-  Widget _buildMacroNutrientsCard() {
+  Widget _buildMacroNutrientsCard(BuildContext context) {
+    MacrosViewmodel viewmodel = Provider.of<MacrosViewmodel>(context);
     return _buildCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,15 +73,19 @@ class _MacrosPageState extends State<MacrosPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${(macrosViewmodel.macros.currentCalories / 100 * 2200).toInt()}',
+                  Text(
+                      '${(viewmodel.macros.currentCalories * 100 / user!.macros.totalCalories).toInt()}',
                       style: const TextStyle(fontSize: 16)),
-                  const Text('of 2,200 calories'),
+                  Text("${user?.macros.totalCalories}"),
                 ],
               ),
               CircleAvatar(
                 backgroundColor: orange,
                 radius: 30,
-                child: Text('${_macroSliderValue.toInt()}%',style: TextStyle(color: font,fontSize: 16),),
+                child: Text(
+                  '${_macroSliderValue.toInt()}%',
+                  style: TextStyle(color: font, fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -93,9 +106,9 @@ class _MacrosPageState extends State<MacrosPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildMacroInfo('65g', 'Fats', '75%'),
-              _buildMacroInfo('180g', 'Protein', '90%'),
-              _buildMacroInfo('220g', 'Carbs', '82%'),
+              _buildMacroInfo(user!.macros.fats.amount, 'Fats', '75%'),
+              _buildMacroInfo(user!.macros.protein.amount, 'Protein', '90%'),
+              _buildMacroInfo(user!.macros.carbs.amount, 'Carbs', '82%'),
             ],
           ),
         ],
@@ -151,11 +164,12 @@ class _MacrosPageState extends State<MacrosPage> {
               const Text('Sleep Quality'),
               Builder(
                 builder: (context) {
-                  if (_sleepSliderValue>=0 && _sleepSliderValue<=30) {
+                  if (_sleepSliderValue >= 0 && _sleepSliderValue <= 30) {
                     return const Text('You need to start tracking!');
-                  }else if(_sleepSliderValue>30 && _sleepSliderValue<=60){
+                  } else if (_sleepSliderValue > 30 &&
+                      _sleepSliderValue <= 60) {
                     return const Text('You can do better!');
-                  }else{
+                  } else {
                     return Text('Congratulations, goal reached!');
                   }
                 },
@@ -175,7 +189,8 @@ class _MacrosPageState extends State<MacrosPage> {
     );
   }
 
-  Widget _buildWaterIntakeCard(MacrosViewmodel viewmodel) {
+  Widget _buildWaterIntakeCard(BuildContext context) {
+    MacrosViewmodel viewmodel = Provider.of<MacrosViewmodel>(context);
     return _buildCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,17 +200,29 @@ class _MacrosPageState extends State<MacrosPage> {
             children: [
               const Text('Water Intake',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              CircleAvatar(
-                minRadius: 20.0,
-                backgroundColor: orange,
-                radius: viewmodel.weather_radius,
-                child: Text('${viewmodel.macros.wheaterIntake}%',style: TextStyle(color: font,fontSize: 16),),
-              ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: orange,
+                ),
+                child: Center(
+                  child: Text(
+                    '${viewmodel.weather_radius}%',
+                    style: TextStyle(color: font, fontSize: 16),
+                  ),
+                ),
+              )
             ],
           ),
           const SizedBox(height: 16),
-          floatingButton(Icon(Icons.water_drop_outlined,color: orange,), () {
-            macrosViewmodel.addWaterIntake();
+          floatingButton(
+              Icon(
+                Icons.water_drop_outlined,
+                color: font,
+              ), () {
+            viewmodel.addWaterIntake();
           }),
           const SizedBox(height: 8),
           Row(
@@ -218,33 +245,35 @@ class _MacrosPageState extends State<MacrosPage> {
     );
   }
 
-  Widget _buildCard({required Widget child,}) {
+  Widget _buildCard({
+    required Widget child,
+  }) {
     return OutlinedButton(
-      style: ButtonStyle(
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+        style: ButtonStyle(
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
           ),
+          side: WidgetStateProperty.all<BorderSide>(
+            const BorderSide(color: Colors.transparent),
+          ),
+          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
         ),
-        side: WidgetStateProperty.all<BorderSide>(
-          const BorderSide(color: Colors.transparent),
-        ),
-        backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-        foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-      ),
-      onPressed: () {
-    }, child: Material(
-      color: Colors.transparent,
-      elevation: 6,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        decoration: BoxDecoration(
+        onPressed: () {},
+        child: Material(
+          color: Colors.transparent,
+          elevation: 6,
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-        ),
-        padding: const EdgeInsets.all(30),
-        child: child,
-      ),
-    ));
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            padding: const EdgeInsets.all(30),
+            child: child,
+          ),
+        ));
   }
 }
