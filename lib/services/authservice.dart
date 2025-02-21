@@ -3,11 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthProvider with ChangeNotifier {
-  final supabase = Supabase.instance.client;
-  String errorMessage = "";
+  static final supabase = Supabase.instance.client;
+  static String errorMessage = "";
 
   // Registro de usuario
-  Future<bool> registerAccount(String email, String password) async {
+  static Future<bool> registerAccount(String email, String password) async {
     try {
       final response = await supabase.auth.signUp(email: email, password: password);
       if (response.user != null) {
@@ -22,7 +22,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   // Inicio de sesión
-  Future<bool> signInAccount(String email, String password) async {
+  static Future<bool> signInAccount(String email, String password) async {
     try {
       final response = await supabase.auth.signInWithPassword(email: email, password: password);
       if (response.user != null) {
@@ -37,13 +37,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   // Guardar el usuario en SharedPreferences
-  Future<void> saveUser(String userId) async {
+  static Future<void> saveUser(String userId) async {
     final pref = await SharedPreferences.getInstance();
     await pref.setString('uid', userId);
   }
 
   // Verificar si hay un usuario autenticado
- Future<String?> checkUser() async {
+ static Future<String?> checkUser() async {
     final pref = await SharedPreferences.getInstance();
     return pref.getString('uid');
   }

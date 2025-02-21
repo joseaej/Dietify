@@ -1,7 +1,9 @@
 
+import 'package:Dietify/models/user.dart';
 import 'package:flutter/widgets.dart';
 
-class OnBoardViewmodel {
+class OnBoardViewmodel extends ChangeNotifier {
+  UserApp? user;
   static PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   static String error = "";
   bool validateFields(String height, String weight, String age) {

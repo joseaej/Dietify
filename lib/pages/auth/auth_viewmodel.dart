@@ -1,7 +1,5 @@
 import 'package:Dietify/pages/onboard/on_board3.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../models/user.dart';
 import '../../services/authservice.dart';
 
@@ -9,11 +7,10 @@ class AuthViewmodel {
   static String error = "";
   static Future<bool> registerUser(BuildContext context, String email,
       String password, String username) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final success = await authProvider.registerAccount(email, password);
+    final success = await AuthProvider.registerAccount(email, password);
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authProvider.errorMessage)),
+        SnackBar(content: Text(AuthProvider.errorMessage)),
       );
       return false;
     } 
@@ -22,16 +19,15 @@ class AuthViewmodel {
 
   static Future<void> signInUser(
       BuildContext context, String email, String password) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final success = await authProvider.signInAccount(email, password);
+    final success = await AuthProvider.signInAccount(email, password);
     if (success) {
       //TODO cambiar navegacion
-      await authProvider.saveUser(authProvider.supabase.auth.currentUser!.id);
+      await AuthProvider.saveUser(AuthProvider.supabase.auth.currentUser!.id);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => OnBoardPage3(user: null,)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authProvider.errorMessage)),
+        SnackBar(content: Text(AuthProvider.errorMessage)),
       );
     }
   }
