@@ -1,8 +1,9 @@
 
 import 'package:Dietify/models/macros.dart';
 import 'package:Dietify/models/settings.dart';
+import 'package:flutter/material.dart';
 
-class UserApp {
+class UserApp extends ChangeNotifier {
   String? password;
   String? username;
   String? email;

@@ -5,6 +5,7 @@ import 'package:Dietify/pages/macros/macros_page.dart';
 import 'package:Dietify/pages/macros/macros_viewmodel.dart';
 import 'package:Dietify/pages/onboard/on_boardcontainer.dart';
 import 'package:Dietify/pages/settings/settings_page.dart';
+import 'package:Dietify/pages/workout/workout_page.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,12 @@ class MyApp extends StatelessWidget {
           ) =>
               MacrosViewmodel(),
         ),
+        ChangeNotifierProvider<UserApp>(
+          create: (
+            context,
+          ) =>
+              UserApp.defaultValues(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, devicetype) {
         return Consumer<Settings>(
@@ -61,7 +68,7 @@ class MyApp extends StatelessWidget {
               theme: lightTheme,
               darkTheme: darkTheme,
               themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-              initialRoute: "/settings",
+              initialRoute: "/home",
               routes: {
                 "/": (context) => AuthHandler(),
                 "/login": (context) => LoginScreen(),
@@ -75,6 +82,7 @@ class MyApp extends StatelessWidget {
                 "/settings": (context) => SettingsPage(
                       user: user,
                     ),
+                "/workout": (context) => WorkoutPage()
               },
             );
           },

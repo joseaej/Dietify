@@ -1,4 +1,3 @@
-import 'package:Dietify/models/settings.dart';
 import 'package:Dietify/models/user.dart';
 import 'package:Dietify/pages/settings/settings_page.dart';
 import 'package:Dietify/utils/theme.dart';

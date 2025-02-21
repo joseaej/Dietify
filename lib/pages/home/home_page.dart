@@ -3,6 +3,7 @@
 import 'package:Dietify/models/user.dart';
 import 'package:Dietify/pages/macros/macros_page.dart';
 import 'package:Dietify/pages/settings/settings_page.dart';
+import 'package:Dietify/pages/workout/workout_page.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +27,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _screens = [
       HomeScreen(user: widget.user),
-      MacrosPage(user: widget.user,),
-      SettingsPage(user: widget.user,),
+      MacrosPage(
+        user: widget.user,
+      ),
+      SettingsPage(
+        user: widget.user,
+      ),
+      WorkoutPage()
     ];
   }
 
@@ -45,6 +51,7 @@ class _HomePageState extends State<HomePage> {
           TabItem(icon: Icons.home, title: 'Inicio'),
           TabItem(icon: Icons.apple, title: 'Nutrición'),
           TabItem(icon: Icons.settings, title: 'Ajustes'),
+          TabItem(icon: Icons.fitness_center, title: 'Deporte'),
         ],
         initialActiveIndex: _currentIndex,
         onTap: (int i) {

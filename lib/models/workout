@@ -1,0 +1,58 @@
+class Workout {
+  String name;
+  DateTime date;
+  int duration; // En minutos
+  String type;
+  String intensity;
+  String notes;
+  String muscles;
+  int calories;
+
+  Workout({
+    required this.name,
+    required this.date,
+    required this.duration,
+    required this.type,
+    required this.intensity,
+    required this.notes,
+    required this.muscles,
+    required this.calories,
+  });
+  Workout.defaultValues()
+      : name = "Cinta",
+        date = DateTime.now(),
+        duration = 30,
+        type = "Cardio",
+        intensity = "Alta",
+        notes = "Correr en cinata",
+        muscles ="Piernas",
+        calories = 300;
+
+  // Método para convertir de un Map a un objeto Workout
+  factory Workout.fromMap(Map<String, dynamic> map) {
+    return Workout(
+      name: map['name'],
+      date: DateTime.parse(map['date']),
+      duration: map['duration'],
+      type: map['type'],
+      intensity: map['intensity'],
+      notes: map['notes'],
+      muscles: map['muscles'],
+      calories: map['calories'],
+    );
+  }
+
+  // Método para convertir un objeto Workout a un Map
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'date': date.toIso8601String(),
+      'duration': duration,
+      'type': type,
+      'intensity': intensity,
+      'notes': notes,
+      'muscles': muscles,
+      'calories': calories,
+    };
+  }
+}
