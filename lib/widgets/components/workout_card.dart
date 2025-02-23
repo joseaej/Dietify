@@ -6,7 +6,7 @@ Widget workoutCard(Workout workout) {
   return GestureDetector(
     child: Container(
       width: 100.w,
-      height: 14.h, // Ajuste de altura para un diseño más compacto
+      height: 14.h,
       margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -44,7 +44,7 @@ Widget workoutCard(Workout workout) {
                 Text(
                   workout.name,
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),

@@ -14,7 +14,7 @@ Widget workoutCardAdd(Workout workout, Function()? onPressed) {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: const Color.fromARGB(255, 145, 145, 145),
             blurRadius: 6,
             offset: Offset(0, 3),
           ),
@@ -44,7 +44,7 @@ Widget workoutCardAdd(Workout workout, Function()? onPressed) {
                 Text(
                   workout.name,
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),

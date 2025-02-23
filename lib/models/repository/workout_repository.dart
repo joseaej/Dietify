@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../workout';
 
 List<Workout> sampleWorkouts = [
@@ -53,14 +55,35 @@ List<Workout> sampleWorkouts = [
   ),
 ];
 
+
 class WorkoutRepository {
-  List<Workout> workouts = List.from(sampleWorkouts); // Precargar datos de prueba
+  List<Workout> workouts = List.empty(growable: true);
 
   Future<List<Workout>> getAllWorkouts() async {
-    return workouts;
+    final response = await Supabase.instance.client
+        .from('workout')
+        .select("*");
+
+    if (response.isEmpty) {
+      return [];
+    }
+
+    return response.map((workout) => Workout.fromMap(workout)).toList();
   }
 
   Future<void> addWorkout(Workout workout) async {
     workouts.add(workout);
   }
+  Future<PostgrestList> getLastRecord() async {
+  final supabase = Supabase.instance.client;
+  final response = await supabase
+      .from('workout')
+      .select('id')
+      .order('id', ascending: false)
+      .limit(1);
+
+  return response;
 }
+
+}
+

@@ -1,6 +1,7 @@
 
 import 'package:Dietify/models/macros.dart';
 import 'package:Dietify/models/settings.dart';
+import 'package:Dietify/models/workout';
 import 'package:flutter/material.dart';
 
 class UserApp extends ChangeNotifier {
@@ -13,6 +14,7 @@ class UserApp extends ChangeNotifier {
   bool isMale;
   Settings settings;
   Macros macros;
+  List<Workout> yourWorkout = [];
 
   UserApp({
     this.email,
@@ -40,5 +42,20 @@ class UserApp extends ChangeNotifier {
   @override
   bool operator ==(Object other) {
     return (email == (other as UserApp) ? true : false);
+  }
+  UserApp getCurrentUser() {
+    return this;
+  }
+  void setMacros(Macros macros) {
+    this.macros = macros;
+    notifyListeners();
+  }
+  void setSettings(Settings settings) {
+    this.settings = settings;
+    notifyListeners();
+  }
+  void addWorkout(Workout workouts) {
+    yourWorkout.add(workouts);
+    notifyListeners();
   }
 }

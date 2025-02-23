@@ -23,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late UserApp? user;
   XFile? photo;
   late Settings settings = Provider.of<Settings>(context);
-  TextEditingController _username = TextEditingController();
+  final TextEditingController _username = TextEditingController();
   @override
   void initState() {
     super.initState();

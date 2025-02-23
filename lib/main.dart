@@ -5,9 +5,11 @@ import 'package:Dietify/pages/macros/macros_page.dart';
 import 'package:Dietify/pages/macros/macros_viewmodel.dart';
 import 'package:Dietify/pages/onboard/on_boardcontainer.dart';
 import 'package:Dietify/pages/settings/settings_page.dart';
+import 'package:Dietify/pages/workout/add_workout_page.dart';
 import 'package:Dietify/pages/workout/workout_page.dart';
 import 'package:Dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,16 +17,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'models/settings.dart';
 import 'pages/auth/signup_page.dart';
 import 'pages/home/home_page.dart';
+import 'pages/timer/timer_viewmodel.dart';
 import 'services/authservice.dart';
 import 'pages/auth/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
 
   await Supabase.initialize(
-    url: 'https://jjaoxdfxgqmzxovrgbog.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqYW94ZGZ4Z3FtenhvdnJnYm9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2NDczMjYsImV4cCI6MjA1MzIyMzMyNn0.sSzeJDPpeNgN73tGzdOe5_5nOGoj5FZaBFMBH5cOE-c',
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['ANON_KEY_SUPABASE']!,
+        
   );
 
   runApp(const MyApp());
@@ -58,6 +62,7 @@ class MyApp extends StatelessWidget {
           ) =>
               UserApp.defaultValues(),
         ),
+        ChangeNotifierProvider<TimerViewmodel>(create: (context) => TimerViewmodel(),)
       ],
       child: Sizer(builder: (context, orientation, devicetype) {
         return Consumer<Settings>(
@@ -68,7 +73,7 @@ class MyApp extends StatelessWidget {
               theme: lightTheme,
               darkTheme: darkTheme,
               themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-              initialRoute: "/home",
+              initialRoute: "/macros",
               routes: {
                 "/": (context) => AuthHandler(),
                 "/login": (context) => LoginScreen(),
@@ -82,7 +87,8 @@ class MyApp extends StatelessWidget {
                 "/settings": (context) => SettingsPage(
                       user: user,
                     ),
-                "/workout": (context) => WorkoutPage()
+                "/workout": (context) => WorkoutPage(),
+                "/addworkout": (context) => AddWorkoutPage(),
               },
             );
           },

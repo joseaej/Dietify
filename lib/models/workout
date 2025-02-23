@@ -29,16 +29,16 @@ class Workout {
         calories = 300;
 
   // Método para convertir de un Map a un objeto Workout
-  factory Workout.fromMap(Map<String, dynamic> map) {
+  factory Workout.fromMap(Map<String, dynamic> json) {
     return Workout(
-      name: map['name'],
-      date: DateTime.parse(map['date']),
-      duration: map['duration'],
-      type: map['type'],
-      intensity: map['intensity'],
-      notes: map['notes'],
-      muscles: map['muscles'],
-      calories: map['calories'],
+      name: json['name'],
+      date: DateTime.parse(json['date']),
+      duration: json['duration'],
+      type: json['type'],
+      intensity: json['intensity'],
+      notes: json['notes'],
+      muscles: json['muscles'],
+      calories: json['calories'],
     );
   }
 
