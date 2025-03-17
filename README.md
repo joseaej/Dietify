@@ -25,7 +25,7 @@ Instalar el SDK de FLutter https://docs.flutter.dev/release/archive
 
 ## Feedback
 
-Si piensas que puedes ayudar al proyecto con alguna idea novedosa, puedes mandar un correo a armandoespi@gmail.com
+Si piensas que puedes ayudar al proyecto con alguna idea novedosa, puedes mandar un correo a armandoespi25@gmail.com
 
 
 ## Autor
