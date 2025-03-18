@@ -1,9 +1,13 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:dietify/pages/home/home_page.dart';
+import 'package:dietify/service/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../utils/theme.dart';
-import '../widgets/form_widget.dart';
+import '../../../utils/theme.dart';
+import '../../models/profile.dart';
+import '../../widgets/form_widget.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -19,9 +23,10 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _confirmpassController = TextEditingController();
   bool seePassword = true;
-
+  late AuthService service;
   @override
   Widget build(BuildContext context) {
+    service = Provider.of<AuthService>(context);
     const inputBorder = BorderRadius.vertical(
       bottom: Radius.circular(10.0),
       top: Radius.circular(20.0),
@@ -88,7 +93,11 @@ class _SignupPageState extends State<SignupPage> {
         backgroundColor: WidgetStateProperty.all(orange),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
-      onPressed: () {
+      onPressed: () async{
+        Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
+        if (profile!=null) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+        }
       },
       child: Text(
         "Sign Up",
@@ -138,7 +147,7 @@ class _SignupPageState extends State<SignupPage> {
             child: IconButton(
               onPressed: onGooglePressed,
               icon: Image.asset(
-                "assets/icons/google.png",
+                "assets/images/google_icon.webp",
                 cacheWidth: 50,
                 cacheHeight: 50,
               ),
@@ -147,7 +156,7 @@ class _SignupPageState extends State<SignupPage> {
           IconButton(
             onPressed: onFacebookPressed,
             icon: Image.asset(
-              "assets/icons/facebook.png",
+              "assets/images/facebook_icon.webp",
               cacheWidth: 50,
               cacheHeight: 50,
             ),
@@ -172,10 +181,8 @@ class _SignupPageState extends State<SignupPage> {
   );
 
   void onGooglePressed() {
-
   }
 
   void onFacebookPressed() {
-
   }
 }

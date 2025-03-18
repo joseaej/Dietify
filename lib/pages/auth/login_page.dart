@@ -1,7 +1,11 @@
+import 'package:dietify/models/profile.dart';
+import 'package:dietify/pages/home/home_page.dart';
+import 'package:dietify/service/auth_service.dart';
 import 'package:flutter/material.dart';
-import '../widgets/form_widget.dart';
+import 'package:provider/provider.dart';
+import '../../widgets/form_widget.dart';
 import 'sign_up_page.dart';
-import '../../utils/theme.dart';
+import '../../../utils/theme.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,9 +19,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool? isChecked = false;
   String? error;
+  late AuthService service;
 
   @override
   Widget build(BuildContext context) {
+    service = Provider.of<AuthService>(context);
     const inputBorder = BorderRadius.vertical(
       bottom: Radius.circular(10.0),
       top: Radius.circular(20.0),
@@ -89,7 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: WidgetStateProperty.all(orange),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
-      onPressed: () {
+      onPressed: () async{
+        Profile? profile = await service.signInWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim());
+        if (profile!=null) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+        }
       },
       child: Text(
         "Login",
@@ -139,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: IconButton(
               onPressed: onGooglePresed,
               icon: Image.asset(
-                "assets/icons/google.png",
+                "assets/images/google_icon.webp",
                 cacheWidth: 50,
                 cacheHeight: 50,
               ),
@@ -148,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
           IconButton(
             onPressed: onFacebookPresed,
             icon: Image.asset(
-              "assets/icons/facebook.png",
+              "assets/images/facebook`_icon.webp",
               cacheWidth: 50,
               cacheHeight: 50,
             ),
