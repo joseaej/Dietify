@@ -1,24 +1,26 @@
 import 'package:dietify/models/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Profile? profile;
+  
+  const HomePage({super.key, required this.profile});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late Profile profile;
   @override
   Widget build(BuildContext context) {
-    profile = Provider.of<Profile>(context);
-    return Column(
-      children: [
-        Text(profile.email!),
-        Text(profile.username!),
-      ],
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Column(
+        children: [
+          Text(widget.profile!.email ?? 'No email'),
+          Text(widget.profile!.username ?? 'No username'),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 
-class Profile with ChangeNotifier {
+class Profile  {
   String? email;
   String? username;
   String? urlPhoto;
@@ -74,7 +73,5 @@ class Profile with ChangeNotifier {
     this.height = height ?? this.height;
     this.age = age ?? this.age;
     this.activityLevel = activityLevel ?? this.activityLevel;
-
-    notifyListeners();
   }
 }

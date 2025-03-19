@@ -96,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       onPressed: () async{
         Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
         if (profile!=null) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
         }
       },
       child: Text(
