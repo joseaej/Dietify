@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: IconButton(
               onPressed: onGooglePresed,
               icon: Image.asset(
-                "assets/images/google_icon.webp",
+                "assets/icons/google_icon.webp",
                 cacheWidth: 50,
                 cacheHeight: 50,
               ),
@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
           IconButton(
             onPressed: onFacebookPresed,
             icon: Image.asset(
-              "assets/images/facebook_icon.webp",
+              "assets/icons/facebook_icon.webp",
               cacheWidth: 50,
               cacheHeight: 50,
             ),
