@@ -1,5 +1,4 @@
 import 'package:dietify/models/profile.dart';
-import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,9 +16,6 @@ class AuthService with ChangeNotifier {
       AuthResponse reponse = await supabase.client.auth.signInWithPassword(email:email, password: password);
       if (reponse.user!=null) {
         profile = await _profileRepository.getProfile(email);
-        if (profile!=null) {
-          await SharedPreferenceService.setProfileFromLocal(profile!);
-        }
         return profile;
       }
       return null;
@@ -34,7 +30,6 @@ class AuthService with ChangeNotifier {
       if (reponse.user!=null) {
         Profile newProfile = profile!.copyWith(email: email,username: username);
         _profileRepository.createProfile(newProfile);
-        await SharedPreferenceService.setProfileFromLocal(newProfile);
         return newProfile;
       }
       return null;
