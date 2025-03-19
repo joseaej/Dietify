@@ -149,7 +149,7 @@ class _SignupPageState extends State<SignupPage> {
             child: IconButton(
               onPressed: onGooglePressed,
               icon: Image.asset(
-                "assets/images/google_icon.webp",
+                "assets/icons/google_icon.webp",
                 cacheWidth: 50,
                 cacheHeight: 50,
               ),
@@ -158,7 +158,7 @@ class _SignupPageState extends State<SignupPage> {
           IconButton(
             onPressed: onFacebookPressed,
             icon: Image.asset(
-              "assets/images/facebook_icon.webp",
+              "assets/icons/facebook_icon.webp",
               cacheWidth: 50,
               cacheHeight: 50,
             ),
