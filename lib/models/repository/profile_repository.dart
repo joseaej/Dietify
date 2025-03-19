@@ -19,6 +19,10 @@ class ProfileRepository {
   }
 
   Future<void> createProfile(Profile profile) async {
-    await _supabase.from('profile').insert(profile.toMap());
+    try {
+      await _supabase.from('profile').insert(profile.toMap());
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

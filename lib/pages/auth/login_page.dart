@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () async{
         Profile? profile = await service.signInWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim());
         if (profile!=null) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
         }
       },
       child: Text(
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
           IconButton(
             onPressed: onFacebookPresed,
             icon: Image.asset(
-              "assets/images/facebook`_icon.webp",
+              "assets/images/facebook_icon.webp",
               cacheWidth: 50,
               cacheHeight: 50,
             ),
