@@ -2,6 +2,7 @@
 
 import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/service/auth_service.dart';
+import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -96,6 +97,7 @@ class _SignupPageState extends State<SignupPage> {
       onPressed: () async{
         Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
         if (profile!=null) {
+          SharedPreferenceService.setProfileFromLocal(profile);
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
         }
       },
