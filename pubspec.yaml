@@ -15,6 +15,7 @@ dependencies:
   shared_preferences: ^2.5.2
   supabase_flutter: ^2.8.4
   cached_network_image: 3.4.1
+  smooth_page_indicator: ^1.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

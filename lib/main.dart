@@ -10,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'models/profile.dart';
 import 'models/providers/profile_provider.dart';
 import 'pages/auth/login_page.dart';
+import 'pages/onboarding/onboarding_page.dart';
 import 'utils/theme.dart';
 
 void main() async {
@@ -47,11 +48,12 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: route,
+        initialRoute: "/onboarding",
         routes: {
           '/home': (context) => HomePage(profile: savedProfile ?? Profile(email: "", username: "")),
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignupPage(),
+          '/onboarding': (context) => OnboardingPage(),
         },
         theme: lightTheme,
         darkTheme: darkTheme,
