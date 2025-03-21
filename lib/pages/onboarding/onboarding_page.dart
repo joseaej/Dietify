@@ -1,9 +1,10 @@
-import 'package:dietify/pages/onboarding/onboarding_page2.dart';
-import 'package:dietify/pages/onboarding/onboarding_page3.dart';
+import 'package:dietify/pages/onboarding/on_board1.dart';
+import 'package:dietify/pages/onboarding/on_board2.dart';
+import 'package:dietify/pages/onboarding/on_board3.dart';
+import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'onboarding_page1.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -13,6 +14,7 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
+  final GlobalKey<FormState> _formKey = OnBoardPage3.formKey;
   final PageController _pagecontroller = PageController();
   bool isOnLastPage =false;
   @override
@@ -32,13 +34,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
               });
             },
             children: [
-              OnboardingPage1(),
-              OnboardingPage2(),
-              OnboardingPage3(),
+              OnBoard1Page(),
+              OnBoard2Page(),
+              OnBoardPage3(),
             ],
           ),
           Container(
-              alignment: Alignment(0, 0.75),
+              alignment: Alignment(0, 0.85),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -55,14 +57,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     },
                     child: Text("Skip"),
                   ),
-                  SmoothPageIndicator(controller: _pagecontroller, count: 3),
+                  SmoothPageIndicator(controller: _pagecontroller, count: 3,effect: JumpingDotEffect(
+                    dotColor: Colors.black26,
+                    activeDotColor: orange
+                  ),),
                   
                   isOnLastPage?
                   GestureDetector(
                     onTap: () {
-                      _pagecontroller.nextPage(
-                          duration: Duration(microseconds: 1000),
-                          curve: Curves.linear);
+                      if (_formKey.currentState!.validate()) {
+                        print("valido");
+                      }
                     },
                     child: Text("Done"),
                   ):
