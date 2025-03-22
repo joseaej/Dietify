@@ -13,3 +13,16 @@ A continuación se detallan las versiones de la aplicación y los cambios realiz
 - **Añadido**: Intefeaz para el on boarding de la app.
   - Animaciones en el onboarding.
 - **Arreglado**: Logica para iniciar sesion si esta logueado.
+
+### Versión 0.0.3
+- **Añadido**: Intefeaz para los ajustes de la app.
+  - Metodos para cargar fotos desde la galeria y la camara.
+  - Interfaz de carga.
+  - Guardado local de los ajustes de la aplicación.
+  - Cargado de ajustes cuando se inicia la aplicación.
+  - Cambiar de tema a claro o oscuro.
+  - Cerrar sesión.
+  - Eliminar cuenta de la base de datos. 
+- **Arreglado**: Provider para la carga del perfil.
+  - Provider para la carga de los ajustes.
+  - Inyeccion de los ajustes en el main.
