@@ -18,8 +18,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool? isChecked = false;
-  String? error;
   late AuthService service;
 
   @override
@@ -56,26 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: isChecked,
-                  checkColor: font,
-                  activeColor: orange,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value;
-                    });
-                  },
-                ),
-                Text(
-                  "Remember",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),

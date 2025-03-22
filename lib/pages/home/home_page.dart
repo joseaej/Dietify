@@ -19,6 +19,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text(widget.profile!.email ?? 'No email'),
           Text(widget.profile!.username ?? 'No username'),
+          Text(widget.profile!.weight.toString()),
+          Text(widget.profile!.height.toString()),
+          Text(widget.profile!.activityLevel??"Sedentario"),
         ],
       ),
     );
