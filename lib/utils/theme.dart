@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 
 const Color background = Color.fromARGB(255, 29, 29, 31);
+const Color backgroundBlack = Color.fromARGB(255, 21, 21, 22);
 const Color backgroundTextField = Color.fromARGB(255, 34, 34, 37);
 const Color font = Colors.white;
 const Color lightGray = Color.fromARGB(255, 133, 133, 133);
 const Color darkfont = Colors.black;
 const Color orange = Color.fromARGB(255, 229, 154, 43);
+const Color lightOrange = Color.fromARGB(255, 229, 152, 100);
 const Color sliderOut = Color.fromARGB(255, 243, 178, 80);
 const Color lightBackground = Color.fromARGB(255, 255, 255, 255);
 const Color lightText = Color(0xFF000000);

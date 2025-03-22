@@ -19,13 +19,15 @@ class ProfileRepository {
         .select();
     print(response);
   }
-Future<void> deleteProfile(Profile profile) async {
+
+  Future<void> deleteProfile(Profile profile) async {
     try {
       await _supabase.from('profile').delete().eq("email", profile.email!);
     } catch (e) {
       print(e.toString());
     }
   }
+
   Future<void> createProfile(Profile profile) async {
     try {
       await _supabase.from('profile').insert(profile.toMap());

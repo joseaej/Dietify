@@ -1,6 +1,6 @@
-
 import 'dart:convert';
 import 'package:dietify/models/profile.dart';
+import 'package:dietify/models/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceService {
@@ -10,6 +10,7 @@ class SharedPreferenceService {
     _preferences = await SharedPreferences.getInstance();
   }
 
+  // Obtención del perfil
   static Future<void> setProfileFromLocal(Profile profile) async {
     await _initPreferences();
     await _preferences?.setString("profile", jsonEncode(profile.toMap()));
@@ -25,5 +26,23 @@ class SharedPreferenceService {
   static Future<void> clearProfile() async {
     await _initPreferences();
     await _preferences?.remove("profile");
+  }
+
+  // Obtener ajustes de la app
+  static Future<void> setSettings(Settings settings) async {
+    await _initPreferences();
+    await _preferences?.setString("settings", jsonEncode(settings.toMap()));
+  }
+
+  static Future<Settings?> getSettings() async {
+    await _initPreferences();
+    final settingsLocal = _preferences?.getString("settings");
+    if (settingsLocal == null) return null;
+    return Settings.fromMap(jsonDecode(settingsLocal));
+  }
+
+  static Future<void> clearSettings() async {
+    await _initPreferences();
+    _preferences?.remove("settings");
   }
 }

@@ -1,27 +1,29 @@
-import 'package:dietify/models/profile.dart';
+import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  final Profile? profile;
-  
-  const HomePage({super.key, required this.profile});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final profile = profileProvider.profile;
+
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Column(
         children: [
-          Text(widget.profile!.email ?? 'No email'),
-          Text(widget.profile!.username ?? 'No username'),
-          Text(widget.profile!.weight.toString()),
-          Text(widget.profile!.height.toString()),
-          Text(widget.profile!.activityLevel??"Sedentario"),
+          Text(profile?.email ?? 'No email'),
+          Text(profile?.username ?? 'No username'),
+          Text(profile?.weight.toString() ?? 'No weight'),
+          Text(profile?.height.toString() ?? 'No height'),
+          Text(profile?.activityLevel ?? "Sedentario"),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, "/settings");
+            },
+          ),
         ],
       ),
     );

@@ -1,24 +1,35 @@
+import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
-
 import '../profile.dart';
 
 class ProfileProvider with ChangeNotifier {
   Profile? _profile;
-  bool _isLoading = false;
+  bool _isLoading = true; // Inicialmente en true para indicar que se está cargando
 
   Profile? get profile => _profile;
   bool get isLoading => _isLoading;
 
+  ProfileProvider() {
+    getProfileFromLocal(); // Cargar el perfil al inicializar
+  }
+
+  Future<void> getProfileFromLocal() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _profile = await SharedPreferenceService.getProfileFromLocal();
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> setProfile(Profile profile) async {
     _isLoading = true;
-    notifyListeners(); 
+    notifyListeners();
 
-    
-    await Future.delayed(Duration(seconds: 2));
-
+    await Future.delayed(Duration(seconds: 2)); // Simular una operación asíncrona
     _profile = profile;
     _isLoading = false;
-    notifyListeners(); 
+    notifyListeners();
   }
 
   void updateEmail(String email) {
@@ -27,6 +38,7 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   void updateUsername(String username) {
     if (_profile != null) {
       _profile = _profile!.copyWith(username: username);
@@ -71,6 +83,6 @@ class ProfileProvider with ChangeNotifier {
 
   void clearProfile() {
     _profile = null;
-    notifyListeners(); 
+    notifyListeners();
   }
 }
