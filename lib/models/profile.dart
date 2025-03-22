@@ -49,7 +49,7 @@ class Profile  {
     String? activityLevel,
   }) {
     return Profile(
-      email: email,
+      email: email??this.email,
       username: username ?? this.username,
       urlPhoto: urlPhoto ?? this.urlPhoto,
       weight: weight ?? this.weight,

@@ -11,19 +11,66 @@ class ProfileProvider with ChangeNotifier {
 
   Future<void> setProfile(Profile profile) async {
     _isLoading = true;
-    notifyListeners(); // Notifica que el estado de carga ha comenzado
+    notifyListeners(); 
 
-    // Simula un delay (por ejemplo, carga desde la base de datos o API)
+    
     await Future.delayed(Duration(seconds: 2));
 
     _profile = profile;
     _isLoading = false;
-    notifyListeners(); // Notifica que el perfil ha sido actualizado y ya no estamos cargando
+    notifyListeners(); 
+  }
+
+  void updateEmail(String email) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(email: email);
+      notifyListeners();
+    }
+  }
+  void updateUsername(String username) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(username: username);
+      notifyListeners();
+    }
+  }
+
+  void updatePhotoUrl(String urlPhoto) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(urlPhoto: urlPhoto);
+      notifyListeners();
+    }
+  }
+
+  void updateWeight(double weight) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(weight: weight);
+      notifyListeners();
+    }
+  }
+
+  void updateHeight(double height) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(height: height);
+      notifyListeners();
+    }
+  }
+
+  void updateAge(int age) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(age: age);
+      notifyListeners();
+    }
+  }
+
+  void updateActivityLevel(String activityLevel) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(activityLevel: activityLevel);
+      notifyListeners();
+    }
   }
 
   void clearProfile() {
     _profile = null;
-    notifyListeners(); // Notifica a los widgets cuando se borre el perfil
+    notifyListeners(); 
   }
 }
-

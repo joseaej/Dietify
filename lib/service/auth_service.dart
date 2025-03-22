@@ -20,8 +20,9 @@ class AuthService with ChangeNotifier {
       }
       return null;
     } catch (e) {
-      throw AuthException(e.toString());
+      debugPrint(e.toString());
     }
+    return null;
   }
 
   Future<Profile?> signUpWithEmailPassword(String email,String password,String username)async{
@@ -34,8 +35,9 @@ class AuthService with ChangeNotifier {
       }
       return null;
     } catch (e) {
-      throw AuthException(e.toString());
+      debugPrint(e.toString());
     }
+    return null;
   }
   
 }

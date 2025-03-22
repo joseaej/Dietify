@@ -11,6 +11,7 @@ Widget formRectangular(
   Color backgroundColor = lightBackground,
   Color textColor = darkfont,
   String? Function(String?)? validator,
+  String? Function(String?)? onSave,
 }) {
   return TextFormField(
     autocorrect: true,
@@ -40,5 +41,6 @@ Widget formRectangular(
     ),
     maxLines: 1,
     validator: validator, 
+    onSaved: onSave,
   );
 }

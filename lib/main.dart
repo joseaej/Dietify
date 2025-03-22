@@ -34,12 +34,11 @@ class MainApp extends StatelessWidget {
   final Profile? savedProfile;
 
   const MainApp({super.key, required this.route, this.savedProfile});
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ProfileProvider()),
+          ChangeNotifierProvider(create: (context) => ProfileProvider(),),
           ChangeNotifierProvider(
             create: (context) => AuthService(
               profile: savedProfile ?? Profile(email: "", username: ""),
@@ -53,7 +52,7 @@ class MainApp extends StatelessWidget {
             title: 'Dietify',
             theme: lightTheme,
             darkTheme: darkTheme,
-            initialRoute: "/onboarding",
+            initialRoute: route,
             routes: {
               '/home': (context) => HomePage(
                   profile:
