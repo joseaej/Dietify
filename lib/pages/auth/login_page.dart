@@ -1,10 +1,11 @@
 import 'package:dietify/models/profile.dart';
-import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/providers/profile_provider.dart';
 import '../../service/shared_preference_service.dart';
 import '../../widgets/form_widget.dart';
+import '../../widgets/loading_widget.dart';
 import 'sign_up_page.dart';
 import '../../../utils/theme.dart';
 
@@ -77,8 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () async{
         Profile? profile = await service.signInWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim());
         if (profile!=null) {
+          ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
+          provider.setProfile(profile);
           SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplashScreen(route: "/home", seconds: 3),));
         }
       },
       child: Text(

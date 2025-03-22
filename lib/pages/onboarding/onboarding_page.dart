@@ -1,6 +1,5 @@
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
-import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/pages/onboarding/on_board1.dart';
 import 'package:dietify/pages/onboarding/on_board2.dart';
 import 'package:dietify/pages/onboarding/on_board3.dart';
@@ -75,14 +74,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               if (provider.profile != null) {
                                 SharedPreferenceService.setProfileFromLocal(
                                     provider.profile!);
-                                ProfileRepository().updateProfile(provider.profile!);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomePage(
-                                        profile: provider.profile,
-                                      ),
-                                    ));
+                                ProfileRepository()
+                                    .updateProfile(provider.profile!);
+                                Navigator.pushReplacementNamed(
+                                    context, "/home");
                               }
                             }
                           },

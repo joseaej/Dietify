@@ -24,7 +24,7 @@ class Profile  {
         urlPhoto = map['url_photo'],
         weight = (map['weight'] as num?)?.toDouble(),
         height = (map['height'] as num?)?.toDouble(),
-        age = map['age'],
+        age = (map['age'] as num?)?.toInt(),
         activityLevel = map['activity_level'];
 
   Map<String, dynamic> toMap() {
