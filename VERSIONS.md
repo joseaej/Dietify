@@ -22,7 +22,10 @@ A continuación se detallan las versiones de la aplicación y los cambios realiz
   - Cargado de ajustes cuando se inicia la aplicación.
   - Cambiar de tema a claro o oscuro.
   - Cerrar sesión.
-  - Eliminar cuenta de la base de datos. 
+  - Eliminar cuenta de la base de datos.
+  - Guardar imagen en el storage medianete un bucket.
+  - Guardado local y carga local. 
 - **Arreglado**: Provider para la carga del perfil.
   - Provider para la carga de los ajustes.
   - Inyeccion de los ajustes en el main.
+  - Guardado de la foto
