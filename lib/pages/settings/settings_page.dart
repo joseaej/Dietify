@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
 import 'package:dietify/service/shared_preference_service.dart';
+import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,12 +23,21 @@ class _SettingsPageState extends State<SettingsPage> {
   XFile? photo;
   late SettingsProvider settings;
   late ProfileProvider profileProvider;
+  late StorageService storageService;
   final TextEditingController _usernameController = TextEditingController();
+  ProfileRepository repository = ProfileRepository();
+
+  @override
+  void initState() {
+    loadImageFromLocal();
+    super.initState();
+  }
 
 
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
+    storageService = Provider.of<StorageService>(context);
     settings = Provider.of<SettingsProvider>(context);
     _usernameController.text = profileProvider.profile?.username ?? '';
 
@@ -48,7 +61,50 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileSection(),
+            _buildProfileSection(
+              () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'Selecciona una opción',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          ListTile(
+                            leading: const Icon(Icons.camera_alt,
+                                color: Colors.blue),
+                            title: const Text('Cámara'),
+                            onTap: () {
+                              getImageFromCamara();
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.photo_library,
+                                color: Colors.green),
+                            title: const Text('Galería'),
+                            onTap: () {
+                              getImageFromGalery();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             SizedBox(height: 4.h),
             _buildSectionTitle('General'),
             _buildSettingOption(
@@ -135,7 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildProfileSection() {
+  Widget _buildProfileSection(Function() onTap) {
     return Container(
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
@@ -151,17 +207,24 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 8.w,
-            backgroundColor: lightOrange,
-            backgroundImage: AssetImage('assets/profile.jpg'),
+          GestureDetector(
+            onTap: onTap,
+            child: CircleAvatar(
+              radius: 8.w,
+              backgroundColor: lightOrange,
+              backgroundImage:
+                  (photo != null) ? FileImage(File(photo!.path)) : null,
+              child: (photo == null)
+                  ? Icon(Icons.person, size: 40.0, color: Colors.white)
+                  : null,
+            ),
           ),
           SizedBox(width: 4.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                profileProvider.profile!.username!,
+                (profileProvider.profile!=null)?profileProvider.profile!.username!:"",
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
@@ -244,12 +307,56 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future getImageFromGalery() async {
-    photo = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {});
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      saveImageLocally(pickedFile);
+      setState(() {
+        photo = pickedFile;
+      });
+      String filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String path =
+          await storageService.savePhotoToBucket(filePath, File(photo!.path));
+      profileProvider.updatePhotoUrl(path);
+      repository.updateProfile(profileProvider.profile!);
+    }
   }
 
   Future getImageFromCamara() async {
-    photo = await ImagePicker().pickImage(source: ImageSource.camera);
-    setState(() {});
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      saveImageLocally(pickedFile);
+      setState(() {
+        photo = pickedFile;
+      });
+      String filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String path =
+          await storageService.savePhotoToBucket(filePath, File(photo!.path));
+      profileProvider.updatePhotoUrl(path);
+      repository.updateProfile(profileProvider.profile!);
+    }
+  }
+
+  Future<void> saveImageLocally(XFile image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/profile.jpg';
+    final File localImage = File(filePath);
+
+    await localImage.writeAsBytes(await image.readAsBytes());
+    setState(() {
+      photo = XFile(localImage.path);
+    });
+
+    await SharedPreferenceService.saveProfilePhotoPath(localImage.path);
+  }
+
+  Future<void> loadImageFromLocal() async {
+    final savedPath = await SharedPreferenceService.getProfilePhotoPath();
+    if (savedPath != null && File(savedPath).existsSync()) {
+      setState(() {
+        photo = XFile(savedPath);
+      });
+    }
   }
 }
