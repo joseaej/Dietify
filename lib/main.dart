@@ -4,6 +4,7 @@ import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
+import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -47,6 +48,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
           create: (context) => SettingsProvider(initialSettings: initialSettings)),
         ChangeNotifierProvider(

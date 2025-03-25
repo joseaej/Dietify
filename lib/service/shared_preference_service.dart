@@ -45,4 +45,14 @@ class SharedPreferenceService {
     await _initPreferences();
     _preferences?.remove("settings");
   }
+
+  static Future<void> saveProfilePhotoPath(String path) async {
+    await _initPreferences();
+    await _preferences?.setString("profile_photo_path", path);
+  }
+
+  static Future<String?> getProfilePhotoPath() async {
+    await _initPreferences();
+    return _preferences?.getString("profile_photo_path");
+  }
 }
