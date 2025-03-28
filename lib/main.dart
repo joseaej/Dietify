@@ -1,7 +1,9 @@
+import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
+import 'package:dietify/pages/workout/workout_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
@@ -48,6 +50,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
           create: (context) => SettingsProvider(initialSettings: initialSettings)),
@@ -70,13 +73,14 @@ class MainApp extends StatelessWidget {
                 themeMode: settingsProvider.settings?.isDarkTheme ?? false
                     ? ThemeMode.dark
                     : ThemeMode.light,
-                initialRoute: route,
+                initialRoute: "/workouts",
                 routes: {
                   '/home': (context) => HomePage(),
                   '/login': (context) => LoginScreen(),
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
+                  '/workouts': (context) => WorkoutPage(),
                   "/spash":(context) => SplashScreen(route: "/login",seconds: 4,)
                 },
               );
