@@ -2,6 +2,7 @@ import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_page.dart';
+import 'package:dietify/pages/recipes/recipes_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/pages/workout/workout_page.dart';
 import 'package:dietify/service/auth_service.dart';
@@ -73,7 +74,7 @@ class MainApp extends StatelessWidget {
                 themeMode: settingsProvider.settings?.isDarkTheme ?? false
                     ? ThemeMode.dark
                     : ThemeMode.light,
-                initialRoute: "/workouts",
+                initialRoute: "/recipes",
                 routes: {
                   '/home': (context) => HomePage(),
                   '/login': (context) => LoginScreen(),
@@ -81,6 +82,7 @@ class MainApp extends StatelessWidget {
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
                   '/workouts': (context) => WorkoutPage(),
+                  '/recipes': (context) => RecipesPage(),
                   "/spash":(context) => SplashScreen(route: "/login",seconds: 4,)
                 },
               );
