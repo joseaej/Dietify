@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dietify/models/goals.dart';
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,5 +55,19 @@ class SharedPreferenceService {
   static Future<String?> getProfilePhotoPath() async {
     await _initPreferences();
     return _preferences?.getString("profile_photo_path");
+  }
+
+
+  //obtener Goals
+  static Future<Goals?> getGoalToLocal() async {
+    await _initPreferences();
+    String? map = _preferences!.getString("profile_photo_path");
+    return (map!=null)?Goals.fromMap(jsonDecode(map)):null;
+  }
+
+
+    static Future<void> setGoals(Goals goals) async {
+    await _initPreferences();
+    await _preferences?.setString("goals", jsonEncode(goals.toMap()));
   }
 }

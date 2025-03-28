@@ -43,6 +43,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.pushNamed(context, "/workouts");
+          }, icon: Icon(Icons.abc))
+        ],
         title: Text(
           'Settings',
           style: TextStyle(
@@ -50,6 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+          
         ),
         centerTitle: true,
         elevation: 0,
@@ -289,7 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: isDestructive
                       ? Colors.red

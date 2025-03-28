@@ -58,7 +58,7 @@ ThemeData lightTheme = ThemeData(
 // Tema oscuro
 ThemeData darkTheme = ThemeData(
   primaryColor: Colors.white,
-  scaffoldBackgroundColor: background,
+  scaffoldBackgroundColor: backgroundBlack, // Cambio para el fondo oscuro
   hintColor: background,
   primaryColorDark: Colors.white,
   textTheme: TextTheme(
