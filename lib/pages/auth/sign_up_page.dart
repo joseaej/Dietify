@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
-import 'package:dietify/pages/home/home_page.dart';
+import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +97,10 @@ class _SignupPageState extends State<SignupPage> {
       onPressed: () async{
         Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
         if (profile!=null) {
+          ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
+          provider.setProfile(profile);
           SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
+          Navigator.pushReplacementNamed(context, "/onboarding");
         }
       },
       child: Text(

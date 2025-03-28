@@ -1,10 +1,11 @@
 import 'package:dietify/models/profile.dart';
-import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/providers/profile_provider.dart';
 import '../../service/shared_preference_service.dart';
 import '../../widgets/form_widget.dart';
+import '../../widgets/loading_widget.dart';
 import 'sign_up_page.dart';
 import '../../../utils/theme.dart';
 
@@ -18,8 +19,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool? isChecked = false;
-  String? error;
   late AuthService service;
 
   @override
@@ -57,26 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: isChecked,
-                  checkColor: font,
-                  activeColor: orange,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value;
-                    });
-                  },
-                ),
-                Text(
-                  "Remember",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
               child: _buttonLogin(context),
@@ -99,8 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () async{
         Profile? profile = await service.signInWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim());
         if (profile!=null) {
+          ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
+          provider.setProfile(profile);
           SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(profile: profile,),));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplashScreen(route: "/home", seconds: 3),));
         }
       },
       child: Text(
