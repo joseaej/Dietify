@@ -50,4 +50,13 @@ class GoalProvider with ChangeNotifier {
     double waterPercent = goal!.currentWaterIntake*100/goal!.maxWaterIntake!;
     return waterPercent.ceilToDouble().round();
   }
+
+  void updateCalories(double calories,String oper){
+    if (oper=="-") {
+      goal!.currentCalories -= calories;
+    }else{
+      goal!.currentCalories += calories;
+    }
+    notifyListeners();
+  }
 }
