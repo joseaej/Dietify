@@ -76,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           const Text(
-                            'Selecciona una opción',
+                            'Select an Options',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -237,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ? profileProvider.profile!.email!
                     : "",
                 style: TextStyle(
-                  fontSize: 13.sp,
+                  fontSize: 15.sp,
                   color: Colors.grey,
                 ),
               ),
@@ -254,7 +254,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 14.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.bold,
           color: orange,
         ),
