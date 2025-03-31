@@ -7,6 +7,7 @@ class Profile  {
   double? height;
   int? age;
   String? activityLevel;
+  String? sex;
 
   Profile({
     this.email,
@@ -16,12 +17,14 @@ class Profile  {
     this.age,
     this.height,
     this.weight,
+    this.sex
   });
 
   Profile.fromMap(Map<String, dynamic> map)
       : email = map['email'],
         username = map['username'],
         urlPhoto = map['url_photo'],
+        sex = map['sex'],
         weight = (map['weight'] as num?)?.toDouble(),
         height = (map['height'] as num?)?.toDouble(),
         age = (map['age'] as num?)?.toInt(),
@@ -32,6 +35,7 @@ class Profile  {
       'email': email,
       'username': username,
       'url_photo': urlPhoto,
+      'sex': sex,
       'weight': weight,
       'height': height,
       'age': age,
@@ -42,6 +46,7 @@ class Profile  {
   Profile copyWith({
     String? email,
     String? username,
+    String? sex,
     String? urlPhoto,
     double? weight,
     double? height,
@@ -51,6 +56,7 @@ class Profile  {
     return Profile(
       email: email??this.email,
       username: username ?? this.username,
+      sex: sex??this.sex,
       urlPhoto: urlPhoto ?? this.urlPhoto,
       weight: weight ?? this.weight,
       height: height ?? this.height,
@@ -59,19 +65,9 @@ class Profile  {
     );
   }
 
-  void updateProfile({
-    String? user,
-    String? urlPhoto,
-    double? weight,
-    double? height,
-    int? age,
-    String? activityLevel,
-  }) {
-    username = user ?? username;
-    this.urlPhoto = urlPhoto ?? this.urlPhoto;
-    this.weight = weight ?? this.weight;
-    this.height = height ?? this.height;
-    this.age = age ?? this.age;
-    this.activityLevel = activityLevel ?? this.activityLevel;
-  }
+@override
+String toString() {
+  return 'Profile(email: $email, username: $username, urlPhoto: $urlPhoto, weight: $weight, height: $height, age: $age, activityLevel: $activityLevel, sex: $sex)';
+}
+
 }
