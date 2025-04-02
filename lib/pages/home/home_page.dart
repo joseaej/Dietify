@@ -1,5 +1,6 @@
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
+import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -16,10 +17,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late GoalProvider goalProvider;
   late ProfileProvider profileProvider;
+  late WorkoutProvider workoutProvider;
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
+    workoutProvider = Provider.of<WorkoutProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text((profileProvider.profile != null)
@@ -30,13 +33,14 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             _buildCaloriesCard(),
+            _buildRecentActivityCard(),
             _buildWaterCard(),
           ],
         ),
       ),
     );
   }
-
+  
   Widget _buildCaloriesCard() {
     return Container(
       height: 25.h,
@@ -114,7 +118,62 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
+  Widget _buildRecentActivityCard() {
+    return Container(
+      height: 25.h,
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15.0),
+        gradient: LinearGradient(
+          colors: [lightOrange, orange],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black38,
+            blurRadius: 8.0,
+            offset: const Offset(4, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Recent Activity',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6.0),
+                  Text(
+                    (workoutProvider.lastWorkout != null)
+                        ? "${workoutProvider.lastWorkout!.name}"
+                        : "No hay actividad reciente",
+                    style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildWaterCard() {
     return Container(
       height: 25.h,
@@ -163,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 6.0),
                   Text(
-                    (goalProvider.goal != null)
+                    (goalProvider.goal != null && profileProvider.profile!=null)
                         ? '${goalProvider.goal!.currentWaterIntake} ml  /  ${goalProvider.goal!.getMaxWaterIntake(profileProvider.profile!.weight!)} ml'
                         : "",
                     style: TextStyle(fontSize: 14.0, color: Colors.white70),

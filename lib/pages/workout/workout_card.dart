@@ -83,7 +83,7 @@ class WorkoutCard extends StatelessWidget {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 12),
               ),
-              onPressed: () {},
+              onPressed: onPressed,
               child: Text(
                 "Start",
                 style: TextStyle(
