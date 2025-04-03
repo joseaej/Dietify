@@ -65,7 +65,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     controller: _pagecontroller,
                     count: 3,
                     effect: JumpingDotEffect(
-                        dotColor: Colors.black26, activeDotColor: orange),
+                        dotColor: Colors.black26, activeDotColor: blue),
                   ),
                   isOnLastPage
                       ? GestureDetector(

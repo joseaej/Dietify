@@ -42,26 +42,26 @@ class _SignupPageState extends State<SignupPage> {
           children: [
             Text(
               "Create your account",
-              style: TextStyle(color: orange, fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(color: blue, fontSize: 30, fontWeight: FontWeight.bold),
             ),
             form(
               _emailController,
               "Email",
-              Icon(Icons.email,color: orange,),
+              Icon(Icons.email,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 30, 50, 20),
               isPassword: false,
             ),form(
               _username,
               "Usuario",
-              Icon(Icons.person,color: orange,),
+              Icon(Icons.person,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: false,
             ),form(
               _passwordController,
               "Password",
-              Icon(Icons.lock_outline_rounded,color: orange,),
+              Icon(Icons.lock_outline_rounded,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -69,7 +69,7 @@ class _SignupPageState extends State<SignupPage> {
             form(
               _confirmpassController,
               "Confirm Password",
-              Icon(Icons.lock_outline_rounded,color: orange,),
+              Icon(Icons.lock_outline_rounded,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -91,7 +91,7 @@ class _SignupPageState extends State<SignupPage> {
   TextButton _buttonSignUp(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(orange),
+        backgroundColor: WidgetStateProperty.all(blue),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async{
@@ -179,7 +179,7 @@ class _SignupPageState extends State<SignupPage> {
             MaterialPageRoute(builder: (context) => LoginScreen()),
           );
         },
-        child: Text("Login", style: TextStyle(color: orange)),
+        child: Text("Login", style: TextStyle(color: blue)),
       ),
     ],
   );
