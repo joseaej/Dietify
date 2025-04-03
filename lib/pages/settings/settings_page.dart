@@ -52,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: orange,
+        backgroundColor: blue,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -110,6 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.dark_mode,
               title: 'Dark Mode',
               trailing: Switch(
+                focusColor: blue,
                 value: settings.settings!.isDarkTheme,
                 onChanged: (p0) {
                   setState(() {
@@ -210,7 +211,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: onTap,
             child: CircleAvatar(
               radius: 8.w,
-              backgroundColor: lightOrange,
+              backgroundColor: skyBlue,
               backgroundImage:
                   (photo != null) ? FileImage(File(photo!.path)) : null,
               child: (photo == null)
@@ -256,7 +257,7 @@ class _SettingsPageState extends State<SettingsPage> {
         style: TextStyle(
           fontSize: 14.sp,
           fontWeight: FontWeight.bold,
-          color: orange,
+          color: blue,
         ),
       ),
     );
@@ -286,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         child: Row(
           children: [
-            Icon(icon, color: isDestructive ? Colors.red : orange),
+            Icon(icon, color: isDestructive ? Colors.red : blue),
             SizedBox(width: 4.w),
             Expanded(
               child: Text(

@@ -71,13 +71,12 @@ class MainApp extends StatelessWidget {
         builder: (context, settingsProvider, child) {
           // Detectar cuando la app se cierra
           GoalProvider goalsProvider = context.read<GoalProvider>();
+          WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
-            if (msg == AppLifecycleState.detached.toString()) {
-              if (goalsProvider.goal != null) {
-                await SharedPreferenceService.setGoalsFromLocal(
-                    goalsProvider.goal!);
-              }
+            if (msg == AppLifecycleState.paused.toString()) {
+              goalsProvider.savaGoalToLocal();
+              workoutProvider.saveLastWorkout();
             }
             return null;
           });

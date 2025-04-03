@@ -23,12 +23,13 @@ class GoalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setGoals(Goal goal) async {
+  Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
+    if (goal != null) {
+      await SharedPreferenceService.setGoalsFromLocal(goal!);
+    }
 
-    await Future.delayed(Duration(seconds: 2));
-    this.goal = goal;
     _isLoading = false;
     notifyListeners();
   }
@@ -64,5 +65,11 @@ class GoalProvider with ChangeNotifier {
       goal!.currentCalories += calories;
     }
     notifyListeners();
+  }
+
+
+  @override
+  String toString() {
+    return "${goal!.currentCalories}\n${goal!.totalCalories}\n${goal!.maxWaterIntake}\n${goal!.currentWaterIntake}\n";
   }
 }
