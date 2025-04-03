@@ -5,7 +5,7 @@ Widget formRectangular(
   String hintText,
   String labelText,
   TextEditingController controller, {
-  Color cursorColor = orange,
+  Color cursorColor = blue,
   Function()? onIconPressed,
   Icon? icon,
   Color backgroundColor = lightBackground,

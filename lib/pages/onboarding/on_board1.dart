@@ -69,7 +69,7 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                           text: "Dietify",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange),
+                              color: Colors.blue),
                         ),
                         const TextSpan(
                             text: ", your ultimate diet planner! Discover "),
@@ -77,7 +77,7 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                           text: "personalized ",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange),
+                              color: Colors.blue),
                         ),
                         const TextSpan(
                             text: "meal plans, delicious recipes, and a "),
@@ -85,7 +85,7 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                           text: "supportive community",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange),
+                              color: Colors.blue),
                         ),
                         const TextSpan(
                             text:
@@ -94,7 +94,7 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                           text: "Let's get started!",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange),
+                              color: Colors.blue),
                         ),
                       ],
                     ),

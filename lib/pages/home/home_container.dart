@@ -38,7 +38,7 @@ class _HomeContainerState extends State<HomeContainer> {
         children: _screens,
       ),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: orange,
+        backgroundColor: blue,
         style: TabStyle.flip,
         items: [
           TabItem(icon: Icons.home, title: 'Inicio'),

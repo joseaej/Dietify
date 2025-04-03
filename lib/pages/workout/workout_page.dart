@@ -1,3 +1,4 @@
+import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/repository/workout_repository.dart';
@@ -23,6 +24,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   TextEditingController searchController = TextEditingController();
 
   late WorkoutProvider workoutProvider;
+  late GoalProvider goalProvider;
 
   @override
   void initState() {
@@ -47,8 +49,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         final difficultyLower = workout.intensity?.toLowerCase() ?? '';
         final searchLower = query.toLowerCase();
 
-        return nameLower.contains(searchLower) || 
-               difficultyLower.contains(searchLower);
+        return nameLower.contains(searchLower) ||
+            difficultyLower.contains(searchLower);
       }).toList();
     });
   }
@@ -56,6 +58,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
     workoutProvider = Provider.of<WorkoutProvider>(context);
+    goalProvider = Provider.of<GoalProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -63,7 +66,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: orange,
+        backgroundColor: blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -99,6 +102,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                           calories: "${workout.calories}",
                           onPressed: () {
                             workoutProvider.updateLastWorkout(workout);
+                            goalProvider.updateCalories(workout.calories!, "-");
                           },
                         ),
                       );

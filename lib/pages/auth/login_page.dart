@@ -38,12 +38,12 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               "Welcome back",
-              style: TextStyle(color: orange, fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(color: blue, fontSize: 30, fontWeight: FontWeight.bold),
             ),
             form(
               _emailController,
               "Email",
-              Icon(Icons.email,color: orange,),
+              Icon(Icons.email,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 30, 50, 20),
               isPassword: false,
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             form(
               _passwordController,
               "Password",
-              Icon(Icons.lock_outline_rounded,color: orange,),
+              Icon(Icons.lock_outline_rounded,color: blue,),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextButton _buttonLogin(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(orange),
+        backgroundColor: WidgetStateProperty.all(blue),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async{
@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: onCreatePressed,
             child: Text(
               "Sign Up",
-              style: TextStyle(color: orange),
+              style: TextStyle(color: blue),
             ),
           ),
         ],

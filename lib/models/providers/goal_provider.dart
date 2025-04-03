@@ -24,8 +24,12 @@ class GoalProvider with ChangeNotifier {
   }
 
   Future<void> savaGoalToLocal() async {
+  Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
+    if (goal != null) {
+      await SharedPreferenceService.setGoalsFromLocal(goal!);
+    }
     if (goal != null) {
       await SharedPreferenceService.setGoalsFromLocal(goal!);
     }
@@ -77,6 +81,7 @@ class GoalProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
 
   @override
   String toString() {
