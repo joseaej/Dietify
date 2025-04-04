@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dietify/models/goal.dart';
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/settings.dart';
+import 'package:dietify/models/workout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceService {
@@ -74,5 +75,18 @@ class SharedPreferenceService {
   static void clearGoals() async{
     await _initPreferences();
     _preferences?.remove("goals");
+  }
+
+
+  //lastWorkout
+  static Future<void> setLastWorkout(Workout workout) async {
+    await _initPreferences();
+    _preferences?.setString("lastWorkout", jsonEncode(workout.toMap()));
+  }
+  static Future<Workout?> getLastWorkout() async{
+    await _initPreferences();
+    final map = _preferences?.getString("lastWorkout");
+    if(map==null)return null;
+    return Workout.fromMap(jsonDecode(map));
   }
 }

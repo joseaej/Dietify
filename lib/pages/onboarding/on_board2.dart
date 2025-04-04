@@ -55,7 +55,7 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                           text: "Dietify",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: orange,
+                            color: blue,
                           ),
                         ),
                         TextSpan(
@@ -69,7 +69,7 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                           text: "Turn your energy",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: orange,
+                            color: blue,
                           ),
                         ),
                         TextSpan(
@@ -83,7 +83,7 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                           text: "Push your limits",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: orange,
+                            color: blue,
                           ),
                         ),
                         TextSpan(
@@ -97,7 +97,7 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                           text: "Let's crush it together!",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: orange,
+                            color: blue,
                           ),
                         ),
                       ],

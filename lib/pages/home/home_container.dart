@@ -38,11 +38,11 @@ class _HomeContainerState extends State<HomeContainer> {
         children: _screens,
       ),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: orange,
+        backgroundColor: blue,
         style: TabStyle.flip,
         items: [
           TabItem(icon: Icons.home, title: 'Inicio'),
-          TabItem(icon: Icons.person, title: 'Workout'),
+          TabItem(icon: Icons.zoom_in_map_rounded, title: 'Workout'),
           TabItem(icon: Icons.settings, title: 'Ajustes'),
         ],
         initialActiveIndex: _currentIndex,

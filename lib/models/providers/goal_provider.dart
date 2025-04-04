@@ -23,12 +23,13 @@ class GoalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setGoals(Goal goal) async {
+  Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
+    if (goal != null) {
+      await SharedPreferenceService.setGoalsFromLocal(goal!);
+    }
 
-    await Future.delayed(Duration(seconds: 2));
-    this.goal = goal;
     _isLoading = false;
     notifyListeners();
   }
@@ -40,23 +41,35 @@ class GoalProvider with ChangeNotifier {
   }
 
   //updateo propiedades
-  void updateWaterIntake(double waterInc){
+  void updateWaterIntake(double waterInc) {
     goal!.currentWaterIntake += waterInc;
     notifyListeners();
   }
 
-  int getWaterPercent(){
-    if (goal==null) return 0;
-    double waterPercent = goal!.currentWaterIntake*100/goal!.maxWaterIntake!;
-    return waterPercent.ceilToDouble().round();
+  int getWaterPercent() {
+    if (goal == null ||
+        goal!.maxWaterIntake == null ||
+        goal!.maxWaterIntake == 0) {
+      return 0;
+    }
+
+    double waterPercent =
+        (goal!.currentWaterIntake * 100) / goal!.maxWaterIntake!;
+    return waterPercent.round();
   }
 
-  void updateCalories(double calories,String oper){
-    if (oper=="-") {
+  void updateCalories(double calories, String oper) {
+    if (oper == "-") {
       goal!.currentCalories -= calories;
-    }else{
+    } else {
       goal!.currentCalories += calories;
     }
     notifyListeners();
+  }
+
+
+  @override
+  String toString() {
+    return "${goal!.currentCalories}\n${goal!.totalCalories}\n${goal!.maxWaterIntake}\n${goal!.currentWaterIntake}\n";
   }
 }

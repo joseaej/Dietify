@@ -6,7 +6,7 @@ class Workout {
   String? intensity;
   String? notes;
   String? muscles;
-  int? calories;
+  double? calories;
   Workout(
       {required this.id,
       this.name,
@@ -24,7 +24,7 @@ class Workout {
         type = map['type'],
         intensity = map['intensity'],
         muscles = map['muscles'],
-        calories = map['calories'],
+        calories = (map['calories'] as num?)?.toDouble(),
         notes = map['notes'];
 
   Map<String, dynamic> toMap() {
@@ -48,7 +48,7 @@ class Workout {
     String? intensity,
     String? notes,
     String? muscles,
-    int? calories,
+    double? calories,
   }) {
     return Workout(
       id: id ?? this.id,

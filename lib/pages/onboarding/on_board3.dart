@@ -52,7 +52,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                     "140",
                     "Height",
                     _heightController,
-                    cursorColor: orange,
+                    cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your height';
@@ -80,7 +80,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                     "80",
                     "Weight",
                     _weightController,
-                    cursorColor: orange,
+                    cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your weight';
@@ -104,7 +104,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                     "30",
                     "Age",
                     _ageController,
-                    cursorColor: orange,
+                    cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your age';
@@ -129,18 +129,18 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                     value: _selectedActivityLevel,
                     decoration: InputDecoration(
                       labelText: "Nivel de actividad",
-                      labelStyle: TextStyle(color: orange, fontSize: 20),
+                      labelStyle: TextStyle(color: blue, fontSize: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: orange, width: 2),
+                        borderSide: BorderSide(color: blue, width: 2),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: orange, width: 2),
+                        borderSide: BorderSide(color: blue, width: 2),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: orange, width: 2.5),
+                        borderSide: BorderSide(color: blue, width: 2.5),
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),

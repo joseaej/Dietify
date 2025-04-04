@@ -76,14 +76,14 @@ class WorkoutCard extends StatelessWidget {
             width: double.infinity,
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: orange,
+                backgroundColor: blue,
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(12)),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 12),
               ),
-              onPressed: () {},
+              onPressed: onPressed,
               child: Text(
                 "Start",
                 style: TextStyle(
@@ -117,7 +117,7 @@ class WorkoutCard extends StatelessWidget {
       case 'baja':
         return Colors.green;
       case 'media':
-        return Colors.orange;
+        return Colors.blue;
       case 'alta':
         return Colors.red;
       default:

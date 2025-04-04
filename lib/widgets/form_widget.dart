@@ -34,7 +34,7 @@ class _PasswordFieldState extends State<PasswordField> {
       child: TextFormField(
         controller: widget.controller,
         obscureText: _obscureText,
-        cursorColor: orange,
+        cursorColor: blue,
         decoration: InputDecoration(
           label: Text(
             widget.texto,
@@ -85,7 +85,7 @@ Widget form(TextEditingController controller, String texto, Icon icono, BorderRa
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
-        cursorColor: orange,
+        cursorColor: blue,
         decoration: InputDecoration(
           label: Text(
             texto,

@@ -1,9 +1,12 @@
+import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
+import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/repository/workout_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_card.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({super.key});
@@ -19,6 +22,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<Workout> allWorkouts = [];
   List<Workout> filteredWorkouts = [];
   TextEditingController searchController = TextEditingController();
+
+  late WorkoutProvider workoutProvider;
+  late GoalProvider goalProvider;
 
   @override
   void initState() {
@@ -43,14 +49,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
         final difficultyLower = workout.intensity?.toLowerCase() ?? '';
         final searchLower = query.toLowerCase();
 
-        return nameLower.contains(searchLower) || 
-               difficultyLower.contains(searchLower);
+        return nameLower.contains(searchLower) ||
+            difficultyLower.contains(searchLower);
       }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    workoutProvider = Provider.of<WorkoutProvider>(context);
+    goalProvider = Provider.of<GoalProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -58,7 +66,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: orange,
+        backgroundColor: blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -92,6 +100,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
                           duration: "${workout.duration} min",
                           difficulty: workout.intensity!,
                           calories: "${workout.calories}",
+                          onPressed: () {
+                            workoutProvider.updateLastWorkout(workout);
+                            goalProvider.updateCalories(workout.calories!, "-");
+                          },
                         ),
                       );
                     },
