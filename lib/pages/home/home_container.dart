@@ -2,6 +2,7 @@
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:dietify/pages/home/home_page.dart';
+import 'package:dietify/pages/profile/profile_page.dart';
 import 'package:dietify/pages/recipes/recipes_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/pages/workout/workout_page.dart';
@@ -29,7 +30,7 @@ class _HomeContainerState extends State<HomeContainer> {
       HomePage(),
       RecipesPage(),
       WorkoutPage(),
-      SettingsPage()
+      ProfilePage()
     ];
   }
 

@@ -60,6 +60,11 @@ class _SettingsPageState extends State<SettingsPage> {
         elevation: 0,
         backgroundColor: blue,
         iconTheme: IconThemeData(color: Colors.white),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(4.w),
@@ -201,14 +206,15 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
-        color: (settings.settings!.isDarkTheme) ? backgroundBlack : font,
-        borderRadius: BorderRadius.circular(12),
+        color: (settings.settings!.isDarkTheme) ? backgroundTextField : font,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderColor, width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
+            color: Colors.black26,
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          )
         ],
       ),
       child: Row(
@@ -281,14 +287,15 @@ class _SettingsPageState extends State<SettingsPage> {
         margin: EdgeInsets.only(bottom: 1.h),
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 4.w),
         decoration: BoxDecoration(
-          color: (settings.settings!.isDarkTheme) ? backgroundBlack : font,
-          borderRadius: BorderRadius.circular(12),
+          color: (settings.settings!.isDarkTheme) ? backgroundTextField : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            )
           ],
         ),
         child: Row(

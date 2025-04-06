@@ -34,13 +34,21 @@ class _HomePageState extends State<HomePage> {
         title: Text((profileProvider.profile != null)
             ? profileProvider.profile!.username!
             : ""),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/settings");
+              },
+              icon: Icon(Icons.settings))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
               height: 20,
-            ),Row(
+            ),
+            Row(
               children: [
                 Expanded(child: _buildPieChart()),
                 Expanded(child: _buildPieChart()),
@@ -80,20 +88,24 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Widget _buildCaloriesCard() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         height: 20.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: (isDarkTheme) ? background : lightBackground,
+          color: (settingsProvider.settings!.isDarkTheme)
+              ? backgroundTextField
+              : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: (isDarkTheme) ? lightBlue : Colors.black26,
-              blurRadius: 5.0,
+              color: Colors.black26,
+              blurRadius: 6,
               offset: const Offset(0, 4),
-            ),
+            )
           ],
         ),
         child: Padding(
@@ -160,14 +172,17 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         height: 20.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: (isDarkTheme) ? background : font,
+          color: (settingsProvider.settings!.isDarkTheme)
+              ? backgroundTextField
+              : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: (isDarkTheme) ? lightBlue : Colors.black26,
-              blurRadius: 5.0,
+              color: Colors.black26,
+              blurRadius: 6,
               offset: const Offset(0, 4),
-            ),
+            )
           ],
         ),
         child: Padding(
@@ -253,14 +268,17 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         height: 20.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: (isDarkTheme) ? background : lightBackground,
+          color: (settingsProvider.settings!.isDarkTheme)
+              ? backgroundTextField
+              : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: (isDarkTheme) ? lightBlue : Colors.black26,
-              blurRadius: 5.0,
+              color: Colors.black26,
+              blurRadius: 6,
               offset: const Offset(0, 4),
-            ),
+            )
           ],
         ),
         child: Padding(
@@ -301,8 +319,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 4.0),
-                    Text((workoutProvider.randomWorkout.name!=null)?workoutProvider.randomWorkout.name!:"Flexiones"
-                      ,
+                    Text(
+                      (workoutProvider.randomWorkout.name != null)
+                          ? workoutProvider.randomWorkout.name!
+                          : "Flexiones",
                       style: TextStyle(
                         fontSize: 15.0,
                         color: (isDarkTheme) ? lightGray : darkfont,
@@ -324,14 +344,17 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         height: 20.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: (isDarkTheme) ? background : lightBackground,
+          color: (settingsProvider.settings!.isDarkTheme)
+              ? backgroundTextField
+              : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: (isDarkTheme) ? lightBlue : Colors.black26,
-              blurRadius: 5.0,
+              color: Colors.black26,
+              blurRadius: 6,
               offset: const Offset(0, 4),
-            ),
+            )
           ],
         ),
         child: Padding(

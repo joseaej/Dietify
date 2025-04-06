@@ -18,20 +18,22 @@ class WorkoutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
-    bool isDarkTheme = settingsProvider.settings!.isDarkTheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: (isDarkTheme) ? backgroundBlack : lightBackground,
-          borderRadius: BorderRadius.circular(24),
+          color: (settingsProvider.settings!.isDarkTheme)
+              ? backgroundTextField
+              : font,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: (isDarkTheme) ? lightBlue : Colors.black26,
-              blurRadius: 0,
-              offset: const Offset(0, 1),
-            ),
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            )
           ],
         ),
         child: Row(
