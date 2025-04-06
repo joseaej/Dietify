@@ -1,9 +1,8 @@
-import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
-import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/repository/workout_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_card.dart';
+import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +22,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<Workout> filteredWorkouts = [];
   TextEditingController searchController = TextEditingController();
 
-  late WorkoutProvider workoutProvider;
-  late GoalProvider goalProvider;
 
   @override
   void initState() {
@@ -57,16 +54,21 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    workoutProvider = Provider.of<WorkoutProvider>(context);
-    goalProvider = Provider.of<GoalProvider>(context);
+    settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Entrenamientos",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            letterSpacing: 0.5,
+          ),
         ),
-        centerTitle: true,
+        elevation: 0,
         backgroundColor: blue,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -88,23 +90,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
                         child: Text("No se encontraron entrenamientos."));
                   }
 
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
+                  return ListView.separated(
                     itemCount: filteredWorkouts.length,
+                    separatorBuilder: (_, __) => SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final workout = filteredWorkouts[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: _workoutCard(
-                          workoutName: workout.name!,
-                          duration: "${workout.duration} min",
-                          difficulty: workout.intensity!,
-                          calories: "${workout.calories}",
-                          onPressed: () {
-                            workoutProvider.updateLastWorkout(workout);
-                            goalProvider.updateCalories(workout.calories!, "-");
-                          },
-                        ),
+                      return WorkoutCard(
+                        workout: workout,
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutDetailPage(workout: workout),));
+                        },
                       );
                     },
                   );
@@ -121,10 +116,12 @@ class _WorkoutPageState extends State<WorkoutPage> {
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
+      
         hintText: "Buscar entrenamiento...",
-        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        prefixIcon: Icon(Icons.search, color: (settingsProvider.settings!.isDarkTheme)?font:grey600),
+        hintStyle: TextStyle(color: (settingsProvider.settings!.isDarkTheme)?font:grey600),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: (settingsProvider.settings!.isDarkTheme)?background:lightBackground,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
@@ -136,24 +133,4 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
-  Widget _workoutCard({
-    required String workoutName,
-    required String duration,
-    required String difficulty,
-    required String calories,
-    String? imageUrl,
-    Color? fontColor,
-    Function()? onPressed,
-  }) {
-    return WorkoutCard(
-      workoutName: workoutName,
-      duration: duration,
-      difficulty: difficulty,
-      calories: calories,
-      imageUrl: imageUrl ??
-          'https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-      fontColor: fontColor ?? Colors.black,
-      onPressed: onPressed ?? () {},
-    );
-  }
 }

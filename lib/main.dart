@@ -69,7 +69,6 @@ class MainApp extends StatelessWidget {
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
-          // Detectar cuando la app se cierra
           GoalProvider goalsProvider = context.read<GoalProvider>();
           WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
 
@@ -91,7 +90,7 @@ class MainApp extends StatelessWidget {
                 themeMode: settingsProvider.settings?.isDarkTheme ?? false
                     ? ThemeMode.dark
                     : ThemeMode.light,
-                initialRoute: "/spash",
+                initialRoute: "/home",
                 routes: {
                   '/home': (context) => HomeContainer(),
                   '/login': (context) => LoginScreen(),
