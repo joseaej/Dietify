@@ -3,6 +3,7 @@ import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
+import 'package:dietify/pages/profile/profile_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
@@ -93,6 +94,7 @@ class MainApp extends StatelessWidget {
                 initialRoute: route,
                 routes: {
                   '/home': (context) => HomeContainer(),
+                  '/profile': (context) => ProfilePage(),
                   '/login': (context) => LoginScreen(),
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
