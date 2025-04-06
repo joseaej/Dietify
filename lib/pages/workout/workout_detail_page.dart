@@ -1,3 +1,5 @@
+import 'package:dietify/models/profile.dart';
+import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
   late SettingsProvider settingsProvider;
   late WorkoutProvider workoutProvider;
   late GoalProvider goalProvider;
+  late ProfileProvider profileProvider;
   @override
   void initState() {
     super.initState();
@@ -31,12 +34,19 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     settingsProvider = Provider.of<SettingsProvider>(context);
     workoutProvider = Provider.of<WorkoutProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
+    profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: IconButton(onPressed: () {
-            Navigator.pop(context);
-          }, icon: Icon(Icons.cancel_outlined,color: blue,size: 3.5.h,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: blue,
+              size: 3.5.h,
+            )),
         title: Text(workout.name ?? "Entrenamiento",
             style: TextStyle(
                 color:
@@ -44,9 +54,14 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                 fontSize: 20.sp)),
         elevation: 0,
         actions: [
-          IconButton(onPressed: () {
-            
-          }, icon: Icon(Icons.save_as_sharp,color: blue,))
+          IconButton(
+              onPressed: () {
+                profileProvider.addWorkoutToList(workout);
+              },
+              icon: Icon(
+                Icons.save_as_sharp,
+                color: blue,
+              ))
         ],
       ),
       body: Padding(
@@ -66,7 +81,9 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                   "${workout.calories?.toStringAsFixed(1) ?? 0} kcal"),
               if ((workout.notes?.isNotEmpty ?? false))
                 _buildCardItem(Icons.notes, "Notas", workout.notes!),
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               _buildAddButton(() {
                 workoutProvider.updateLastWorkout(workout);
                 goalProvider.updateCalories(workout.calories!, "-");
@@ -94,7 +111,11 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("COMENZAR",style: TextStyle(color: font,fontWeight: FontWeight.bold,fontSize: 18.sp),)
+            Text(
+              "COMENZAR",
+              style: TextStyle(
+                  color: font, fontWeight: FontWeight.bold, fontSize: 18.sp),
+            )
           ],
         ),
       ),
