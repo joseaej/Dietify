@@ -1,16 +1,20 @@
+import 'package:dietify/models/repository/workout_repository.dart';
+import 'package:dietify/models/workout.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import '../profile.dart';
 
 class ProfileProvider with ChangeNotifier {
   Profile? _profile;
-  bool _isLoading = true; // Inicialmente en true para indicar que se está cargando
+  bool _isLoading = true;
+  final WorkoutRepository _repository = WorkoutRepository();
+  List<Workout> savedWorkout = List.empty(growable: true);
 
   Profile? get profile => _profile;
   bool get isLoading => _isLoading;
 
   ProfileProvider() {
-    getProfileFromLocal(); // Cargar el perfil al inicializar
+    getProfileFromLocal();
   }
 
   Future<void> getProfileFromLocal() async {
@@ -26,7 +30,7 @@ class ProfileProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    await Future.delayed(Duration(seconds: 2)); // Simular una operación asíncrona
+    await Future.delayed(Duration(seconds: 2));
     _profile = profile;
     _isLoading = false;
     notifyListeners();
@@ -66,7 +70,6 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
 
   void updateAge(int age) {
     if (_profile != null) {
@@ -85,5 +88,10 @@ class ProfileProvider with ChangeNotifier {
   void clearProfile() {
     _profile = null;
     notifyListeners();
+  }
+
+  //Guardar Workouts;
+  Future<void> addWorkoutToList(Workout savedWorkout) async {
+    await _repository.saveWorkoutToProfile(savedWorkout, profile!);
   }
 }
