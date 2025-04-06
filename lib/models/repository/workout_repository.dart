@@ -16,6 +16,12 @@ class WorkoutRepository with ChangeNotifier {
         await _supabase.from("workout").select().eq("id", id).single());
   }
 
+Future<Workout> getRandomWorkouts() async {
+  final map = await _supabase.rpc("getrandomworkout");
+  final workout = map.first as Map<String, dynamic>;
+  return Workout.fromMap(workout['result_json']);
+}
+
   void insertWorkoutToSupabase(Workout workout) async {
     await _supabase.from("workout").insert(workout.toMap());
     notifyListeners();

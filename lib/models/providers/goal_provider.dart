@@ -57,6 +57,17 @@ class GoalProvider with ChangeNotifier {
         (goal!.currentWaterIntake * 100) / goal!.maxWaterIntake!;
     return waterPercent.round();
   }
+  int getCaloriesPrecent() {
+    if (goal == null ||
+        goal!.totalCalories == null ||
+        goal!.totalCalories == 0) {
+      return 0;
+    }
+
+    double totalCalories =
+        (goal!.currentCalories * 100) / goal!.totalCalories!;
+    return totalCalories.round();
+  }
 
   void updateCalories(double calories, String oper) {
     if (oper == "-") {
@@ -66,7 +77,6 @@ class GoalProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   @override
   String toString() {

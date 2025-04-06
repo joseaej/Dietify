@@ -69,7 +69,6 @@ class MainApp extends StatelessWidget {
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
-          // Detectar cuando la app se cierra
           GoalProvider goalsProvider = context.read<GoalProvider>();
           WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
 

@@ -1,5 +1,5 @@
 class Workout {
-  String id;
+  String? id;
   String? name;
   int? duration;
   String? type;
@@ -7,15 +7,17 @@ class Workout {
   String? notes;
   String? muscles;
   double? calories;
+  String? urlVideo;
   Workout(
-      {required this.id,
+      {this.id,
       this.name,
       this.duration,
       this.type,
       this.intensity,
       this.notes,
       this.muscles,
-      this.calories});
+      this.calories,
+      this.urlVideo});
 
   Workout.fromMap(Map<String, dynamic> map)
       : id = map['id'],
@@ -25,7 +27,8 @@ class Workout {
         intensity = map['intensity'],
         muscles = map['muscles'],
         calories = (map['calories'] as num?)?.toDouble(),
-        notes = map['notes'];
+        notes = map['notes'],
+        urlVideo = map['urlVideo'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,6 +40,7 @@ class Workout {
       'muscles': muscles,
       'calories': calories,
       'notes': notes,
+      'urlVideo':urlVideo
     };
   }
 
@@ -49,6 +53,7 @@ class Workout {
     String? notes,
     String? muscles,
     double? calories,
+    String? urlVideo
   }) {
     return Workout(
       id: id ?? this.id,
@@ -59,6 +64,7 @@ class Workout {
       notes: notes ?? this.notes,
       muscles: muscles ?? this.muscles,
       calories: calories ?? this.calories,
+      urlVideo: urlVideo ?? this.urlVideo
     );
   }
 }

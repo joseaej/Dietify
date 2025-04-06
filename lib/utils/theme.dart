@@ -6,8 +6,8 @@ const Color background = Color.fromARGB(255, 29, 29, 31);
 const Color backgroundBlack = Color.fromARGB(255, 21, 21, 22);
 const Color backgroundTextField = Color.fromARGB(255, 34, 34, 37);
 const Color font = Colors.white;
-const Color lightGray = Color.fromARGB(255, 184, 184, 184);
-const Color darkfont = Colors.black;
+const Color lightGray = Colors.white60;
+const Color darkfont = Color.fromARGB(221, 34, 34, 34);
 const Color blue = Color.fromRGBO(0, 170, 255, 1);
 const Color skyBlue = Color.fromRGBO(137, 207, 243, 1);
 const Color lightBlue = Color.fromRGBO(137, 207, 243, 1);
@@ -25,6 +25,8 @@ const Color warningColor = Color(0xFFFFC107);
 const Color iconColor = blue;
 const Color borderColor = blue;
 const Color focusBorderColor = blue;
+const Color grey600 = Color.fromARGB(255, 125, 125, 125);
+const Color grey = Color.fromARGB(161, 175, 175, 175);
 
 // Tema claro
 ThemeData lightTheme = ThemeData(
