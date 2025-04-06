@@ -34,7 +34,9 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: Text(""),
+        leading: IconButton(onPressed: () {
+            Navigator.pop(context);
+          }, icon: Icon(Icons.cancel_outlined,color: blue,size: 3.5.h,)),
         title: Text(workout.name ?? "Entrenamiento",
             style: TextStyle(
                 color:
@@ -43,8 +45,8 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         elevation: 0,
         actions: [
           IconButton(onPressed: () {
-            Navigator.pop(context);
-          }, icon: Icon(Icons.cancel_outlined,color: blue,size: 3.5.h,))
+            
+          }, icon: Icon(Icons.save_as_sharp,color: blue,))
         ],
       ),
       body: Padding(
