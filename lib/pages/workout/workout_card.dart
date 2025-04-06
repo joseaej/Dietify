@@ -1,127 +1,106 @@
+import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:dietify/models/workout.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class WorkoutCard extends StatelessWidget {
-  final String workoutName;
-  final String duration;
-  final String difficulty;
-  final String calories;
-  final String imageUrl;
-  final Color fontColor;
-  final Function()? onPressed;
+  final Workout workout;
+  final VoidCallback onTap;
 
-  const WorkoutCard(
-      {super.key,
-      required this.workoutName,
-      required this.duration,
-      required this.difficulty,
-      required this.calories,
-      required this.imageUrl,
-      required this.fontColor,
-      required this.onPressed});
+  const WorkoutCard({
+    super.key,
+    required this.workout,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 45.w,
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.black)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              height: 25.h,
-              fit: BoxFit.cover,
+    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    bool isDarkTheme = settingsProvider.settings!.isDarkTheme;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: (isDarkTheme) ? backgroundBlack : lightBackground,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: (isDarkTheme) ? lightBlue : Colors.black26,
+              blurRadius: 0,
+              offset: const Offset(0, 1),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  workoutName,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(163, 137, 208, 243),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.fitness_center_rounded,
+                color: blue,
+                size: 28,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    workout.name!,
+                    style: TextStyle(fontSize: 17),
                   ),
-                ),
-                SizedBox(height: 1.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildIconText(Icons.timer, duration),
-                    Text(
-                      difficulty,
-                      style: TextStyle(
-                        color: _getDifficultyColor(difficulty),
-                        fontWeight: FontWeight.bold,
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.timer_sharp,
+                        color: grey600,
+                        size: 2.h,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 1.h),
-                _buildIconText(Icons.local_fire_department, "$calories kcal"),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(12)),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 12),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        "${workout.duration.toString()} min",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: grey600,
+                            ),
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Icon(
+                        Icons.local_fire_department,
+                        color: Colors.red,
+                        size: 2.h,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        "${workout.calories!} kcal",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: grey600,
+                            ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              onPressed: onPressed,
-              child: Text(
-                "Start",
-                style: TextStyle(
-                  color: font,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
             ),
-          ),
-        ],
+            const Icon(Icons.arrow_forward_ios_rounded,
+                size: 18, color: grey600),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildIconText(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.grey[700], size: 18),
-        SizedBox(width: 6),
-        Text(
-          text,
-          style: TextStyle(fontSize: 16.sp,),
-        ),
-      ],
-    );
-  }
-
-  Color _getDifficultyColor(String difficulty) {
-    switch (difficulty.toLowerCase()) {
-      case 'baja':
-        return Colors.green;
-      case 'media':
-        return Colors.blue;
-      case 'alta':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 }

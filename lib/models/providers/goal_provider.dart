@@ -82,7 +82,6 @@ class GoalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   @override
   String toString() {
     return "${goal!.currentCalories}\n${goal!.totalCalories}\n${goal!.maxWaterIntake}\n${goal!.currentWaterIntake}\n";
