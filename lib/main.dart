@@ -33,7 +33,7 @@ void main() async {
 
   final String route =
       await SharedPreferenceService.getProfileFromLocal() != null
-          ? "/splash"
+          ? "/spash"
           : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
