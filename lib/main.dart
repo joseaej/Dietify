@@ -33,7 +33,7 @@ void main() async {
 
   final String route =
       await SharedPreferenceService.getProfileFromLocal() != null
-          ? "/splash"
+          ? "/spash"
           : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
@@ -91,7 +91,7 @@ class MainApp extends StatelessWidget {
                 themeMode: settingsProvider.settings?.isDarkTheme ?? false
                     ? ThemeMode.dark
                     : ThemeMode.light,
-                initialRoute: "/home",
+                initialRoute: route,
                 routes: {
                   '/home': (context) => HomeContainer(),
                   '/profile': (context) => ProfilePage(),

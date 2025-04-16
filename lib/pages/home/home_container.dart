@@ -42,7 +42,7 @@ class _HomeContainerState extends State<HomeContainer> {
         style: TabStyle.flip,
         items: [
           TabItem(icon: Icons.home, title: 'Inicio'),
-          TabItem(icon: Icons.zoom_in_map_rounded, title: 'Workout'),
+          TabItem(icon: Icons.fitness_center_rounded, title: 'Workout'),
           TabItem(icon: Icons.person, title: 'Perfil'),
         ],
         initialActiveIndex: _currentIndex,
