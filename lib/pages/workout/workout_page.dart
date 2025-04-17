@@ -1,9 +1,11 @@
 import 'package:dietify/models/providers/settings_provider.dart';
+import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/repository/workout_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_card.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({super.key});
@@ -19,6 +21,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
   List<Workout> allWorkouts = [];
   List<Workout> filteredWorkouts = [];
   TextEditingController searchController = TextEditingController();
+
+  late WorkoutProvider workoutProvider;
 
   @override
   void initState() {
@@ -51,6 +55,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    workoutProvider = Provider.of<WorkoutProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -92,6 +97,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
                           duration: "${workout.duration} min",
                           difficulty: workout.intensity!,
                           calories: "${workout.calories}",
+                          onPressed: () {
+                            workoutProvider.updateLastWorkout(workout);
+                          },
                         ),
                       );
                     },

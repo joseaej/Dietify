@@ -1,52 +1,3 @@
-import 'package:dietify/service/shared_preference_service.dart';
-import 'package:flutter/material.dart';
-import '../goals.dart';
-
-class GoalProvider with ChangeNotifier {
-  Goals? _goal;
-  bool _isLoading = true;
-
-  Goals? get goal => _goal;
-  bool get isLoading => _isLoading;
-
-  GoalProvider() {
-    getGoalFromLocal();
-  }
-
-  Future<void> getGoalFromLocal() async {
-    _isLoading = true;
-    notifyListeners();
-
-    _goal = await SharedPreferenceService.getGoalToLocal();
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> setGoalFromLocal() async {
-    _isLoading = true;
-    notifyListeners();
-    if (_goal != null) {
-      await SharedPreferenceService.setGoals(_goal!);
-    }
-
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> setGoal(Goals goals) async {
-    _isLoading = true;
-    notifyListeners();
-    await Future.delayed(Duration(seconds: 2));
-    _goal = goals;
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  void clearGoal() {
-    _goal = Goals.defaultValue();
-    notifyListeners();
-  }
-}
 import 'package:dietify/models/goal.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
@@ -72,12 +23,13 @@ class GoalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setGoals(Goal goal) async {
+  Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
+    if (goal != null) {
+      await SharedPreferenceService.setGoalsFromLocal(goal!);
+    }
 
-    await Future.delayed(Duration(seconds: 2));
-    this.goal = goal;
     _isLoading = false;
     notifyListeners();
   }
@@ -89,23 +41,45 @@ class GoalProvider with ChangeNotifier {
   }
 
   //updateo propiedades
-  void updateWaterIntake(double waterInc){
+  void updateWaterIntake(double waterInc) {
     goal!.currentWaterIntake += waterInc;
     notifyListeners();
   }
 
-  int getWaterPercent(){
-    if (goal==null) return 0;
-    double waterPercent = goal!.currentWaterIntake*100/goal!.maxWaterIntake!;
-    return waterPercent.ceilToDouble().round();
+  int getWaterPercent() {
+    if (goal == null ||
+        goal!.maxWaterIntake == null ||
+        goal!.maxWaterIntake == 0) {
+      return 0;
+    }
+
+    double waterPercent =
+        (goal!.currentWaterIntake * 100) / goal!.maxWaterIntake!;
+    return waterPercent.round();
+  }
+  int getCaloriesPrecent() {
+    if (goal == null ||
+        goal!.totalCalories == null ||
+        goal!.totalCalories == 0) {
+      return 0;
+    }
+
+    double totalCalories =
+        (goal!.currentCalories * 100) / goal!.totalCalories!;
+    return totalCalories.round();
   }
 
-  void updateCalories(double calories,String oper){
-    if (oper=="-") {
+  void updateCalories(double calories, String oper) {
+    if (oper == "-") {
       goal!.currentCalories -= calories;
-    }else{
+    } else {
       goal!.currentCalories += calories;
     }
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return "${goal!.currentCalories}\n${goal!.totalCalories}\n${goal!.maxWaterIntake}\n${goal!.currentWaterIntake}\n";
   }
 }

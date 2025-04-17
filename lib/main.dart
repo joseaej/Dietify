@@ -1,5 +1,6 @@
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
+import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
@@ -31,12 +32,15 @@ void main() async {
 
   final String route =
       await SharedPreferenceService.getProfileFromLocal() != null
-          ? "/home"
+          ? "/splash"
           : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
 
-  runApp(MainApp(route: route, initialSettings: settings));
+  runApp(MainApp(
+    route: route,
+    initialSettings: settings,
+  ));
 }
 
 class MainApp extends StatelessWidget {
@@ -51,6 +55,7 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => GoalProvider()),
+        ChangeNotifierProvider(create: (context) => WorkoutProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
             create: (context) =>
@@ -65,14 +70,18 @@ class MainApp extends StatelessWidget {
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
           // Detectar cuando la app se cierra
-          GoalProvider goalsProvider = GoalProvider();
+          GoalProvider goalsProvider = context.read<GoalProvider>();
+
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.detached.toString()) {
-              await SharedPreferenceService.setGoalsFromLocal(
-                  goalsProvider.goal!);
+              if (goalsProvider.goal != null) {
+                await SharedPreferenceService.setGoalsFromLocal(
+                    goalsProvider.goal!);
+              }
             }
             return null;
           });
+
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
