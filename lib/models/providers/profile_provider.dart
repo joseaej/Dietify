@@ -66,6 +66,7 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  
 
   void updateAge(int age) {
     if (_profile != null) {

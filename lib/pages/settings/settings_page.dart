@@ -33,7 +33,6 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
@@ -230,7 +229,9 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                (profileProvider.profile!=null)?profileProvider.profile!.username!:"",
+                (profileProvider.profile != null)
+                    ? profileProvider.profile!.username!
+                    : "",
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
@@ -238,7 +239,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SizedBox(height: 0.5.h),
               Text(
-                profileProvider.profile!.email!,
+                (profileProvider.profile != null)
+                    ? profileProvider.profile!.email!
+                    : "",
                 style: TextStyle(
                   fontSize: 13.sp,
                   color: Colors.grey,
