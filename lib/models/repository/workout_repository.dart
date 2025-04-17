@@ -6,32 +6,32 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class WorkoutRepository with ChangeNotifier {
-  List<Workout> wokouts = List.empty(growable: true);
-  List<Workout> profileWorkout = List.empty(growable: true);
+  List<Recipe> wokouts = List.empty(growable: true);
+  List<Recipe> profileWorkout = List.empty(growable: true);
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<List<Workout>> getAllWorkouts() async {
+  Future<List<Recipe>> getAllWorkouts() async {
     final data = await _supabase.from("workout").select();
-    return data.map((e) => Workout.fromMap(e)).toList();
+    return data.map((e) => Recipe.fromMap(e)).toList();
   }
 
-  Future<Workout> getWorkoutById(String id) async {
-    return Workout.fromMap(
+  Future<Recipe> getWorkoutById(String id) async {
+    return Recipe.fromMap(
         await _supabase.from("workout").select().eq("id", id).single());
   }
 
-  Future<Workout> getRandomWorkouts() async {
+  Future<Recipe> getRandomWorkouts() async {
     final map = await _supabase.rpc("getrandomworkout");
     final workout = map.first as Map<String, dynamic>;
-    return Workout.fromMap(workout['result_json']);
+    return Recipe.fromMap(workout['result_json']);
   }
 
-  void insertWorkoutToSupabase(Workout workout) async {
+  void insertWorkoutToSupabase(Recipe workout) async {
     await _supabase.from("workout").insert(workout.toMap());
     notifyListeners();
   }
 
-  Future<void> saveWorkoutToProfile(Workout wokout, Profile profile) async {
+  Future<void> saveWorkoutToProfile(Recipe wokout, Profile profile) async {
     final profileID = _supabase
         .from("profile")
         .select("id")

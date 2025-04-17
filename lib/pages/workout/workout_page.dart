@@ -17,9 +17,9 @@ class WorkoutPage extends StatefulWidget {
 class _WorkoutPageState extends State<WorkoutPage> {
   late SettingsProvider settingsProvider;
   final WorkoutRepository workoutRepository = WorkoutRepository();
-  late Future<List<Workout>> futureWorkouts;
-  List<Workout> allWorkouts = [];
-  List<Workout> filteredWorkouts = [];
+  late Future<List<Recipe>> futureWorkouts;
+  List<Recipe> allWorkouts = [];
+  List<Recipe> filteredWorkouts = [];
   TextEditingController searchController = TextEditingController();
 
 
@@ -77,7 +77,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             _buildSearchBar(),
             const SizedBox(height: 16),
             Expanded(
-              child: FutureBuilder<List<Workout>>(
+              child: FutureBuilder<List<Recipe>>(
                 future: futureWorkouts,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
