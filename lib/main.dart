@@ -1,15 +1,14 @@
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
-import 'package:dietify/pages/home/home_page.dart';
-import 'package:dietify/pages/recipes/recipes_page.dart';
+import 'package:dietify/pages/home/home_container.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
-import 'package:dietify/pages/workout/workout_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -33,7 +32,7 @@ void main() async {
   final String route =
       await SharedPreferenceService.getProfileFromLocal() != null
           ? "/home"
-          : "/spash";
+          : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
 
@@ -54,7 +53,8 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
-          create: (context) => SettingsProvider(initialSettings: initialSettings)),
+            create: (context) =>
+                SettingsProvider(initialSettings: initialSettings)),
         ChangeNotifierProvider(
           create: (context) => AuthService(
             profile: Profile(email: "", username: ""),
@@ -64,6 +64,15 @@ class MainApp extends StatelessWidget {
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
+          // Detectar cuando la app se cierra
+          GoalProvider goalsProvider = GoalProvider();
+          SystemChannels.lifecycle.setMessageHandler((msg) async {
+            if (msg == AppLifecycleState.detached.toString()) {
+              await SharedPreferenceService.setGoalsFromLocal(
+                  goalsProvider.goal!);
+            }
+            return null;
+          });
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
@@ -74,15 +83,13 @@ class MainApp extends StatelessWidget {
                 themeMode: settingsProvider.settings?.isDarkTheme ?? false
                     ? ThemeMode.dark
                     : ThemeMode.light,
-                initialRoute: "/recipes",
+                initialRoute: route,
                 routes: {
-                  '/home': (context) => HomePage(),
+                  '/home': (context) => HomeContainer(),
                   '/login': (context) => LoginScreen(),
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
-                  '/workouts': (context) => WorkoutPage(),
-                  '/recipes': (context) => RecipesPage(),
                   "/spash":(context) => SplashScreen(route: "/login",seconds: 4,)
                 },
               );
