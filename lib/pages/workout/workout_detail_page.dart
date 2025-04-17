@@ -1,4 +1,3 @@
-import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
@@ -10,7 +9,7 @@ import '../../models/providers/workout_provider.dart';
 import '../../utils/theme.dart';
 
 class WorkoutDetailPage extends StatefulWidget {
-  final Workout workout;
+  final Recipe workout;
   const WorkoutDetailPage({super.key, required this.workout});
 
   @override
@@ -18,7 +17,7 @@ class WorkoutDetailPage extends StatefulWidget {
 }
 
 class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
-  late Workout workout;
+  late Recipe workout;
   late SettingsProvider settingsProvider;
   late WorkoutProvider workoutProvider;
   late GoalProvider goalProvider;

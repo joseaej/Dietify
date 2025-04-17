@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class WorkoutCard extends StatelessWidget {
-  final Workout workout;
+  final Recipe workout;
   final VoidCallback onTap;
 
   const WorkoutCard({
