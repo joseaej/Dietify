@@ -9,7 +9,7 @@ import '../../models/providers/workout_provider.dart';
 import '../../utils/theme.dart';
 
 class WorkoutDetailPage extends StatefulWidget {
-  final Recipe workout;
+  final Workout workout;
   const WorkoutDetailPage({super.key, required this.workout});
 
   @override
@@ -17,7 +17,7 @@ class WorkoutDetailPage extends StatefulWidget {
 }
 
 class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
-  late Recipe workout;
+  late Workout workout;
   late SettingsProvider settingsProvider;
   late WorkoutProvider workoutProvider;
   late GoalProvider goalProvider;

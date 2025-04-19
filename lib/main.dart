@@ -1,4 +1,5 @@
 import 'package:dietify/models/providers/goal_provider.dart';
+import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
@@ -57,6 +58,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutProvider()),
+        ChangeNotifierProvider(create: (context) => RecipeProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
             create: (context) =>
@@ -99,7 +101,7 @@ class MainApp extends StatelessWidget {
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
-                  "/spash":(context) => SplashScreen(route: "/login",seconds: 4,)
+                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,)
                 },
               );
             },

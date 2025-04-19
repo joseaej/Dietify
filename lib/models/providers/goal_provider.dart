@@ -2,6 +2,8 @@ import 'package:dietify/models/goal.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 
+enum MacrosEnum { fat, carbs, protein }
+
 class GoalProvider with ChangeNotifier {
   Goal? goal;
   bool _isLoading = true;
@@ -23,7 +25,6 @@ class GoalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> savaGoalToLocal() async {
   Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
@@ -61,6 +62,7 @@ class GoalProvider with ChangeNotifier {
         (goal!.currentWaterIntake * 100) / goal!.maxWaterIntake!;
     return waterPercent.round();
   }
+
   int getCaloriesPrecent() {
     if (goal == null ||
         goal!.totalCalories == null ||
@@ -68,10 +70,10 @@ class GoalProvider with ChangeNotifier {
       return 0;
     }
 
-    double totalCalories =
-        (goal!.currentCalories * 100) / goal!.totalCalories!;
+    double totalCalories = (goal!.currentCalories * 100) / goal!.totalCalories!;
     return totalCalories.round();
   }
+
 
   void updateCalories(double calories, String oper) {
     if (oper == "-") {
@@ -80,6 +82,40 @@ class GoalProvider with ChangeNotifier {
       goal!.currentCalories += calories;
     }
     notifyListeners();
+  }
+
+  void updateMacro(MacrosEnum macrosEnum, double value) {
+    if (goal != null) {
+      switch (macrosEnum) {
+        case MacrosEnum.fat:
+          goal!.fat += value;
+          break;
+        case MacrosEnum.protein:
+          goal!.protein += value;
+          break;
+        case MacrosEnum.carbs:
+          goal!.carbs += value;
+          break;
+      }
+    }
+  }
+  double getMaxCarbs(){
+    if (goal!=null) {
+      return goal!.getMaxCarbs()??0;
+    }
+    return 0;
+  }
+  double getMaxFats(){
+    if (goal!=null) {
+      return goal!.getMaxFats()??0;
+    }
+    return 0;
+  }
+  double getMaxProtein(double weight){
+    if (goal!=null) {
+      return goal!.getMaxProtein(weight)??0;
+    }
+    return 0;
   }
 
   @override
