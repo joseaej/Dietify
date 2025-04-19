@@ -2,6 +2,7 @@ import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
+import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,9 +51,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Row(
               children: [
-                Expanded(child: _buildPieChart()),
-                Expanded(child: _buildPieChart()),
-                Expanded(child: _buildPieChart()),
+                Expanded(child: _buildPieChart(goalProvider.getMaxCarbs(),goalProvider.goal?.carbs??0)),
+                Expanded(child: _buildPieChart(goalProvider.getMaxFats(),goalProvider.goal?.fat??0)),
+                Expanded(child: _buildPieChart(goalProvider.getMaxProtein(profileProvider.profile?.weight??0),goalProvider.goal?.protein??0)),
               ],
             ),
             _buildCaloriesCard(),
@@ -65,25 +66,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPieChart() {
+  Widget _buildPieChart(double maxValue,double currentValue) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
         height: 20.h,
-        child: PieChart(
-          PieChartData(
-              borderData:
-                  FlBorderData(border: Border.all(color: background, width: 2)),
-              sections: [
-                PieChartSectionData(
-                  color: skyBlue,
-                  value: goalProvider.getWaterPercent().toDouble(),
-                ),
-                PieChartSectionData(
-                  color: Colors.grey,
-                  value: 100 - goalProvider.getWaterPercent().toDouble(),
-                )
-              ]),
+        child: Stack(
+        alignment: Alignment.center,
+          children: [
+            PieChart(
+              PieChartData(
+                centerSpaceRadius: 5.w,
+                
+                  borderData:
+                      FlBorderData(border: Border.all(color: background, width: 2)),
+                  sections: [
+                    PieChartSectionData(
+                      color: Colors.grey,
+                      value: maxValue,
+                      title: ''
+                    ),
+                    PieChartSectionData(
+                      color: blue,
+                      value: currentValue,
+                      title: '${currentValue.ceil()}g'
+                    )
+                  ]),
+            ),
+            Text("${maxValue.ceil()}")
+          ],
         ),
       ),
     );
@@ -265,73 +276,78 @@ class _HomePageState extends State<HomePage> {
     workoutProvider.getRandomWorkout();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        height: 20.h,
-        decoration: BoxDecoration(
-          color: (settingsProvider.settings!.isDarkTheme)
-              ? backgroundTextField
-              : font,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: borderColor, width: 1.2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 6,
-              offset: const Offset(0, 4),
-            )
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [skyBlue, blue],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutDetailPage(workout: workoutProvider.randomWorkout,),));
+        },
+        child: Container(
+          height: 20.h,
+          decoration: BoxDecoration(
+            color: (settingsProvider.settings!.isDarkTheme)
+                ? backgroundTextField
+                : font,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: borderColor, width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [skyBlue, blue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.star_border_purple500_rounded,
+                    size: 34,
+                    color: Colors.white,
                   ),
                 ),
-                child: const Icon(
-                  Icons.star_border_purple500_rounded,
-                  size: 34,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Actividad Recomendada',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                        color: (isDarkTheme) ? font : darkfont,
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Actividad Recomendada',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          color: (isDarkTheme) ? font : darkfont,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      (workoutProvider.randomWorkout.name != null)
-                          ? workoutProvider.randomWorkout.name!
-                          : "Flexiones",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: (isDarkTheme) ? lightGray : darkfont,
+                      const SizedBox(height: 4.0),
+                      Text(
+                        (workoutProvider.randomWorkout.name != null)
+                            ? workoutProvider.randomWorkout.name!
+                            : "Flexiones",
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: (isDarkTheme) ? lightGray : darkfont,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

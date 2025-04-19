@@ -3,6 +3,12 @@ class Goal {
   double currentWaterIntake;
   double? totalCalories;
   double currentCalories;
+  double fat=0;
+  double? maxFats;
+  double carbs=0;
+  double? maxCarbs;
+  double protein=0;
+  double? maxProtein;
 
   Goal({this.currentWaterIntake = 0,this.currentCalories=0});
 
@@ -11,6 +17,24 @@ class Goal {
     return maxWaterIntake;
   }
   
+  double? getMaxFats(){
+    if (totalCalories!=null) {
+      maxFats = (totalCalories! *0.25)/9;
+      return maxFats;
+    }
+    return null;
+  }
+  double? getMaxCarbs(){
+    if (totalCalories!=null) {
+      maxCarbs = (totalCalories! *0.55)/4;
+      return maxCarbs;
+    }
+    return null;
+  }
+  double? getMaxProtein(double weight){
+    maxProtein =weight*0.8;
+    return maxProtein;
+  }
   double? getTotalCalories(String sex, double weight, double height, int age) {
     if (sex == "male") {
       //hombre

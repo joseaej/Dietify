@@ -8,7 +8,7 @@ class ProfileProvider with ChangeNotifier {
   Profile? _profile;
   bool _isLoading = true;
   final WorkoutRepository _repository = WorkoutRepository();
-  List<Recipe> savedWorkout = List.empty(growable: true);
+  List<Workout> savedWorkout = List.empty(growable: true);
 
   Profile? get profile => _profile;
   bool get isLoading => _isLoading;
@@ -91,7 +91,7 @@ class ProfileProvider with ChangeNotifier {
   }
 
   //Guardar Workouts;
-  Future<void> addWorkoutToList(Recipe savedWorkout) async {
+  Future<void> addWorkoutToList(Workout savedWorkout) async {
     await _repository.saveWorkoutToProfile(savedWorkout, profile!);
   }
 }

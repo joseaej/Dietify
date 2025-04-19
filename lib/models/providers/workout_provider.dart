@@ -4,20 +4,21 @@ import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutProvider with ChangeNotifier {
-  Recipe? lastWorkout;
-  Recipe randomWorkout = Recipe();
+  Workout? lastWorkout;
+  Workout randomWorkout = Workout();
   WorkoutProvider() {
     loadLastWorkout();
   }
 
-  void updateLastWorkout(Recipe? newLastWorkout) {
+  void updateLastWorkout(Workout? newLastWorkout) {
     lastWorkout = newLastWorkout;
     notifyListeners();
   }
 
-  Future<void> getRandomWorkout()async {
+  Future<Workout> getRandomWorkout()async {
     WorkoutRepository workoutRepository = WorkoutRepository();
-    randomWorkout = await workoutRepository.getRandomWorkouts();
+    return await workoutRepository.getRandomWorkouts();
+    //notifyListeners();
   }
 
   Future<void> loadLastWorkout() async {

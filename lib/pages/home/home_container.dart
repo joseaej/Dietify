@@ -4,8 +4,6 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:dietify/pages/home/home_page.dart';
 import 'package:dietify/pages/profile/profile_page.dart';
 import 'package:dietify/pages/recipes/recipes_page.dart';
-import 'package:dietify/pages/settings/settings_page.dart';
-import 'package:dietify/pages/workout/workout_page.dart';
 import 'package:dietify/pages/workout/workout_page.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +26,7 @@ class _HomeContainerState extends State<HomeContainer> {
     super.initState();
     _screens = [
       HomePage(),
-      RecipesPage(),
+      RecipePage(),
       WorkoutPage(),
       ProfilePage()
     ];
@@ -46,7 +44,7 @@ class _HomeContainerState extends State<HomeContainer> {
         style: TabStyle.flip,
         items: [
           TabItem(icon: Icons.home, title: 'Inicio'),
-          TabItem(icon: Icons.zoom_in_map_rounded, title: 'Workout'),
+          TabItem(icon: Icons.apple_outlined, title: 'Recetas'),
           TabItem(icon: Icons.person, title: 'Workout'),
           TabItem(icon: Icons.settings, title: 'Ajustes'),
         ],

@@ -29,3 +29,15 @@ A continuación se detallan las versiones de la aplicación y los cambios realiz
   - Provider para la carga de los ajustes.
   - Inyeccion de los ajustes en el main.
   - Guardado de la foto
+
+### Versión 0.0.4
+- **Añadido**: Añadido Workouts de la app
+  - Consulta de Workouts
+  - Filtrado de Workouts
+  - Detalles de entrenamientos
+
+### Versión 0.0.5
+- **Añadido**: Añadido Home Screen
+  - Añadido water intake
+  - Entrenamientos recomendados
+  - Calorias consumidas

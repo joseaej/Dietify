@@ -79,14 +79,14 @@ class SharedPreferenceService {
 
 
   //lastWorkout
-  static Future<void> setLastWorkout(Recipe workout) async {
+  static Future<void> setLastWorkout(Workout workout) async {
     await _initPreferences();
     _preferences?.setString("lastWorkout", jsonEncode(workout.toMap()));
   }
-  static Future<Recipe?> getLastWorkout() async{
+  static Future<Workout?> getLastWorkout() async{
     await _initPreferences();
     final map = _preferences?.getString("lastWorkout");
     if(map==null)return null;
-    return Recipe.fromMap(jsonDecode(map));
+    return Workout.fromMap(jsonDecode(map));
   }
 }

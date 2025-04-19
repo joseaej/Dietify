@@ -1,4 +1,4 @@
-class Recipe {
+class Workout {
   String? id;
   String? name;
   int? duration;
@@ -8,7 +8,7 @@ class Recipe {
   String? muscles;
   double? calories;
   String? urlVideo;
-  Recipe(
+  Workout(
       {this.id,
       this.name,
       this.duration,
@@ -19,7 +19,7 @@ class Recipe {
       this.calories,
       this.urlVideo});
 
-  Recipe.fromMap(Map<String, dynamic> map)
+  Workout.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],
         duration = map['duration'],
@@ -44,7 +44,7 @@ class Recipe {
     };
   }
 
-  Recipe copyWith({
+  Workout copyWith({
     String? id,
     String? name,
     int? duration,
@@ -55,7 +55,7 @@ class Recipe {
     double? calories,
     String? urlVideo
   }) {
-    return Recipe(
+    return Workout(
       id: id ?? this.id,
       name: name ?? this.name,
       duration: duration ?? this.duration,
