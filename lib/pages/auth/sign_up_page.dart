@@ -96,13 +96,11 @@ class _SignupPageState extends State<SignupPage> {
       ),
       onPressed: () async{
         Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
-        if (profile!=null) {
-          ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
-          provider.setProfile(profile);
-          SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacementNamed(context, "/onboarding");
-        }
-      },
+        ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
+        provider.setProfile(profile!);
+        SharedPreferenceService.setProfileFromLocal(profile);
+        Navigator.pushReplacementNamed(context, "/onboarding");
+            },
       child: Text(
         "Sign Up",
         style: TextStyle(
