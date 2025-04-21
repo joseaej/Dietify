@@ -12,6 +12,7 @@ class Goal {
 
   Goal({this.currentWaterIntake = 0,this.currentCalories=0});
 
+  Goal.clearGoal({this.currentCalories = 0,this.currentWaterIntake= 0, this.fat = 0, this.carbs=0,this.protein=0,this.totalCalories=0,this.maxCarbs=0,this.maxFats=0,this.maxProtein=0,this.maxWaterIntake=0});
   double? getMaxWaterIntake(double weight) {
     maxWaterIntake = weight * 35;
     return maxWaterIntake;

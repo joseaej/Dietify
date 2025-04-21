@@ -182,7 +182,15 @@ class _SignupPageState extends State<SignupPage> {
     ],
   );
 
-  void onGooglePressed() {
+  void onGooglePressed() async{
+    Profile? profile = await service.nativeGoogleSignIn();
+    if (profile != null) {
+      ProfileProvider provider =
+          Provider.of<ProfileProvider>(context, listen: false);
+      provider.setProfile(profile);
+      SharedPreferenceService.setProfileFromLocal(profile);
+      Navigator.pushReplacementNamed(context, "/onboarding");
+    }
   }
 
   void onFacebookPressed() {

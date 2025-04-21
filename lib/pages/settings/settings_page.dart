@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         actions: [
           IconButton(onPressed: () {
-            Navigator.pushNamed(context, "/workouts");
+            Navigator.pushNamed(context, "/home");
           }, icon: Icon(Icons.abc))
         ],
         title: Text(

@@ -20,10 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late AuthService service;
-
+  late ProfileProvider profileProvider;
   @override
   Widget build(BuildContext context) {
     service = Provider.of<AuthService>(context);
+    profileProvider = Provider.of<ProfileProvider>(context);
     const inputBorder = BorderRadius.vertical(
       bottom: Radius.circular(10.0),
       top: Radius.circular(20.0),
@@ -38,12 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               "Welcome back",
-              style: TextStyle(color: blue, fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: blue, fontSize: 30, fontWeight: FontWeight.bold),
             ),
             form(
               _emailController,
               "Email",
-              Icon(Icons.email,color: blue,),
+              Icon(
+                Icons.email,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 30, 50, 20),
               isPassword: false,
@@ -51,7 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
             form(
               _passwordController,
               "Password",
-              Icon(Icons.lock_outline_rounded,color: blue,),
+              Icon(
+                Icons.lock_outline_rounded,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -75,13 +83,19 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: WidgetStateProperty.all(blue),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
-      onPressed: () async{
-        Profile? profile = await service.signInWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim());
-        if (profile!=null) {
-          ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
+      onPressed: () async {
+        Profile? profile = await service.signInWithEmailPassword(
+            _emailController.text.trim(), _passwordController.text.trim());
+        if (profile != null) {
+          ProfileProvider provider =
+              Provider.of<ProfileProvider>(context, listen: false);
           provider.setProfile(profile);
           SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplashScreen(route: "/home", seconds: 3),));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SplashScreen(route: "/home", seconds: 3),
+              ));
         }
       },
       child: Text(
@@ -123,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   Row get _rowiconlogin => Row(
-  
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -168,10 +181,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   void onGooglePresed() async {
+    Profile? profile = await service.nativeGoogleSignIn();
+    if (profile != null) {
+      ProfileProvider provider =
+          Provider.of<ProfileProvider>(context, listen: false);
+      provider.setProfile(profile);
+      SharedPreferenceService.setProfileFromLocal(profile);
+      Navigator.pushReplacementNamed(context, "/onboarding");
+    }
   }
 
-  void onFacebookPresed() {
-  }
+  void onFacebookPresed() {}
 
   void onCreatePressed() {
     Navigator.of(context).pushReplacement(

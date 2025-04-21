@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       (goalProvider.goal != null &&
                               profileProvider.profile != null)
-                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)} kcal'
+                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
                           : "No hay datos disponibles",
                       style: TextStyle(
                         fontSize: 15.0,

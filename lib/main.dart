@@ -56,7 +56,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
-        ChangeNotifierProvider(create: (context) => GoalProvider()),
+        ChangeNotifierProvider(create: (_) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutProvider()),
         ChangeNotifierProvider(create: (context) => RecipeProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
