@@ -181,7 +181,6 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
-        height: 20.h,
         decoration: BoxDecoration(
           color: (settingsProvider.settings!.isDarkTheme)
               ? backgroundTextField
@@ -212,21 +211,22 @@ class _HomePageState extends State<HomePage> {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.fitness_center,
                   size: 32,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(width: 16.0),
+
+              SizedBox(width: 4.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       'Actividad Reciente',
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
                         color: (isDarkTheme) ? font : darkfont,
                       ),
@@ -236,29 +236,28 @@ class _HomePageState extends State<HomePage> {
                       workoutProvider.lastWorkout?.name ??
                           "No hay actividad reciente",
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: (isDarkTheme) ? font : darkfont,
                       ),
                     ),
                     if (workoutProvider.lastWorkout != null) ...[
-                      const SizedBox(height: 6.0),
                       Text(
                         "Duración: ${workoutProvider.lastWorkout?.duration ?? 'N/A'} min",
                         style: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 15.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                       Text(
                         "Tipo: ${workoutProvider.lastWorkout?.type ?? 'Desconocido'}",
                         style: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 15.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                       Text(
                         "Intensidad: ${workoutProvider.lastWorkout?.intensity ?? 'N/A'}",
                         style: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 15.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                     ],
@@ -358,7 +357,6 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
-        height: 20.h,
         decoration: BoxDecoration(
           color: (settingsProvider.settings!.isDarkTheme)
               ? backgroundTextField
