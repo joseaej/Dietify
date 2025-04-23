@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:dietify/models/providers/profile_provider.dart';
+import 'package:dietify/models/workout.dart';
+import 'package:dietify/widgets/vertical_workout_card.dart';
+import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +58,57 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               profileProvider.profile?.username ?? "",
               style: TextStyle(fontSize: 18.sp),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: FutureBuilder<List<Workout>>(
+                future: profileProvider.getAllWorkoutsToProfile(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error: ${snapshot.error}"));
+                  }
+                  if (snapshot.data == null) {
+                    return const Center(
+                        child: Text("Error al obtener la lista"));
+                  }
+                  if (snapshot.data!.isEmpty) {
+                    return const Center(
+                        child: Text("No se encontraron entrenamientos."));
+                  }
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(10.0),
+                    shrinkWrap: true,
+                    physics:
+                        const NeverScrollableScrollPhysics(), 
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 16,
+                      childAspectRatio:
+                          0.7,
+                    ),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final workout = snapshot.data![index];
+                      return VerticalWorkoutCard(
+                        workout: workout,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WorkoutDetailPage(workout: workout),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),

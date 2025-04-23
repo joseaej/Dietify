@@ -2,7 +2,7 @@ import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/workout_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_add.dart';
-import 'package:dietify/pages/workout/workout_card.dart';
+import 'package:dietify/widgets/workout_card.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
