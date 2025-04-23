@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:flutter/material.dart';
@@ -32,23 +30,44 @@ class WorkoutRepository with ChangeNotifier {
   }
 
   Future<void> saveWorkoutToProfile(Workout wokout, Profile profile) async {
-    final profileID = _supabase
-        .from("profile")
-        .select("id")
-        .eq("email", profile.email!)
-        .single();
-    print(jsonEncode(profileID.toString()));
-    _supabase.from("profile_workout").insert({
-      'profile_id': profileID,
-      'workout_id': wokout.id,
-    });
-  }
-  /*
-  Future<void> getAllWorkoutsToProfile(Profile profile) async {
-    if (profile.email!=null) {
-      final idProfile = await _supabase.from("profile").select("id").eq("email", profile.email!);
-      print(idProfile);
-      _supabase.from("profile_workout").select().eq(, value)
+    try {
+      final profileResponse = await _supabase
+          .from("profile")
+          .select("id")
+          .eq("email", profile.email!)
+          .single();
+
+      await _supabase.from("profile_workout").insert({
+        'profile_id': profileResponse['id'],
+        'workout_id': wokout.id,
+      }).select();
+    } catch (e) {
+      debugPrint(e.toString());
     }
-  }*/
+  }
+
+  Future<List<Workout>?> getAllWorkoutsToProfile(Profile profile) async {
+    if (profile.email != null) {
+      final profileResponse = await _supabase
+          .from("profile")
+          .select("id")
+          .eq("email", profile.email!)
+          .single();
+      final listIdsWorkouts = await _supabase
+          .from("profile_workout")
+          .select("workout_id")
+          .eq("profile_id", profileResponse['id']);
+
+      List<Workout> profileWorkouts = List.empty(growable: true);
+      for (var element in listIdsWorkouts) {
+        profileWorkouts.add(await getWorkoutById(element["workout_id"]));
+      }
+      
+      if (profileWorkouts.isEmpty) {
+        return null;
+      }
+      return profileWorkouts;
+    }
+    return null;
+  }
 }

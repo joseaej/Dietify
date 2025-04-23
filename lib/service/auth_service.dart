@@ -1,5 +1,6 @@
 import 'package:dietify/models/profile.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/repository/profile_repository.dart';
@@ -43,10 +44,16 @@ class AuthService with ChangeNotifier {
     }
     return null;
   }
+    Future<void> changePasswordForEmail(String email) async {
+    try {
+      await supabase.client.auth.resetPasswordForEmail(email);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   Future<Profile?> nativeGoogleSignIn() async {
-    const webClientId =
-        '103862269146-ef9kl2t74hsu116hbqh07ffqcobdsoj6.apps.googleusercontent.com';
+    var webClientId =dotenv.env['WEB_CLIENT_ID'];
     //const iosClientId = 'my-ios.apps.googleusercontent.com';
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -77,4 +84,6 @@ class AuthService with ChangeNotifier {
     }
     return null;
   }
+
+
 }

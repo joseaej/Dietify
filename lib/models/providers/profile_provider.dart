@@ -94,4 +94,17 @@ class ProfileProvider with ChangeNotifier {
   Future<void> addWorkoutToList(Workout savedWorkout) async {
     await _repository.saveWorkoutToProfile(savedWorkout, profile!);
   }
+
+  Future<List<Workout>> getAllWorkoutsToProfile() async {
+    if (profile != null) {
+      final list = await _repository.getAllWorkoutsToProfile(profile!);
+      if (list != null) {
+        if (list.isNotEmpty) {
+          return list;
+        }
+        return list;
+      }
+    }
+    return List.empty();
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
+import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/utils/theme.dart';
@@ -24,6 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late SettingsProvider settings;
   late ProfileProvider profileProvider;
   late StorageService storageService;
+  late AuthService authService;
   final TextEditingController _usernameController = TextEditingController();
   ProfileRepository repository = ProfileRepository();
 
@@ -37,15 +39,18 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
     storageService = Provider.of<StorageService>(context);
+    authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
     _usernameController.text = profileProvider.profile?.username ?? '';
 
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {
-            Navigator.pushNamed(context, "/home");
-          }, icon: Icon(Icons.abc))
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/home");
+              },
+              icon: Icon(Icons.abc))
         ],
         title: Text(
           'Settings',
@@ -54,7 +59,6 @@ class _SettingsPageState extends State<SettingsPage> {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
-          
         ),
         centerTitle: true,
         elevation: 0,
@@ -87,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           const Text(
-                            'Select an Options',
+                            'Selecciona una opcion',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -119,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildSectionTitle('General'),
             _buildSettingOption(
               icon: Icons.dark_mode,
-              title: 'Dark Mode',
+              title: 'Modo oscuro',
               trailing: Switch(
                 focusColor: blue,
                 value: settings.settings!.isDarkTheme,
@@ -132,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             _buildSettingOption(
               icon: Icons.dark_mode,
-              title: 'Notifications',
+              title: 'Notificaciones',
               trailing: Switch(
                 value: settings.settings!.isNotificationsOn,
                 onChanged: (p0) {
@@ -142,26 +146,27 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
-            _buildSettingOption(
-              icon: Icons.language,
-              title: 'Language',
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
-            ),
             SizedBox(height: 4.h),
-            _buildSectionTitle('Account'),
+            _buildSectionTitle('Cuenta'),
             _buildSettingOption(
               icon: Icons.email,
-              title: 'Change Email',
+              title: 'Cambiar email',
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),
             _buildSettingOption(
               icon: Icons.lock,
-              title: 'Change Password',
+              title: 'Cambiar contraseña',
+              onTap: () {
+                if (profileProvider.profile != null) {
+                  authService
+                      .changePasswordForEmail(profileProvider.profile!.email!);
+                }
+              },
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),
             _buildSettingOption(
               icon: Icons.close,
-              title: 'Close Account',
+              title: 'Cerrar cuenta',
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
               isDestructive: true,
               onTap: () {
@@ -174,7 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             _buildSettingOption(
               icon: Icons.delete,
-              title: 'Delete Account',
+              title: 'Eliminar cuenta',
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
               isDestructive: true,
               onTap: () {
@@ -183,18 +188,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.pushReplacementNamed(context, "/login");
                 ProfileRepository().deleteProfile(profileProvider.profile!);
               },
-            ),
-            SizedBox(height: 4.h),
-            _buildSectionTitle('Support'),
-            _buildSettingOption(
-              icon: Icons.help,
-              title: 'Help & Support',
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
-            ),
-            _buildSettingOption(
-              icon: Icons.privacy_tip,
-              title: 'Privacy Policy',
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),
           ],
         ),

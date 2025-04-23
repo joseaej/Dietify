@@ -1,7 +1,7 @@
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/recipe.dart';
 import 'package:dietify/models/repository/recipe_repository.dart';
-import 'package:dietify/pages/recipes/recipe_card.dart';
+import 'package:dietify/widgets/recipe_card.dart';
 import 'package:dietify/pages/recipes/recipe_detail.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
