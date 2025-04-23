@@ -31,10 +31,6 @@ class GoalProvider with ChangeNotifier {
     if (goal != null) {
       await SharedPreferenceService.setGoalsFromLocal(goal!);
     }
-    if (goal != null) {
-      await SharedPreferenceService.setGoalsFromLocal(goal!);
-    }
-
     _isLoading = false;
     notifyListeners();
   }

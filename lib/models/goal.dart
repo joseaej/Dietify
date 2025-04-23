@@ -51,6 +51,9 @@ class Goal {
       : maxWaterIntake = (map['waterIntake'] as num?)?.toDouble(),
         currentWaterIntake = (map['currentWaterIntake'] as num?)!.toDouble(),
         totalCalories = (map['totalCalories'] as num?)?.toDouble(),
+        fat = (map['fat'] as num?)?.toDouble()??0.0,
+        protein = (map['protein'] as num?)?.toDouble()??0.0,
+        carbs = (map['carbs'] as num?)?.toDouble()??0.0,
         currentCalories = (map['currentCalories'] as num?)!.toDouble();
 
   Map<String, dynamic> toMap() {
@@ -59,6 +62,9 @@ class Goal {
       'totalCalories': totalCalories,
       'currentWaterIntake': currentWaterIntake,
       'currentCalories': currentCalories,
+      'fat': fat,
+      'carbs': carbs,
+      'protein': protein,
     };
   }
 
