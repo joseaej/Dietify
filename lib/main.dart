@@ -32,19 +32,17 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_KEY'] ?? '',
   );
 
-  final String route =
+  String route =
       await SharedPreferenceService.getProfileFromLocal() != null
           ? "/spash"
           : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
-
   runApp(MainApp(
     route: route,
     initialSettings: settings,
   ));
 }
-
 class MainApp extends StatelessWidget {
   final String route;
   final Settings? initialSettings;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,11 @@ class WorkoutRepository with ChangeNotifier {
   List<Workout> wokouts = List.empty(growable: true);
   List<Workout> profileWorkout = List.empty(growable: true);
   final SupabaseClient _supabase = Supabase.instance.client;
+
+  Future<List<Workout>> getCountListWorkout() async {
+    final data = await _supabase.from("workout").select();
+    return data.map((e) => Workout.fromMap(e)).toList();
+  }
 
   Future<List<Workout>> getAllWorkouts() async {
     final data = await _supabase.from("workout").select();
@@ -18,11 +25,19 @@ class WorkoutRepository with ChangeNotifier {
         await _supabase.from("workout").select().eq("id", id).single());
   }
 
-  Future<Workout> getRandomWorkouts() async {
-    final map = await _supabase.rpc("getrandomworkout");
-    final workout = map.first as Map<String, dynamic>;
-    return Workout.fromMap(workout['result_json']);
+Future<Workout> getRandomWorkouts() async {
+  /*
+  final results = await _supabase.from("workout").select("result_json");
+
+  if (results.isEmpty) {
+    throw Exception("No se ha recibido ningún workout.");
   }
+  final Map<String, dynamic> json = results.first['result_json'];
+  debugPrint("Workout ID: ${json['id']}");
+  return Workout.fromMap(json);*/
+  return Workout();
+}
+
 
   void insertWorkoutToSupabase(Workout workout) async {
     await _supabase.from("workout").insert(workout.toMap());
@@ -62,7 +77,7 @@ class WorkoutRepository with ChangeNotifier {
       for (var element in listIdsWorkouts) {
         profileWorkouts.add(await getWorkoutById(element["workout_id"]));
       }
-      
+
       if (profileWorkouts.isEmpty) {
         return null;
       }

@@ -70,7 +70,6 @@ class GoalProvider with ChangeNotifier {
     return totalCalories.round();
   }
 
-
   void updateCalories(double calories, String oper) {
     if (oper == "-") {
       goal!.currentCalories -= calories;
@@ -95,21 +94,24 @@ class GoalProvider with ChangeNotifier {
       }
     }
   }
-  double getMaxCarbs(){
-    if (goal!=null) {
-      return goal!.getMaxCarbs()??0;
+
+  double getMaxCarbs() {
+    if (goal != null) {
+      return goal!.getMaxCarbs() ?? 0;
     }
     return 0;
   }
-  double getMaxFats(){
-    if (goal!=null) {
-      return goal!.getMaxFats()??0;
+
+  double getMaxFats() {
+    if (goal != null) {
+      return goal!.getMaxFats() ?? 0;
     }
     return 0;
   }
-  double getMaxProtein(double weight){
-    if (goal!=null) {
-      return goal!.getMaxProtein(weight)??0;
+
+  double getMaxProtein(double weight) {
+    if (goal != null) {
+      return goal!.getMaxProtein(weight) ?? 0;
     }
     return 0;
   }

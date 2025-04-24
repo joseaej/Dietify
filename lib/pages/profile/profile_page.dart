@@ -64,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: FutureBuilder<List<Workout>>(
                 future: profileProvider.getAllWorkoutsToProfile(),
                 builder: (context, snapshot) {
+                  
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {

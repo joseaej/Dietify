@@ -1,5 +1,5 @@
-
-class Profile  {
+class Profile {
+  String? uuid;
   String? email;
   String? username;
   String? urlPhoto;
@@ -9,19 +9,19 @@ class Profile  {
   String? activityLevel;
   String? sex;
 
-  Profile({
-    this.email,
-    this.username,
-    this.urlPhoto,
-    this.activityLevel,
-    this.age,
-    this.height,
-    this.weight,
-    this.sex
-  });
-
+  Profile(
+      {this.uuid,
+      this.email,
+      this.username,
+      this.urlPhoto,
+      this.activityLevel,
+      this.age,
+      this.height,
+      this.weight,
+      this.sex});
   Profile.fromMap(Map<String, dynamic> map)
-      : email = map['email'],
+      : uuid = map['id'],
+        email = map['email'],
         username = map['username'],
         urlPhoto = map['url_photo'],
         sex = map['sex'],
@@ -32,6 +32,7 @@ class Profile  {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': uuid,
       'email': email,
       'username': username,
       'url_photo': urlPhoto,
@@ -44,6 +45,7 @@ class Profile  {
   }
 
   Profile copyWith({
+    String? uuid,
     String? email,
     String? username,
     String? sex,
@@ -54,9 +56,10 @@ class Profile  {
     String? activityLevel,
   }) {
     return Profile(
-      email: email??this.email,
+      uuid: uuid ?? this.uuid,
+      email: email ?? this.email,
       username: username ?? this.username,
-      sex: sex??this.sex,
+      sex: sex ?? this.sex,
       urlPhoto: urlPhoto ?? this.urlPhoto,
       weight: weight ?? this.weight,
       height: height ?? this.height,
@@ -65,9 +68,8 @@ class Profile  {
     );
   }
 
-@override
-String toString() {
-  return 'Profile(email: $email, username: $username, urlPhoto: $urlPhoto, weight: $weight, height: $height, age: $age, activityLevel: $activityLevel, sex: $sex)';
-}
-
+  @override
+  String toString() {
+    return 'Profile(id: $uuid,email: $email, username: $username, urlPhoto: $urlPhoto, weight: $weight, height: $height, age: $age, activityLevel: $activityLevel, sex: $sex)';
+  }
 }

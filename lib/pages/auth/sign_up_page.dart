@@ -42,26 +42,38 @@ class _SignupPageState extends State<SignupPage> {
           children: [
             Text(
               "Create your account",
-              style: TextStyle(color: blue, fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: blue, fontSize: 30, fontWeight: FontWeight.bold),
             ),
             form(
               _emailController,
               "Email",
-              Icon(Icons.email,color: blue,),
+              Icon(
+                Icons.email,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 30, 50, 20),
               isPassword: false,
-            ),form(
+            ),
+            form(
               _username,
               "Usuario",
-              Icon(Icons.person,color: blue,),
+              Icon(
+                Icons.person,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: false,
-            ),form(
+            ),
+            form(
               _passwordController,
               "Password",
-              Icon(Icons.lock_outline_rounded,color: blue,),
+              Icon(
+                Icons.lock_outline_rounded,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -69,7 +81,10 @@ class _SignupPageState extends State<SignupPage> {
             form(
               _confirmpassController,
               "Confirm Password",
-              Icon(Icons.lock_outline_rounded,color: blue,),
+              Icon(
+                Icons.lock_outline_rounded,
+                color: blue,
+              ),
               inputBorder,
               EdgeInsets.fromLTRB(50, 10, 50, 20),
               isPassword: true,
@@ -87,20 +102,25 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-
   TextButton _buttonSignUp(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(blue),
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
-      onPressed: () async{
-        Profile? profile = await service.signUpWithEmailPassword(_emailController.text.trim(), _passwordController.text.trim(),_username.text.trim());
-        ProfileProvider provider = Provider.of<ProfileProvider>(context,listen: false);
-        provider.setProfile(profile!);
-        SharedPreferenceService.setProfileFromLocal(profile);
+      onPressed: () async {
+        Profile? profile = await service.signUpWithEmailPassword(
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+            _username.text.trim());
+        ProfileProvider provider =
+            Provider.of<ProfileProvider>(context, listen: false);
+        if (profile != null) {
+          provider.setProfile(profile);
+          SharedPreferenceService.setProfileFromLocal(profile);
+        }
         Navigator.pushReplacementNamed(context, "/onboarding");
-            },
+      },
       child: Text(
         "Sign Up",
         style: TextStyle(
@@ -113,37 +133,36 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Padding get _rowlinea => Padding(
-    padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-    child: Row(
-      children: [
-        Expanded(
-          child: Divider(
-            color: darkfont,
-            thickness: 1,
-          ),
+        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: darkfont,
+                thickness: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                "or",
+                style: TextStyle(color: darkfont),
+              ),
+            ),
+            Expanded(
+              child: Divider(
+                color: darkfont,
+                thickness: 1,
+              ),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            "or",
-            style: TextStyle(color: darkfont),
-          ),
-        ),
-        Expanded(
-          child: Divider(
-            color: darkfont,
-            thickness: 1,
-          ),
-        ),
-      ],
-    ),
-  );
+      );
 
   Row get _rowiconlogin => Row(
-
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
@@ -164,25 +183,26 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
         ],
-  );
+      );
 
   Row get _createaccount => Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text("Access with your account here:", style: TextStyle(color: darkfont)),
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
-        },
-        child: Text("Login", style: TextStyle(color: blue)),
-      ),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Access with your account here:",
+              style: TextStyle(color: darkfont)),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+            child: Text("Login", style: TextStyle(color: blue)),
+          ),
+        ],
+      );
 
-  void onGooglePressed() async{
+  void onGooglePressed() async {
     Profile? profile = await service.nativeGoogleSignIn();
     if (profile != null) {
       ProfileProvider provider =
@@ -193,6 +213,5 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
-  void onFacebookPressed() {
-  }
+  void onFacebookPressed() {}
 }

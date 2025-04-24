@@ -17,8 +17,7 @@ class WorkoutProvider with ChangeNotifier {
 
   Future<void> getRandomWorkout()async {
     WorkoutRepository workoutRepository = WorkoutRepository();
-    await workoutRepository.getRandomWorkouts();
-    notifyListeners();
+    randomWorkout = await workoutRepository.getRandomWorkouts();
   }
 
   Future<void> loadLastWorkout() async {
