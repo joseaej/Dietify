@@ -72,6 +72,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           onTap: () {
                             if (OnBoardPage3.formKey.currentState!.validate()) {
                               if (provider.profile != null) {
+                                debugPrint(provider.profile!.toString());
                                 SharedPreferenceService.setProfileFromLocal(
                                     provider.profile!);
                                 ProfileRepository()

@@ -2,6 +2,7 @@ import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
+import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,21 @@ class _HomePageState extends State<HomePage> {
   late SettingsProvider settingsProvider;
   bool isDarkTheme = false;
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => Provider.of<WorkoutProvider>(context, listen: false)
+        .getRandomWorkout());
+  }
+
+  @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
-    workoutProvider = Provider.of<WorkoutProvider>(context);
     settingsProvider = Provider.of<SettingsProvider>(context);
+    workoutProvider = Provider.of<WorkoutProvider>(context);
+
     isDarkTheme = settingsProvider.settings!.isDarkTheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text((profileProvider.profile != null)
@@ -51,9 +61,17 @@ class _HomePageState extends State<HomePage> {
             ),
             Row(
               children: [
-                Expanded(child: _buildPieChart(goalProvider.getMaxCarbs(),goalProvider.goal?.carbs??0)),
-                Expanded(child: _buildPieChart(goalProvider.getMaxFats(),goalProvider.goal?.fat??0)),
-                Expanded(child: _buildPieChart(goalProvider.getMaxProtein(profileProvider.profile?.weight??0),goalProvider.goal?.protein??0)),
+                Expanded(
+                    child: _buildPieChart(goalProvider.getMaxCarbs(),
+                        goalProvider.goal?.carbs ?? 0)),
+                Expanded(
+                    child: _buildPieChart(goalProvider.getMaxFats(),
+                        goalProvider.goal?.fat ?? 0)),
+                Expanded(
+                    child: _buildPieChart(
+                        goalProvider.getMaxProtein(
+                            profileProvider.profile?.weight ?? 0),
+                        goalProvider.goal?.protein ?? 0)),
               ],
             ),
             _buildCaloriesCard(),
@@ -66,31 +84,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPieChart(double maxValue,double currentValue) {
+  Widget _buildPieChart(double maxValue, double currentValue) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
         height: 20.h,
         child: Stack(
-        alignment: Alignment.center,
+          alignment: Alignment.center,
           children: [
             PieChart(
               PieChartData(
-                centerSpaceRadius: 5.w,
-                
-                  borderData:
-                      FlBorderData(border: Border.all(color: background, width: 2)),
+                  centerSpaceRadius: 5.w,
+                  borderData: FlBorderData(
+                      border: Border.all(color: background, width: 2)),
                   sections: [
                     PieChartSectionData(
-                      color: Colors.grey,
-                      value: maxValue,
-                      title: ''
-                    ),
+                        color: Colors.grey, value: maxValue, title: ''),
                     PieChartSectionData(
-                      color: blue,
-                      value: currentValue,
-                      title: '${currentValue.ceil()}g'
-                    )
+                        color: blue,
+                        value: currentValue,
+                        title: '${currentValue.ceil()}g')
                   ]),
             ),
             Text("${maxValue.ceil()}")
@@ -217,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                 ),
               ),
-
               SizedBox(width: 4.w),
               Expanded(
                 child: Column(
@@ -272,12 +284,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRandomActivityCard() {
-    workoutProvider.getRandomWorkout();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutDetailPage(workout: workoutProvider.randomWorkout,),));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkoutDetailPage(
+                    workout: workoutProvider.randomWorkout ?? Workout()),
+              ));
         },
         child: Container(
           height: 20.h,
@@ -334,13 +350,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 4.0),
                       Text(
-                        (workoutProvider.randomWorkout.name != null)
-                            ? workoutProvider.randomWorkout.name!
-                            : "Flexiones",
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: (isDarkTheme) ? lightGray : darkfont,
-                        ),
+                        (workoutProvider.randomWorkout != null)
+                            ? workoutProvider.randomWorkout!.name ?? "Flexiones"
+                            : "Cargando...",
                       ),
                     ],
                   ),

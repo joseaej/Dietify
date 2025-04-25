@@ -32,17 +32,23 @@ class AuthService with ChangeNotifier {
     try {
       AuthResponse reponse =
           await supabase.client.auth.signUp(email: email, password: password);
+          
       if (reponse.user != null) {
         Profile newProfile =
-            profile!.copyWith(email: email, username: username);
+            profile!.copyWith(uuid: supabase.client.auth.currentUser!.id,email: email, username: username);
         _profileRepository.createProfile(newProfile);
         return newProfile;
       }
       return null;
     } catch (e) {
-      debugPrint(e.toString());
+      if (e is AuthException) {
+        if (e.message == "User already registered") {
+          debugPrint("Usuario repetido");
+
+        }
+      }
+      return null;
     }
-    return null;
   }
     Future<void> changePasswordForEmail(String email) async {
     try {
