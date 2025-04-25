@@ -75,6 +75,7 @@ class MainApp extends StatelessWidget {
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
+              workoutProvider.getRandomWorkout();
               goalsProvider.savaGoalToLocal();
               workoutProvider.saveLastWorkout();
             }

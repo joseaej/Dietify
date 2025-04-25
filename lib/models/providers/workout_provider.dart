@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class WorkoutProvider with ChangeNotifier {
   Workout? lastWorkout;
-  Workout randomWorkout = Workout();
+  Workout? randomWorkout;
+  final workoutRepository = WorkoutRepository();
   WorkoutProvider() {
     loadLastWorkout();
   }
@@ -15,9 +16,10 @@ class WorkoutProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getRandomWorkout()async {
-    WorkoutRepository workoutRepository = WorkoutRepository();
+  Future<void> getRandomWorkout() async {
+    
     randomWorkout = await workoutRepository.getRandomWorkouts();
+    notifyListeners();
   }
 
   Future<void> loadLastWorkout() async {
@@ -30,5 +32,10 @@ class WorkoutProvider with ChangeNotifier {
       await SharedPreferenceService.setLastWorkout(lastWorkout!);
       notifyListeners();
     }
+  }
+
+  Future<void> insertWorkout(Workout workout) async {
+    workoutRepository.insertWorkoutToSupabase(workout);
+    notifyListeners();
   }
 }

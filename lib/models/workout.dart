@@ -28,11 +28,10 @@ class Workout {
         muscles = map['muscles'],
         calories = (map['calories'] as num?)?.toDouble(),
         notes = map['notes'],
-        urlVideo = map['urlVideo'];
+        urlVideo = map['video_url'];
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'duration': duration,
       'type': type,
@@ -40,7 +39,7 @@ class Workout {
       'muscles': muscles,
       'calories': calories,
       'notes': notes,
-      'urlVideo':urlVideo
+      'video_url':urlVideo
     };
   }
 
