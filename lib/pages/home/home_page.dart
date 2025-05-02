@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../service/notification_service.dart';
 import '../../utils/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    /*
     Future.microtask(() => Provider.of<WorkoutProvider>(context, listen: false)
-        .getRandomWorkout());
+        .getRandomWorkout());*/
   }
 
   @override
@@ -50,7 +52,16 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, "/settings");
               },
-              icon: Icon(Icons.settings))
+              icon: Icon(Icons.settings)),
+                        IconButton(
+              onPressed: () {
+                NotificationService().showNotification(
+                  id: 0,
+                  title: "¡Hola ${profileProvider.profile?.username}!",
+                  body: "Recuerda beber suficiente agua hoy.",
+                );
+              },
+              icon: Icon(Icons.settings)),
         ],
       ),
       body: SingleChildScrollView(
@@ -76,7 +87,7 @@ class _HomePageState extends State<HomePage> {
             ),
             _buildCaloriesCard(),
             _buildRecentActivityCard(),
-            _buildRandomActivityCard(),
+            //_buildRandomActivityCard(),
             _buildWaterCard(),
           ],
         ),
