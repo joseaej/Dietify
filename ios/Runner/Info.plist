@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSCameraUsageDescription</key>
+<string>We need access to the camera</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need access to your location</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We need access to your photo library</string>
+<key>NSUserNotificationUsageDescription</key>
+<string>Dietify necesita notificaciones para avisarte de entrenamientos y recordatorios.</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

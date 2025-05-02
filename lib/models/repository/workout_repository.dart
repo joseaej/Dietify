@@ -25,12 +25,12 @@ class WorkoutRepository with ChangeNotifier {
     return Workout.fromMap(
         await _supabase.from("workout").select().eq("id", id).single());
   }
-
+  /*
   Future<Workout> getRandomWorkouts() async {
     Workout randomWorkout = Workout();
     int rowCountNumber = await _supabase.from("workout").count();
     Random rdn = Random();
-    int randomNumber = rdn.nextInt(rowCountNumber + 1);
+    int randomNumber = rdn.nextInt(rowCountNumber);
     final result = await _supabase
         .from("workout")
         .select()
@@ -39,7 +39,7 @@ class WorkoutRepository with ChangeNotifier {
 
     randomWorkout = Workout.fromMap(result);
     return randomWorkout;
-  }
+  }*/
 
   void insertWorkoutToSupabase(Workout workout) async {
     await _supabase.from("workout").insert(workout.toMap());
