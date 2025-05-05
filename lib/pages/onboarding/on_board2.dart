@@ -15,7 +15,8 @@ class OnBoard2Page extends StatefulWidget {
 class _OnBoard2PageState extends State<OnBoard2Page> {
   @override
   Widget build(BuildContext context) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -45,7 +46,7 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: "Take one step closer to your goals with ",
+                          text: "Da un paso más hacia tus objetivos con ",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             color: Colors.black,
@@ -59,42 +60,44 @@ class _OnBoard2PageState extends State<OnBoard2Page> {
                           ),
                         ),
                         TextSpan(
-                          text: ", your perfect companion for a healthy lifestyle. ",
+                          text:
+                              ", tu compañero perfecto para un estilo de vida saludable. ",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
-                          text: "Turn your energy",
+                          text: "Convierte tu energía",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: blue,
                           ),
                         ),
                         TextSpan(
-                          text: " into strength with plans tailored just for you. ",
+                          text: " en fuerza con planes hechos a tu medida. ",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
-                          text: "Push your limits",
+                          text: "Supera tus límites",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: blue,
                           ),
                         ),
                         TextSpan(
-                          text: " and build the body you've always dreamed of. ",
+                          text:
+                              " y construye el cuerpo con el que siempre has soñado. ",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             color: Colors.black,
                           ),
                         ),
                         TextSpan(
-                          text: "Let's crush it together!",
+                          text: "¡Vamos a romperla juntos!",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: blue,

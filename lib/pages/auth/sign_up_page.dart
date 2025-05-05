@@ -23,6 +23,11 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _confirmpassController = TextEditingController();
+  final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final RegExp _passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$');
+
+  final _formKey = GlobalKey<FormState>();
+
   bool seePassword = true;
   late AuthService service;
   @override
@@ -34,69 +39,108 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     return Scaffold(
+      appBar: AppBar(),
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Create your account",
-              style: TextStyle(
-                  color: blue, fontSize: 30, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Crea tu cuenta",
+                  style: TextStyle(
+                      color: blue, fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                form(
+                  _emailController,
+                  "Email",
+                  Icon(
+                    Icons.email,
+                    color: blue,
+                  ),
+                  inputBorder,
+                  EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  isPassword: false,
+                  (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Debes ingresar un email";
+                    } else if (!_emailRegex.hasMatch(value)) {
+                      return "Email incorrecto";
+                    }
+                    return null;
+                  },
+                ),
+                form(
+                  _username,
+                  "Usuario",
+                  Icon(
+                    Icons.person,
+                    color: blue,
+                  ),
+                  inputBorder,
+                  EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  isPassword: false,
+                  (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Debes ingresar un usuario valido";
+                    } else if (value.length < 4) {
+                      return "El nombre de usuario debe mas de 4 caracteres";
+                    }
+                    return null;
+                  },
+                ),
+                PasswordField(
+                  controller: _passwordController,
+                  texto: "Contraseña",
+                  icono: Icon(
+                    Icons.lock_outline_rounded,
+                    color: blue,
+                  ),
+                  borde: inputBorder,
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Debes ingresar una contraseña";
+                    }
+                    if (value.length < 6) {
+                      return "Debe contener al menos 6 caracteres";
+                    }
+                    if (!_passwordRegex.hasMatch(value)) {
+                      return 'Incluir una letra y un número';
+                    }
+
+                    return null;
+                  },
+                ),
+                PasswordField(
+                  controller: _confirmpassController,
+                  texto: "Confirmar Contraseña",
+                  icono: Icon(
+                    Icons.lock_outline_rounded,
+                    color: blue,
+                  ),
+                  borde: inputBorder,
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Debes ingresar una contraseña";
+                    }
+                    return null;
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                  child: _buttonSignUp(context),
+                ),
+                _rowlinea,
+                _rowiconlogin,
+                _createaccount,
+              ],
             ),
-            form(
-              _emailController,
-              "Email",
-              Icon(
-                Icons.email,
-                color: blue,
-              ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 30, 50, 20),
-              isPassword: false,
-            ),
-            form(
-              _username,
-              "Usuario",
-              Icon(
-                Icons.person,
-                color: blue,
-              ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 10, 50, 20),
-              isPassword: false,
-            ),
-            form(
-              _passwordController,
-              "Password",
-              Icon(
-                Icons.lock_outline_rounded,
-                color: blue,
-              ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 10, 50, 20),
-              isPassword: true,
-            ),
-            form(
-              _confirmpassController,
-              "Confirm Password",
-              Icon(
-                Icons.lock_outline_rounded,
-                color: blue,
-              ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 10, 50, 20),
-              isPassword: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-              child: _buttonSignUp(context),
-            ),
-            _rowlinea,
-            _rowiconlogin,
-            _createaccount,
-          ],
+          ),
         ),
       ),
     );
@@ -109,20 +153,22 @@ class _SignupPageState extends State<SignupPage> {
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async {
-        Profile? profile = await service.signUpWithEmailPassword(
-            _emailController.text.trim(),
-            _passwordController.text.trim(),
-            _username.text.trim());
-        ProfileProvider provider =
-            Provider.of<ProfileProvider>(context, listen: false);
-        if (profile != null) {
-          provider.setProfile(profile);
-          SharedPreferenceService.setProfileFromLocal(profile);
+        if (_formKey.currentState!.validate() && _passwordController.text == _confirmpassController.text) {
+          Profile? profile = await service.signUpWithEmailPassword(
+              _emailController.text.trim(),
+              _passwordController.text.trim(),
+              _username.text.trim());
+          ProfileProvider provider =
+              Provider.of<ProfileProvider>(context, listen: false);
+          if (profile != null) {
+            provider.setProfile(profile);
+            SharedPreferenceService.setProfileFromLocal(profile);
+          }
+          Navigator.pushReplacementNamed(context, "/onboarding");
         }
-        Navigator.pushReplacementNamed(context, "/onboarding");
       },
       child: Text(
-        "Sign Up",
+        "Registrarse",
         style: TextStyle(
           color: font,
           fontSize: 20,
@@ -145,7 +191,7 @@ class _SignupPageState extends State<SignupPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                "or",
+                "o",
                 style: TextStyle(color: darkfont),
               ),
             ),
@@ -174,14 +220,6 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
           ),
-          IconButton(
-            onPressed: onFacebookPressed,
-            icon: Image.asset(
-              "assets/icons/facebook_icon.webp",
-              cacheWidth: 50,
-              cacheHeight: 50,
-            ),
-          ),
         ],
       );
 
@@ -189,15 +227,14 @@ class _SignupPageState extends State<SignupPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Access with your account here:",
-              style: TextStyle(color: darkfont)),
+          Text("Accede con tu cuenta aqui:", style: TextStyle(color: darkfont)),
           TextButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => LoginScreen()),
               );
             },
-            child: Text("Login", style: TextStyle(color: blue)),
+            child: Text("Acceder", style: TextStyle(color: blue)),
           ),
         ],
       );

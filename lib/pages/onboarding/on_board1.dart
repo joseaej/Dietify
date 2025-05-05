@@ -46,7 +46,7 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                   delay: const Duration(milliseconds: 500),
                   duration: const Duration(milliseconds: 1000),
                   child: Text(
-                    "Welcome to Dietify",
+                    "Bienvenido a Dietify",
                     style: TextStyle(
                       fontSize: isPortrait ? 25.sp : 20.sp,
                       fontWeight: FontWeight.bold,
@@ -64,37 +64,34 @@ class _OnBoard1PageState extends State<OnBoard1Page> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(text: "Achieve your health goals with "),
+                        const TextSpan(
+                            text: "Alcanza tus objetivos de salud con "),
                         TextSpan(
                           text: "Dietify",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
-                        const TextSpan(
-                            text: ", your ultimate diet planner! Discover "),
-                        TextSpan(
-                          text: "personalized ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
-                        const TextSpan(
-                            text: "meal plans, delicious recipes, and a "),
-                        TextSpan(
-                          text: "supportive community",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
+                              fontWeight: FontWeight.bold, color: Colors.blue),
                         ),
                         const TextSpan(
                             text:
-                                " to keep you inspired every step of the way. "),
+                                ", tu planificador de dietas definitivo. Descubre "),
                         TextSpan(
-                          text: "Let's get started!",
+                          text: "planes de comida personalizados ",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
+                              fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                        const TextSpan(text: "recetas deliciosas y una "),
+                        TextSpan(
+                          text: "comunidad que te apoya",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                        const TextSpan(
+                            text:
+                                " para mantenerte inspirado en cada paso del camino. "),
+                        TextSpan(
+                          text: "¡Empecemos!",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
                         ),
                       ],
                     ),

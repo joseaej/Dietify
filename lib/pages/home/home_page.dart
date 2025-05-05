@@ -53,15 +53,6 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushNamed(context, "/settings");
               },
               icon: Icon(Icons.settings)),
-                        IconButton(
-              onPressed: () {
-                NotificationService().showNotification(
-                  id: 0,
-                  title: "¡Hola ${profileProvider.profile?.username}!",
-                  body: "Recuerda beber suficiente agua hoy.",
-                );
-              },
-              icon: Icon(Icons.settings)),
         ],
       ),
       body: SingleChildScrollView(
@@ -294,6 +285,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildRandomActivityCard() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

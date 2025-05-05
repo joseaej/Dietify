@@ -1,12 +1,18 @@
 import 'dart:io';
 
 import 'package:dietify/models/providers/profile_provider.dart';
+import 'package:dietify/models/providers/settings_provider.dart';
+import 'package:dietify/models/repository/profile_repository.dart';
 import 'package:dietify/models/workout.dart';
+import 'package:dietify/service/auth_service.dart';
+import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/widgets/vertical_workout_card.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,82 +25,88 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileProvider profileProvider;
-  String? _localPhotoPath;
+  late SettingsProvider settings;
+  late StorageService storageService;
+  late AuthService authService;
+  ProfileRepository repository = ProfileRepository();
+  XFile? photo;
 
   @override
   void initState() {
     super.initState();
-    _loadProfilePhoto();
-  }
-
-  Future<void> _loadProfilePhoto() async {
-    final savedPath = await SharedPreferenceService.getProfilePhotoPath();
-    if (mounted) {
-      setState(() {
-        _localPhotoPath = savedPath;
-      });
-    }
+    loadImageFromLocal();
   }
 
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
+    storageService = Provider.of<StorageService>(context);
+    authService = Provider.of<AuthService>(context);
+    settings = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: const Text("Mi perfil"),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 15.h),
-            CircleAvatar(
-              backgroundColor: blue,
-              radius: 15.w,
-              backgroundImage: _buildProfileImage(),
-              child: (_buildProfileImage() == null)
-                  ? Icon(Icons.person, size: 40.0, color: Colors.white)
-                  : null,
+            _buildProfileHeader(),
+            SizedBox(height: 3.h),
+            Text(
+              "Mis entrenamientos",
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 2.h),
-            Text(
-              profileProvider.profile?.username ?? "",
-              style: TextStyle(fontSize: 18.sp),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: FutureBuilder<List<Workout>>(
-                future: profileProvider.getAllWorkoutsToProfile(),
-                builder: (context, snapshot) {
-                  
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text("Error: ${snapshot.error}"));
-                  }
-                  if (snapshot.data == null) {
-                    return const Center(
-                        child: Text("Error al obtener la lista"));
-                  }
-                  if (snapshot.data!.isEmpty) {
-                    return const Center(
-                        child: Text("No se encontraron entrenamientos."));
-                  }
-
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(10.0),
-                    shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), 
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 16,
-                      childAspectRatio:
-                          0.7,
+            FutureBuilder<List<Workout>>(
+              future: profileProvider.getAllWorkoutsToProfile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Error: ${snapshot.error}",
+                      style: const TextStyle(color: Colors.red),
                     ),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      final workout = snapshot.data![index];
-                      return VerticalWorkoutCard(
+                  );
+                }
+
+                final workouts = snapshot.data;
+                if (workouts == null || workouts.isEmpty) {
+                  return const Center(
+                    child: Text("No tienes entrenamientos guardados."),
+                  );
+                }
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 3.w,
+                    mainAxisSpacing: 2.h,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: workouts.length,
+                  itemBuilder: (context, index) {
+                    final workout = workouts[index];
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: VerticalWorkoutCard(
                         workout: workout,
                         onTap: () {
                           Navigator.push(
@@ -105,11 +117,93 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           );
                         },
-                      );
-                    },
-                  );
-                },
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => _showPhotoOptions(),
+          child: CircleAvatar(
+            radius: 30.sp,
+            backgroundColor: skyBlue,
+            backgroundImage: (photo != null)
+                ? FileImage(File(photo!.path))
+                : (profileProvider.profile?.urlPhoto != null &&
+                        profileProvider.profile!.urlPhoto!.isNotEmpty)
+                    ? NetworkImage(profileProvider.profile!.urlPhoto!)
+                        as ImageProvider
+                    : null,
+            child: (photo == null &&
+                    (profileProvider.profile?.urlPhoto?.isEmpty ?? true))
+                ? const Icon(Icons.person, size: 40, color: Colors.white)
+                : null,
+          ),
+        ),
+        SizedBox(width: 4.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              profileProvider.profile?.username ?? "Usuario",
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              profileProvider.profile?.email ?? "",
+              style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pushNamed(context, "/settings"),
+              child: Text(
+                "Editar perfil",
+                style: TextStyle(
+                  color: blue,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
               ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _showPhotoOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Selecciona una opción',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: Colors.blue),
+              title: const Text('Cámara'),
+              onTap: () => getImage(ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library, color: Colors.green),
+              title: const Text('Galería'),
+              onTap: () => getImage(ImageSource.gallery),
             ),
           ],
         ),
@@ -117,13 +211,38 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  ImageProvider<Object>? _buildProfileImage() {
-    if (_localPhotoPath != null && File(_localPhotoPath!).existsSync()) {
-      return FileImage(File(_localPhotoPath!));
-    } else if (profileProvider.profile?.urlPhoto != null &&
-        profileProvider.profile!.urlPhoto!.isNotEmpty) {
-      return NetworkImage(profileProvider.profile!.urlPhoto!);
+  Future<void> getImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        await saveImageLocally(pickedFile);
+        setState(() {
+          photo = pickedFile;
+        });
+        final filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final url =
+            await storageService.savePhotoToBucket(filePath, File(photo!.path));
+        profileProvider.updatePhotoUrl(url);
+        repository.updateProfile(profileProvider.profile!);
+        if (mounted) Navigator.pop(context);
+      }
+    } catch (e) {}
+  }
+
+  Future<void> saveImageLocally(XFile image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = '${directory.path}/profile.jpg';
+    final localImage = File(path);
+    await localImage.writeAsBytes(await image.readAsBytes());
+    photo = XFile(localImage.path);
+    await SharedPreferenceService.saveProfilePhotoPath(path);
+  }
+
+  Future<void> loadImageFromLocal() async {
+    final savedPath = await SharedPreferenceService.getProfilePhotoPath();
+    if (savedPath != null && File(savedPath).existsSync()) {
+      photo = XFile(savedPath);
+      setState(() {});
     }
-    return null;
   }
 }

@@ -4,6 +4,7 @@ import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
+import 'package:dietify/pages/permisions/permisions_handler_page.dart';
 import 'package:dietify/pages/profile/profile_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/service/auth_service.dart';
@@ -136,7 +137,9 @@ class MainApp extends StatelessWidget {
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
-                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,)
+                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,),
+                  '/permissions': (context) => PermisionsHandlerPage(),
+
                 },
               );
             },
