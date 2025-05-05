@@ -21,6 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   late AuthService service;
   late ProfileProvider profileProvider;
+  final _formKey = GlobalKey<FormState>();
+  final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final RegExp _passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$');
+
   @override
   Widget build(BuildContext context) {
     service = Provider.of<AuthService>(context);
@@ -33,45 +37,68 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Welcome back",
-              style: TextStyle(
-                  color: blue, fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            form(
-              _emailController,
-              "Email",
-              Icon(
-                Icons.email,
-                color: blue,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Bienvenido de vuelta",
+                style: TextStyle(
+                    color: blue, fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 30, 50, 20),
-              isPassword: false,
-            ),
-            form(
-              _passwordController,
-              "Password",
-              Icon(
-                Icons.lock_outline_rounded,
-                color: blue,
+              form(
+                _emailController,
+                "Email",
+                Icon(
+                  Icons.email,
+                  color: blue,
+                ),
+                inputBorder,
+                EdgeInsets.fromLTRB(50, 30, 50, 20),
+                isPassword: false,
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Debes ingresar un email";
+                  } else if (!_emailRegex.hasMatch(value)) {
+                    return "Email incorrecto";
+                  }
+                  return null;
+                },
               ),
-              inputBorder,
-              EdgeInsets.fromLTRB(50, 10, 50, 20),
-              isPassword: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-              child: _buttonLogin(context),
-            ),
-            _rowlinea,
-            _rowiconlogin,
-            _createaccount,
-          ],
+              PasswordField(
+                controller: _passwordController,
+                texto: "Contraseña",
+                icono: Icon(
+                  Icons.lock_outline_rounded,
+                  color: blue,
+                ),
+                borde: inputBorder,
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Debes ingresar una contraseña";
+                  }
+                  if (value.length < 6) {
+                    return "Debe contener al menos 6 caracteres";
+                  }
+                  if (!_passwordRegex.hasMatch(value)) {
+                    return 'Incluir una letra y un número';
+                  }
+
+                  return null;
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                child: _buttonLogin(context),
+              ),
+              _rowlinea,
+              _rowiconlogin,
+              _createaccount,
+            ],
+          ),
         ),
       ),
     );
@@ -84,22 +111,25 @@ class _LoginScreenState extends State<LoginScreen> {
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async {
-        Profile? profile = await service.signInWithEmailPassword(
-            _emailController.text.trim(), _passwordController.text.trim());
-        if (profile != null) {
-          ProfileProvider provider =
-              Provider.of<ProfileProvider>(context, listen: false);
-          provider.setProfile(profile);
-          SharedPreferenceService.setProfileFromLocal(profile);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SplashScreen(route: "/home", seconds: 3),
-              ));
+        if (_formKey.currentState!.validate()) {
+          Profile? profile = await service.signInWithEmailPassword(
+              _emailController.text.trim(), _passwordController.text.trim());
+          if (profile != null) {
+            ProfileProvider provider =
+                Provider.of<ProfileProvider>(context, listen: false);
+            provider.setProfile(profile);
+            SharedPreferenceService.setProfileFromLocal(profile);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SplashScreen(route: "/home", seconds: 3),
+                ));
+          }
         }
       },
       child: Text(
-        "Login",
+        "Acceder",
         style: TextStyle(
           color: font,
           fontSize: 20,
@@ -122,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                "or",
+                "o",
                 style: TextStyle(color: darkfont),
               ),
             ),
@@ -151,14 +181,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          IconButton(
-            onPressed: onFacebookPresed,
-            icon: Image.asset(
-              "assets/icons/facebook_icon.webp",
-              cacheWidth: 50,
-              cacheHeight: 50,
-            ),
-          ),
         ],
       );
 
@@ -167,13 +189,13 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Create account here:",
+            "Crea tu cuenta aqui:",
             style: TextStyle(color: darkfont),
           ),
           TextButton(
             onPressed: onCreatePressed,
             child: Text(
-              "Sign Up",
+              "Registrar",
               style: TextStyle(color: blue),
             ),
           ),

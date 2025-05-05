@@ -39,7 +39,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                   delay: Duration(milliseconds: 1000),
                   duration: Duration(milliseconds: 3000),
                   child: const Text(
-                    "This is the last thing, let's change",
+                    "Esto es lo último, comenzemos con el cambio",
                     style: TextStyle(fontSize: 25),
                     textAlign: TextAlign.center,
                   ),
@@ -47,18 +47,18 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                 SizedBox(height: size.height * 0.1),
                 FadeIn(
                   delay: Duration(milliseconds: 1200),
-                  duration: Duration(milliseconds: 2000),
+                  duration: Duration(milliseconds: 3000),
                   child: formRectangular(
                     "140",
-                    "Height",
+                    "Altura",
                     _heightController,
                     cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your height';
+                        return 'Inserta tu altura';
                       }
                       if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
+                        return 'Numero invalido';
                       }
                       provider
                           .updateHeight(double.parse(_heightController.text));
@@ -75,7 +75,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                 SizedBox(height: size.height * 0.02),
                 FadeIn(
                   delay: Duration(milliseconds: 1200),
-                  duration: Duration(milliseconds: 2000),
+                  duration: Duration(milliseconds: 3000),
                   child: formRectangular(
                     "80",
                     "Weight",
@@ -83,13 +83,13 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                     cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your weight';
+                        return 'Inserta tu peso';
                       }
                       if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
+                        return 'Numero invalido';
                       }
                       if (double.parse(value) > 500) {
-                        return 'Please enter a valid number';
+                        return 'Numero invalido';
                       }
                       provider.updateWeight(double.parse(value));
                       return null;
@@ -98,23 +98,23 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                 ),
                 SizedBox(height: size.height * 0.02),
                 FadeIn(
-                  delay: Duration(microseconds: 1000),
+                  delay: Duration(milliseconds: 1200),
                   duration: Duration(milliseconds: 3000),
                   child: formRectangular(
                     "30",
-                    "Age",
+                    "Edad",
                     _ageController,
                     cursorColor: blue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your age';
+                        return 'Inserta tu edad';
                       } else if (int.tryParse(value) == null) {
-                        return 'Please enter a valid number';
+                        return 'Numero invalido';
                       } else if (int.parse(value) > 100) {
-                        return 'Number cant be more than 100 years';
+                        return 'Numero invalido';
                       }
                       if (int.parse(value) < 0) {
-                        return 'Number cant be less than 0 years';
+                        return 'Numero invalido';
                       }
                       provider.updateAge(int.parse(value));
                       return null;
@@ -123,7 +123,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                 ),
                 SizedBox(height: size.height * 0.03),
                 FadeIn(
-                  delay: Duration(microseconds: 1000),
+                  delay: Duration(milliseconds: 1200),
                   duration: Duration(milliseconds: 3000),
                   child: DropdownButtonFormField<activityLevel>(
                     value: _selectedActivityLevel,

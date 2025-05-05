@@ -137,7 +137,9 @@ class MainApp extends StatelessWidget {
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
-                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,)
+                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,),
+                  '/permissions': (context) => PermisionsHandlerPage(),
+
                 },
               );
             },

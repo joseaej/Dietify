@@ -10,6 +10,7 @@ import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -28,11 +29,20 @@ class _SettingsPageState extends State<SettingsPage> {
   late AuthService authService;
   final TextEditingController _usernameController = TextEditingController();
   ProfileRepository repository = ProfileRepository();
+  bool _notificationsEnabled = false;
 
   @override
   void initState() {
-    loadImageFromLocal();
     super.initState();
+    loadImageFromLocal();
+    _checkNotificationPermission();
+  }
+
+  Future<void> _checkNotificationPermission() async {
+    final status = await Permission.notification.status;
+    setState(() {
+      _notificationsEnabled = status.isGranted;
+    });
   }
 
   @override
@@ -45,13 +55,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/home");
-              },
-              icon: Icon(Icons.abc))
-        ],
         title: Text(
           'Settings',
           style: TextStyle(
@@ -135,14 +138,19 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             _buildSettingOption(
-              icon: Icons.dark_mode,
+              icon: Icons.notifications,
               title: 'Notificaciones',
               trailing: Switch(
-                value: settings.settings!.isNotificationsOn,
-                onChanged: (p0) {
-                  setState(() {
-                    settings.toggleNotis();
-                  });
+                value: _notificationsEnabled,
+                onChanged: (enabled) async {
+                  if (enabled) {
+                    final status = await Permission.notification.request();
+                    setState(() {
+                      _notificationsEnabled = status.isGranted;
+                    });
+                  } else {
+                    openAppSettings();
+                  }
                 },
               ),
             ),
@@ -317,31 +325,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future getImageFromGalery() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      saveImageLocally(pickedFile);
-      setState(() {
-        photo = pickedFile;
-      });
-      String filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      String path =
-          await storageService.savePhotoToBucket(filePath, File(photo!.path));
-      profileProvider.updatePhotoUrl(path);
-      repository.updateProfile(profileProvider.profile!);
-    }
+    await _handleImageSelection(ImageSource.gallery);
   }
 
   Future getImageFromCamara() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    await _handleImageSelection(ImageSource.camera);
+  }
+
+  Future<void> _handleImageSelection(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
-      saveImageLocally(pickedFile);
+      await saveImageLocally(pickedFile);
       setState(() {
-        photo = pickedFile;
+        photo = XFile(pickedFile.path);
       });
-      String filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      String path =
+      final filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final path =
           await storageService.savePhotoToBucket(filePath, File(photo!.path));
       profileProvider.updatePhotoUrl(path);
       repository.updateProfile(profileProvider.profile!);
@@ -352,12 +351,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/profile.jpg';
     final File localImage = File(filePath);
-
     await localImage.writeAsBytes(await image.readAsBytes());
-    setState(() {
-      photo = XFile(localImage.path);
-    });
-
+    photo = XFile(localImage.path);
     await SharedPreferenceService.saveProfilePhotoPath(localImage.path);
   }
 
