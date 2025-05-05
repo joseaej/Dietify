@@ -1,7 +1,7 @@
 name: dietify
-description: "A new Flutter project."
+description: "Dietify is a fitness and nutrition app that helps users track their health and share recipes."
 publish_to: 'none'
-version: 0.1.0
+version: 0.3.0
 
 environment:
   sdk: ^3.6.1
