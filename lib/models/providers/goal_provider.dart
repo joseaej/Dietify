@@ -95,25 +95,22 @@ class GoalProvider with ChangeNotifier {
     }
   }
 
-  double getMaxCarbs() {
+  void getMaxCarbs() {
     if (goal != null) {
-      return goal!.getMaxCarbs() ?? 0;
+      goal!.getMaxCarbs() ?? 0;
     }
-    return 0;
   }
 
-  double getMaxFats() {
+  void getMaxFats() {
     if (goal != null) {
-      return goal!.getMaxFats() ?? 0;
+      goal!.getMaxFats() ?? 0;
     }
-    return 0;
   }
 
-  double getMaxProtein(double weight) {
+  void getMaxProtein(double weight) {
     if (goal != null) {
-      return goal!.getMaxProtein(weight) ?? 0;
+      goal!.getMaxProtein(weight) ?? 0;
     }
-    return 0;
   }
 
   @override

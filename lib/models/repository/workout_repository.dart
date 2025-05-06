@@ -1,4 +1,4 @@
-//import 'dart:math';
+import 'dart:math';
 
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/workout.dart';
@@ -25,7 +25,6 @@ class WorkoutRepository with ChangeNotifier {
     return Workout.fromMap(
         await _supabase.from("workout").select().eq("id", id).single());
   }
-  /*
   Future<Workout> getRandomWorkouts() async {
     Workout randomWorkout = Workout();
     int rowCountNumber = await _supabase.from("workout").count();
@@ -39,7 +38,7 @@ class WorkoutRepository with ChangeNotifier {
 
     randomWorkout = Workout.fromMap(result);
     return randomWorkout;
-  }*/
+  }
 
   void insertWorkoutToSupabase(Workout workout) async {
     await _supabase.from("workout").insert(workout.toMap());

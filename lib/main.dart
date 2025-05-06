@@ -32,33 +32,38 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     if (task == periodicTask) {
       SharedPreferenceService.clearGoals();
+
       NotificationService notificationService = NotificationService();
       await notificationService.initialize();
-      notificationService.showNotification(
+
+      await notificationService.showNotification(
         id: 90,
         title: "¡Recuerda anotar tus comidas!",
-        body: "¡No olvides registrar tus comidas y mantener un seguimiento de tu progreso!",
+        body:
+            "¡No olvides registrar tus comidas y mantener un seguimiento de tu progreso!",
       );
     }
+
     return Future.value(true);
   });
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Workmanager().initialize(
-    callbackDispatcher,
-  );
 
-  await Workmanager().registerPeriodicTask(
-    "dieitfyPeriodicTask",
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
+  Workmanager().registerPeriodicTask(
+    "dietifyPeriodicTask",
     periodicTask,
-    frequency: const Duration(hours: 24),
-    initialDelay: const Duration(seconds: 10),
+    frequency: Duration(hours: 24),
     constraints: Constraints(
       networkType: NetworkType.not_required,
     ),
   );
+
   await dotenv.load();
 
   await Supabase.initialize(
@@ -66,20 +71,21 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_KEY'] ?? '',
   );
 
-  String route =
-      await SharedPreferenceService.getProfileFromLocal() != null
-          ? "/spash"
-          : "/login";
+  String route = await SharedPreferenceService.getProfileFromLocal() != null
+      ? "/spash"
+      : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
 
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
+
   runApp(MainApp(
     route: route,
     initialSettings: settings,
   ));
 }
+
 class MainApp extends StatelessWidget {
   final String route;
   final Settings? initialSettings;
@@ -137,9 +143,11 @@ class MainApp extends StatelessWidget {
                   '/signup': (context) => SignupPage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
-                  "/spash":(context) => SplashScreen(route: "/home",seconds: 4,),
+                  "/spash": (context) => SplashScreen(
+                        route: "/home",
+                        seconds: 4,
+                      ),
                   '/permissions': (context) => PermisionsHandlerPage(),
-
                 },
               );
             },

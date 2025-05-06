@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../service/notification_service.dart';
 import '../../utils/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,9 +27,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    /*
     Future.microtask(() => Provider.of<WorkoutProvider>(context, listen: false)
-        .getRandomWorkout());*/
+        .getRandomWorkout());
   }
 
   @override
@@ -41,7 +39,9 @@ class _HomePageState extends State<HomePage> {
     workoutProvider = Provider.of<WorkoutProvider>(context);
 
     isDarkTheme = settingsProvider.settings!.isDarkTheme;
-
+    goalProvider.getMaxCarbs();
+    goalProvider.getMaxFats();
+    goalProvider.getMaxProtein(profileProvider.profile?.weight ?? 0);
     return Scaffold(
       appBar: AppBar(
         title: Text((profileProvider.profile != null)
@@ -64,21 +64,18 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Expanded(
-                    child: _buildPieChart(goalProvider.getMaxCarbs(),
+                    child: _buildPieChart(goalProvider.goal?.maxCarbs ?? 0,
                         goalProvider.goal?.carbs ?? 0)),
                 Expanded(
-                    child: _buildPieChart(goalProvider.getMaxFats(),
+                    child: _buildPieChart(goalProvider.goal?.maxFats ?? 0,
                         goalProvider.goal?.fat ?? 0)),
                 Expanded(
-                    child: _buildPieChart(
-                        goalProvider.getMaxProtein(
-                            profileProvider.profile?.weight ?? 0),
-                        goalProvider.goal?.protein ?? 0)),
+                    child: _buildPieChart(goalProvider.goal?.maxProtein ?? 0,goalProvider.goal?.protein ?? 0)),
               ],
             ),
             _buildCaloriesCard(),
             _buildRecentActivityCard(),
-            //_buildRandomActivityCard(),
+            _buildRandomActivityCard(),
             _buildWaterCard(),
           ],
         ),
@@ -285,7 +282,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ignore: unused_element
   Widget _buildRandomActivityCard() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

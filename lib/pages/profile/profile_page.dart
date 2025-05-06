@@ -75,8 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 }
 
-                final workouts = snapshot.data;
-                if (workouts == null || workouts.isEmpty) {
+                if (snapshot.data == null || snapshot.data!.isEmpty) {
                   return const Center(
                     child: Text("No tienes entrenamientos guardados."),
                   );
@@ -91,9 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisSpacing: 2.h,
                     childAspectRatio: 0.9,
                   ),
-                  itemCount: workouts.length,
+                  itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    final workout = workouts[index];
+                    final workout = snapshot.data![index];
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
