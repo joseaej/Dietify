@@ -93,6 +93,7 @@ class ProfileProvider with ChangeNotifier {
   //Guardar Workouts;
   Future<void> addWorkoutToList(Workout savedWorkout) async {
     await _repository.saveWorkoutToProfile(savedWorkout, profile!);
+    notifyListeners();
   }
 
   Future<List<Workout>> getAllWorkoutsToProfile() async {
