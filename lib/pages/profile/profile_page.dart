@@ -88,14 +88,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 3.w,
                     mainAxisSpacing: 2.h,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 0.95,
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final workout = snapshot.data![index];
                     return Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(

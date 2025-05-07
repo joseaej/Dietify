@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable
@@ -29,9 +31,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNextScreen() {
     Navigator.pushReplacementNamed(context, widget.route);
   }
-
+  late RecipeProvider _recipeProvider;
   @override
   Widget build(BuildContext context) {
+    _recipeProvider = Provider.of<RecipeProvider>(context);
+    _recipeProvider.getAllRecipes();
     return Scaffold(
       body: Center(
         child: Column(

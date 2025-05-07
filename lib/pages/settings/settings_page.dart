@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
+import 'package:dietify/pages/settings/terms_and_services.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
@@ -80,46 +81,6 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             _buildProfileSection(
               () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  builder: (context) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text(
-                            'Selecciona una opcion',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          ListTile(
-                            leading: const Icon(Icons.camera_alt,
-                                color: Colors.blue),
-                            title: const Text('Cámara'),
-                            onTap: () {
-                              getImageFromCamara();
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.photo_library,
-                                color: Colors.green),
-                            title: const Text('Galería'),
-                            onTap: () {
-                              getImageFromGalery();
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
               },
             ),
             SizedBox(height: 4.h),
@@ -157,11 +118,6 @@ class _SettingsPageState extends State<SettingsPage> {
             SizedBox(height: 4.h),
             _buildSectionTitle('Cuenta'),
             _buildSettingOption(
-              icon: Icons.email,
-              title: 'Cambiar email',
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
-            ),
-            _buildSettingOption(
               icon: Icons.lock,
               title: 'Cambiar contraseña',
               onTap: () {
@@ -196,6 +152,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.pushReplacementNamed(context, "/login");
                 ProfileRepository().deleteProfile(profileProvider.profile!);
               },
+            ),
+             _buildSectionTitle('Soporte'),
+            _buildSettingOption(
+              icon: Icons.lock,
+              title: 'Terminos y servicios',
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TermsAndConditionsPage(),));
+              },
+              trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),
           ],
         ),

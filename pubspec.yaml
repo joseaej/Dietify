@@ -1,7 +1,7 @@
 name: dietify
 description: "Dietify is a fitness and nutrition app that helps users track their health and share recipes."
 publish_to: 'none'
-version: 0.4.0
+version: 0.5.1
 
 environment:
   sdk: ^3.6.1
@@ -31,6 +31,7 @@ dependencies:
   permission_handler: ^12.0.0+1
   flutter_local_notifications: ^19.1.0
   workmanager: ^0.5.2
+  url_launcher: ^6.3.1
 
 
 dev_dependencies:
@@ -43,6 +44,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icons/dietify.png"
+  
 
 flutter:
   uses-material-design: true
