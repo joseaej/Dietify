@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: blue,
                 ),
                 inputBorder,
-                EdgeInsets.fromLTRB(50, 30, 50, 20),
+                EdgeInsets.fromLTRB(30, 10, 30, 0),
                 isPassword: false,
                 (value) {
                   if (value == null || value.isEmpty) {
