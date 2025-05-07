@@ -30,10 +30,12 @@ const String periodicTask = "dailyTask";
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
+    WidgetsFlutterBinding.ensureInitialized();
+
     if (task == periodicTask) {
       SharedPreferenceService.clearGoals();
 
-      NotificationService notificationService = NotificationService();
+      final notificationService = NotificationService();
       await notificationService.initialize();
 
       await notificationService.showNotification(
@@ -53,7 +55,7 @@ void main() async {
 
   Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true,
+    isInDebugMode: false
   );
   Workmanager().registerPeriodicTask(
     "dietifyPeriodicTask",

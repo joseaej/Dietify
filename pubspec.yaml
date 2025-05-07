@@ -43,6 +43,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icons/dietify.png"
+  
 
 flutter:
   uses-material-design: true
