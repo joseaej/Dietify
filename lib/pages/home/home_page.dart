@@ -1,3 +1,4 @@
+import 'package:dietify/models/goal.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
@@ -172,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       (goalProvider.goal != null &&
                               profileProvider.profile != null)
-                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
+                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? Sex.male , profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
                           : "No hay datos disponibles",
                       style: TextStyle(
                         fontSize: 15.0,

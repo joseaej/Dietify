@@ -24,7 +24,7 @@ class GoalProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-
+  
   Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
@@ -109,7 +109,7 @@ class GoalProvider with ChangeNotifier {
 
   void getMaxProtein(double weight) {
     if (goal != null) {
-      goal!.getMaxProtein(weight) ?? 0;
+      goal!.getMaxProtein(weight);
     }
   }
 

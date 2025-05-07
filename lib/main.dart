@@ -18,7 +18,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workmanager/workmanager.dart';
 import 'models/profile.dart';
 import 'models/providers/profile_provider.dart';
 import 'models/settings.dart';
@@ -26,45 +25,8 @@ import 'pages/auth/login_page.dart';
 import 'pages/onboarding/onboarding_page.dart';
 import 'utils/theme.dart';
 
-const String periodicTask = "dailyTask";
-
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    if (task == periodicTask) {
-      SharedPreferenceService.clearGoals();
-
-      final notificationService = NotificationService();
-      await notificationService.initialize();
-
-      await notificationService.showNotification(
-        id: 90,
-        title: "¡Recuerda anotar tus comidas!",
-        body:
-            "¡No olvides registrar tus comidas y mantener un seguimiento de tu progreso!",
-      );
-    }
-
-    return Future.value(true);
-  });
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: false
-  );
-  Workmanager().registerPeriodicTask(
-    "dietifyPeriodicTask",
-    periodicTask,
-    frequency: Duration(hours: 24),
-    constraints: Constraints(
-      networkType: NetworkType.not_required,
-    ),
-  );
 
   await dotenv.load();
 
@@ -78,7 +40,11 @@ void main() async {
       : "/login";
 
   final Settings? settings = await SharedPreferenceService.getSettings();
-
+  DateTime? lastGoalsSaved = await SharedPreferenceService.getLastGoalDate();
+  if (lastGoalsSaved != null &&
+      DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
+    SharedPreferenceService.clearGoals();
+  }
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
 
@@ -120,9 +86,16 @@ class MainApp extends StatelessWidget {
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
-              //workoutProvider.getRandomWorkout();
+              workoutProvider.getRandomWorkout();
               goalsProvider.savaGoalToLocal();
               workoutProvider.saveLastWorkout();
+              await SharedPreferenceService.saveLastGoalDate(DateTime.now());
+              DateTime? lastGoalsSaved =
+                  await SharedPreferenceService.getLastGoalDate();
+              if (lastGoalsSaved != null &&
+                  DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
+                SharedPreferenceService.clearGoals();
+              }
             }
             return null;
           });

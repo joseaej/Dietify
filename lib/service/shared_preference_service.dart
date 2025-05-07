@@ -58,35 +58,45 @@ class SharedPreferenceService {
     return _preferences?.getString("profile_photo_path");
   }
 
-
-
   //goals
-  static Future<Goal?> getGoalsFromLocal() async{
+  static Future<Goal?> getGoalsFromLocal() async {
     await _initPreferences();
     final goals = _preferences?.getString("goals");
     if (goals == null) return null;
     return Goal.fromMap(jsonDecode(goals));
   }
-  static Future<void> setGoalsFromLocal(Goal goal) async{
+
+  static Future<void> setGoalsFromLocal(Goal goal) async {
     await _initPreferences();
     _preferences?.setString("goals", jsonEncode(goal.toMap()));
   }
 
-  static void clearGoals() async{
+  static Future<void> saveLastGoalDate(DateTime date) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('last_goal_date', date.toIso8601String());
+  }
+
+  static Future<DateTime?> getLastGoalDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? dateStr = prefs.getString('last_goal_date');
+    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+  }
+
+  static void clearGoals() async {
     await _initPreferences();
     _preferences?.remove("goals");
   }
-
 
   //lastWorkout
   static Future<void> setLastWorkout(Workout workout) async {
     await _initPreferences();
     _preferences?.setString("lastWorkout", jsonEncode(workout.toMap()));
   }
-  static Future<Workout?> getLastWorkout() async{
+
+  static Future<Workout?> getLastWorkout() async {
     await _initPreferences();
     final map = _preferences?.getString("lastWorkout");
-    if(map==null)return null;
+    if (map == null) return null;
     return Workout.fromMap(jsonDecode(map));
   }
 }
