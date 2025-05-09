@@ -14,8 +14,8 @@ class LoadingWidget extends StatelessWidget {
         children: [
           Image.asset(
             "assets/icons/dietify_icon.webp",
-            width: 90.w,
-            height: 90.h,
+            width: 50.w,
+            height: 50.h,
           ),
           LoadingAnimationWidget.staggeredDotsWave(
             size: 50,

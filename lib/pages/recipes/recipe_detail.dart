@@ -2,6 +2,8 @@ import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/recipe.dart';
+import 'package:dietify/service/export_service.dart';
+import 'package:dietify/service/file_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +38,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     recipeProvider = Provider.of<RecipeProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
     profileProvider = Provider.of<ProfileProvider>(context);
-
+    ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -50,6 +52,19 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
             size: 3.5.h,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final file = await exportService.generateRecipePDF(recipe);
+              FileService.openPDF(file);
+            },
+            icon: Icon(
+              Icons.exit_to_app,
+              color: blue,
+              size: 3.5.h,
+            ),
+          )
+        ],
         title: Text(
           recipe.title,
           style: TextStyle(
@@ -94,9 +109,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               SizedBox(height: 3.h),
               _buildAddButton(() {
                 goalProvider.updateCalories(recipe.calories!, "+");
-                goalProvider.updateMacro(MacrosEnum.fat, recipe.fat??0);
-                goalProvider.updateMacro(MacrosEnum.protein, recipe.protein??0);
-                goalProvider.updateMacro(MacrosEnum.carbs, recipe.carbs??0);
+                goalProvider.updateMacro(MacrosEnum.fat, recipe.fat ?? 0);
+                goalProvider.updateMacro(
+                    MacrosEnum.protein, recipe.protein ?? 0);
+                goalProvider.updateMacro(MacrosEnum.carbs, recipe.carbs ?? 0);
                 Navigator.pop(context);
               }),
             ],
@@ -149,7 +165,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   Widget _buidMacrosCard(Recipe recipe) {
     return Container(
-      padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: settingsProvider.settings!.isDarkTheme
