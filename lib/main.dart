@@ -11,7 +11,7 @@ import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/notification_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
-import 'package:dietify/widgets/loading_widget.dart';
+import 'package:dietify/widgets/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

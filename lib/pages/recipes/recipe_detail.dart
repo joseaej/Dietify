@@ -149,6 +149,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   Widget _buidMacrosCard(Recipe recipe) {
     return Container(
+      padding: EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: settingsProvider.settings!.isDarkTheme

@@ -1,6 +1,7 @@
-import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/recipe.dart';
+import 'package:dietify/models/repository/recipe_repository.dart';
+import 'package:dietify/widgets/loading_widget.dart';
 import 'package:dietify/widgets/recipe_card.dart';
 import 'package:dietify/pages/recipes/recipe_detail.dart';
 import 'package:dietify/utils/theme.dart';
@@ -16,10 +17,21 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage> {
   late SettingsProvider settingsProvider;
-  late RecipeProvider recipeProvider;
+  final RecipeRepository recipeRepository = RecipeRepository();
+  late Future<List<Recipe>> futureRecipes;
   List<Recipe> listAllRecipes = [];
   List<Recipe> filteredRecipes = [];
   TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    futureRecipes = recipeRepository.getAllRecipes().then((recipes) {
+      listAllRecipes = recipes;
+      filteredRecipes = List.from(listAllRecipes);
+      return recipes;
+    });
+  }
 
   @override
   void dispose() {
@@ -39,15 +51,10 @@ class _RecipePageState extends State<RecipePage> {
       }).toList();
     });
   }
-  void init()async{
-    listAllRecipes = (await recipeProvider.futureRecipes)!;
-    filteredRecipes = (await recipeProvider.futureRecipes)!;
-  }
+
   @override
   Widget build(BuildContext context) {
     settingsProvider = Provider.of<SettingsProvider>(context);
-    recipeProvider = Provider.of<RecipeProvider>(context);
-    init();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -71,10 +78,10 @@ class _RecipePageState extends State<RecipePage> {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Recipe>>(
-                future: recipeProvider.futureRecipes,
+                future: futureRecipes,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: LoadingWidget());
                   } else if (snapshot.hasError) {
                     return Center(child: Text("Error: ${snapshot.error}"));
                   }
@@ -91,12 +98,7 @@ class _RecipePageState extends State<RecipePage> {
                       return RecipeCard(
                         recipe: recipe,
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RecipeDetailPage(recipe: recipe),
-                              ));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetailPage(recipe: recipe),));
                         },
                       );
                     },

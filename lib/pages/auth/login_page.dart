@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/providers/profile_provider.dart';
 import '../../service/shared_preference_service.dart';
 import '../../widgets/form_widget.dart';
-import '../../widgets/loading_widget.dart';
+import '../../widgets/splash_page.dart';
 import 'sign_up_page.dart';
 import '../../../utils/theme.dart';
 

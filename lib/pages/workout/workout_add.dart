@@ -1,3 +1,4 @@
+import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/utils/theme.dart';
@@ -22,6 +23,7 @@ class _WorkoutAddState extends State<WorkoutAdd> {
   final TextEditingController _musclesController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
   late WorkoutProvider workoutProvider;
+  late SettingsProvider settingsProvider;
 
   String? selectedType;
   String? selectedIntensity;
@@ -30,6 +32,7 @@ class _WorkoutAddState extends State<WorkoutAdd> {
   @override
   Widget build(BuildContext context) {
     workoutProvider = Provider.of<WorkoutProvider>(context);
+    settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: blue,
@@ -45,9 +48,15 @@ class _WorkoutAddState extends State<WorkoutAdd> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            spacing: 8,
+            spacing: 15,
             children: [
               formRectangular(
+                backgroundColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                textColor: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,
                 "Nombre del entrenamiento",
                 "Nombre",
                 _titleController,
@@ -60,35 +69,81 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 },
               ),
               formRectangular(
+                backgroundColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                textColor: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,
                 "Descripción",
                 "Descripción",
                 _notesController,
                 cursorColor: blue,
               ),
               formRectangular(
+                backgroundColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                textColor: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,
                 "Músculo entrenado",
                 "Músculos",
                 _musclesController,
                 cursorColor: blue,
               ),
               numberInput(
+                backgroundColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                textColor: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,
                 "Minutos",
                 "Minutos",
                 _timeController,
                 cursorColor: blue,
               ),
               numberInput(
+                backgroundColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                textColor: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,
                 "Calorías",
                 "Calorías",
                 _caloriesController,
                 cursorColor: blue,
               ),
-              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                focusColor: blue,
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                dropdownColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                iconEnabledColor: blue,
+                style: TextStyle(
+                  color: (settingsProvider.settings!.isDarkTheme)
+                      ? font
+                      : backgroundTextField,
+                ),
                 decoration: InputDecoration(
                   labelText: "Tipo de entrenamiento",
+                  labelStyle: TextStyle(color: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: blue, width: 2),
+                  ),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 value: selectedType,
                 items: ['Cardio', 'Fuerza', 'Flexibilidad', 'Otro']
@@ -101,12 +156,34 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 },
                 validator: (val) => val == null ? 'Selecciona un tipo' : null,
               ),
-              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                focusColor: blue,
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                dropdownColor: (settingsProvider.settings!.isDarkTheme)
+                    ? backgroundTextField
+                    : font,
+                iconEnabledColor: blue,
+                style: TextStyle(
+                  color: (settingsProvider.settings!.isDarkTheme)
+                      ? font
+                      : backgroundTextField,
+                ),
                 decoration: InputDecoration(
                   labelText: "Intensidad",
+                  labelStyle: TextStyle(color: (settingsProvider.settings!.isDarkTheme)
+                    ? font
+                    : backgroundTextField,),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: blue, width: 2),
+                  ),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 value: selectedIntensity,
                 items: ['Baja', 'Media', 'Alta']
@@ -131,15 +208,15 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 onPressed: () {
                   if (widget.formKey.currentState!.validate()) {
                     addWorkout = Workout(
-                      name: _titleController.text,
-                      notes: _notesController.text,
-                      duration: int.tryParse(_timeController.text) ?? 0,
-                      muscles: _musclesController.text,
-                      calories: double.tryParse(_caloriesController.text) ?? 0,
-                      type: selectedType ?? 'Otro',
-                      intensity: selectedIntensity,
-                      urlVideo: null
-                    );
+                        name: _titleController.text,
+                        notes: _notesController.text,
+                        duration: int.tryParse(_timeController.text) ?? 0,
+                        muscles: _musclesController.text,
+                        calories:
+                            double.tryParse(_caloriesController.text) ?? 0,
+                        type: selectedType ?? 'Otro',
+                        intensity: selectedIntensity,
+                        urlVideo: null);
                     workoutProvider.insertWorkout(addWorkout);
                     Navigator.pop(context);
                   }
