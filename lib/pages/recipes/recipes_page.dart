@@ -7,6 +7,7 @@ import 'package:dietify/pages/recipes/recipe_detail.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class RecipePage extends StatefulWidget {
   const RecipePage({super.key});
@@ -78,6 +79,7 @@ class _RecipePageState extends State<RecipePage> {
         child: Column(
           children: [
             _buildSearchBar(),
+            SizedBox(height: 2.h,),
             Wrap(
               spacing: 5,
               children: [
@@ -123,7 +125,7 @@ class _RecipePageState extends State<RecipePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 2.h),
             Expanded(
               child: FutureBuilder<List<Recipe>>(
                 future: futureRecipes,
