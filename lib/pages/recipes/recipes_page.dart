@@ -22,7 +22,10 @@ class _RecipePageState extends State<RecipePage> {
   List<Recipe> listAllRecipes = [];
   List<Recipe> filteredRecipes = [];
   TextEditingController searchController = TextEditingController();
-
+  bool isPostreSelected = false;
+  bool isEntranteSelected = false;
+  bool isPrimeroSelected = false;
+  bool isBebidaSelected = false;
   @override
   void initState() {
     super.initState();
@@ -75,6 +78,51 @@ class _RecipePageState extends State<RecipePage> {
         child: Column(
           children: [
             _buildSearchBar(),
+            Wrap(
+              spacing: 5,
+              children: [
+                _buildFilterChip(
+                  label: "Postre",
+                  isSelected: isPostreSelected,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      isPostreSelected = selected;
+                      _applyFilters();
+                    });
+                  },
+                ),
+                _buildFilterChip(
+                  label: "Entrante",
+                  isSelected: isEntranteSelected,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      isEntranteSelected = selected;
+                      _applyFilters();
+                    });
+                  },
+                ),
+                _buildFilterChip(
+                  label: "Primero",
+                  isSelected: isPrimeroSelected,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      isPrimeroSelected = selected;
+                      _applyFilters();
+                    });
+                  },
+                ),
+                _buildFilterChip(
+                  label: "Bebida",
+                  isSelected: isBebidaSelected,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      isBebidaSelected = selected;
+                      _applyFilters();
+                    });
+                  },
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Recipe>>(
@@ -98,7 +146,12 @@ class _RecipePageState extends State<RecipePage> {
                       return RecipeCard(
                         recipe: recipe,
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetailPage(recipe: recipe),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RecipeDetailPage(recipe: recipe),
+                              ));
                         },
                       );
                     },
@@ -134,5 +187,47 @@ class _RecipePageState extends State<RecipePage> {
       ),
       onChanged: filterRecipes,
     );
+  }
+
+  Widget _buildFilterChip({
+    required String label,
+    required bool isSelected,
+    required ValueChanged<bool> onSelected,
+  }) {
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.blue,
+        ),
+      ),
+      selected: isSelected,
+      showCheckmark: false,
+      selectedColor: Colors.blue,
+      backgroundColor:
+          settingsProvider.settings!.isDarkTheme ? background : lightBackground,
+      shape: StadiumBorder(
+        side: BorderSide(color: Colors.blue),
+      ),
+      onSelected: onSelected,
+    );
+  }
+
+  void _applyFilters() {
+    String query = searchController.text.toLowerCase();
+    filteredRecipes = listAllRecipes.where((recipe) {
+      final matchesQuery = recipe.title.toLowerCase().contains(query) ||
+          (recipe.description?.toLowerCase().contains(query) ?? false);
+      final matchesPostre =
+          !isPostreSelected || recipe.category?.toLowerCase() == 'postre';
+      final matchesSaludable =
+          !isEntranteSelected || recipe.category?.toLowerCase() == 'entrante';
+      final matchesBebida=
+          !isBebidaSelected || recipe.category?.toLowerCase() == 'bebida';
+      final matchesPrimero =
+          !isPrimeroSelected || recipe.category?.toLowerCase() == 'primero';
+
+      return matchesQuery && matchesPostre && matchesSaludable && matchesBebida && matchesPrimero;
+    }).toList();
   }
 }

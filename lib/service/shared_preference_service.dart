@@ -3,6 +3,7 @@ import 'package:dietify/models/goal.dart';
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/settings.dart';
 import 'package:dietify/models/workout.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceService {
@@ -72,14 +73,20 @@ class SharedPreferenceService {
   }
 
   static Future<void> saveLastGoalDate(DateTime date) async {
+    debugPrint(date.day.toString());
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('last_goal_date', date.toIso8601String());
+    await prefs.setString('lastGoalDate', date.toIso8601String());
   }
 
   static Future<DateTime?> getLastGoalDate() async {
+    
     final prefs = await SharedPreferences.getInstance();
-    String? dateStr = prefs.getString('last_goal_date');
-    return dateStr != null ? DateTime.tryParse(dateStr) : null;
+    String? dateStr = prefs.getString('lastGoalDate');
+    if (dateStr != null) {
+      debugPrint(dateStr);
+      return DateTime.tryParse(dateStr);
+    }
+    return null;
   }
 
   static void clearGoals() async {

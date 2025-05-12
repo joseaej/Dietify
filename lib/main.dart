@@ -6,6 +6,7 @@ import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
 import 'package:dietify/pages/permisions/permisions_handler_page.dart';
 import 'package:dietify/pages/profile/profile_page.dart';
+import 'package:dietify/pages/recipes/recipes_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/notification_service.dart';
@@ -41,10 +42,12 @@ void main() async {
 
   final Settings? settings = await SharedPreferenceService.getSettings();
   DateTime? lastGoalsSaved = await SharedPreferenceService.getLastGoalDate();
+
   if (lastGoalsSaved != null &&
       DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
     SharedPreferenceService.clearGoals();
   }
+
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
 
@@ -86,16 +89,17 @@ class MainApp extends StatelessWidget {
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
-              workoutProvider.getRandomWorkout();
-              goalsProvider.savaGoalToLocal();
-              workoutProvider.saveLastWorkout();
-              await SharedPreferenceService.saveLastGoalDate(DateTime.now());
               DateTime? lastGoalsSaved =
                   await SharedPreferenceService.getLastGoalDate();
+
               if (lastGoalsSaved != null &&
                   DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
                 SharedPreferenceService.clearGoals();
               }
+              workoutProvider.getRandomWorkout();
+              goalsProvider.savaGoalToLocal();
+              workoutProvider.saveLastWorkout();
+              await SharedPreferenceService.saveLastGoalDate(DateTime.now());
             }
             return null;
           });
@@ -116,6 +120,7 @@ class MainApp extends StatelessWidget {
                   '/profile': (context) => ProfilePage(),
                   '/login': (context) => LoginScreen(),
                   '/signup': (context) => SignupPage(),
+                  '/recipes': (context) => RecipePage(),
                   '/onboarding': (context) => OnboardingPage(),
                   '/settings': (context) => SettingsPage(),
                   "/spash": (context) => SplashScreen(

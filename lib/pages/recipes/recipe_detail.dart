@@ -59,7 +59,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               FileService.openPDF(file);
             },
             icon: Icon(
-              Icons.exit_to_app,
+              Icons.download,
               color: blue,
               size: 3.5.h,
             ),
