@@ -1,6 +1,8 @@
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
+import 'package:dietify/service/export_service.dart';
+import 'package:dietify/service/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -34,6 +36,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     workoutProvider = Provider.of<WorkoutProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
     profileProvider = Provider.of<ProfileProvider>(context);
+    final ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -60,7 +63,16 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
               icon: Icon(
                 Icons.save_as_sharp,
                 color: blue,
-              ))
+              )),
+          IconButton(
+              onPressed: () async {
+                final file = await exportService.generateWorkoutPDF(workout);
+                FileService.openPDF(file);
+              },
+              icon: Icon(
+                Icons.download,
+                color: blue,
+              )),
         ],
       ),
       body: Padding(

@@ -32,6 +32,8 @@ dependencies:
   flutter_local_notifications: ^19.1.0
   workmanager: ^0.5.2
   url_launcher: ^6.3.1
+  pdf: ^3.11.3
+  open_file: ^3.5.10
 
 
 dev_dependencies:

@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                       workoutProvider.lastWorkout?.name ??
                           "No hay actividad reciente",
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w600,
                         color: (isDarkTheme) ? font : darkfont,
                       ),
@@ -257,19 +257,19 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         "Duración: ${workoutProvider.lastWorkout?.duration ?? 'N/A'} min",
                         style: TextStyle(
-                            fontSize: 15.sp,
+                            fontSize: 16.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                       Text(
                         "Tipo: ${workoutProvider.lastWorkout?.type ?? 'Desconocido'}",
                         style: TextStyle(
-                            fontSize: 15.sp,
+                            fontSize: 16.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                       Text(
                         "Intensidad: ${workoutProvider.lastWorkout?.intensity ?? 'N/A'}",
                         style: TextStyle(
-                            fontSize: 15.sp,
+                            fontSize: 16.sp,
                             color: (isDarkTheme) ? lightGray : Colors.black45),
                       ),
                     ],
@@ -507,6 +507,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildAddWaterDialog() {
     return AlertDialog(
+      backgroundColor: settingsProvider.settings!.isDarkTheme?background:lightBackground,
       title: Center(
         child: Text(
           "Añadir agua",
