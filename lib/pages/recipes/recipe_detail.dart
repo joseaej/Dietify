@@ -143,6 +143,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          
           _buildHeaderItem(Icons.timer_outlined, coockingTime.toString()),
           _buildHeaderItem(Icons.local_fire_department, calories.toString()),
           _buildHeaderItem(Icons.person, persons.toString()),

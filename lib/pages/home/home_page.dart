@@ -66,12 +66,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                     child: _buildPieChart(goalProvider.goal?.maxCarbs ?? 0,
-                        goalProvider.goal?.carbs ?? 0)),
+                        goalProvider.goal?.carbs ?? 0,Colors.deepOrange.shade400)),
                 Expanded(
                     child: _buildPieChart(goalProvider.goal?.maxFats ?? 0,
-                        goalProvider.goal?.fat ?? 0)),
+                        goalProvider.goal?.fat ?? 0,Colors.amber.shade600)),
                 Expanded(
-                    child: _buildPieChart(goalProvider.goal?.maxProtein ?? 0,goalProvider.goal?.protein ?? 0)),
+                    child: _buildPieChart(goalProvider.goal?.maxProtein ?? 0,goalProvider.goal?.protein ?? 0,Colors.green.shade600,)),
               ],
             ),
             _buildCaloriesCard(),
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPieChart(double maxValue, double currentValue) {
+  Widget _buildPieChart(double maxValue, double currentValue,Color colorSection) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                     PieChartSectionData(
                         color: Colors.grey, value: maxValue, title: ''),
                     PieChartSectionData(
-                        color: blue,
+                        color: colorSection,
                         value: currentValue,
                         title: '${currentValue.ceil()}g')
                   ]),
