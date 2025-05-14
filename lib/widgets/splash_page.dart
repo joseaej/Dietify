@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -18,8 +19,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    checkLastSave();
     super.initState();
     _startTimer();
+  }
+
+  void checkLastSave() async {
+    DateTime? lastGoalsSaved = await SharedPreferenceService.getLastGoalDate();
+
+    if (lastGoalsSaved != null &&
+        DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
+      SharedPreferenceService.clearGoals();
+    }
   }
 
   void _startTimer() {
@@ -29,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNextScreen() {
     Navigator.pushReplacementNamed(context, widget.route);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
