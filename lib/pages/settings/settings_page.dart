@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
@@ -26,6 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   XFile? photo;
   late SettingsProvider settings;
   late ProfileProvider profileProvider;
+  late GoalProvider goalProvider;
   late StorageService storageService;
   late AuthService authService;
   final TextEditingController _usernameController = TextEditingController();
@@ -49,6 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
+    goalProvider = Provider.of<GoalProvider>(context);
     storageService = Provider.of<StorageService>(context);
     authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
@@ -80,8 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileSection(
-              () {
-              },
+              () {},
             ),
             SizedBox(height: 4.h),
             _buildSectionTitle('General'),
@@ -136,9 +138,11 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () {
                 settings.setDefaultSettings();
                 SharedPreferenceService.clearSettings();
-                Navigator.pushReplacementNamed(context, "/login");
                 profileProvider.clearProfile();
                 SharedPreferenceService.clearProfile();
+                goalProvider.clearGoals();
+                SharedPreferenceService.clearGoals();
+                Navigator.pushReplacementNamed(context, "/login");
               },
             ),
             _buildSettingOption(
@@ -153,12 +157,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ProfileRepository().deleteProfile(profileProvider.profile!);
               },
             ),
-             _buildSectionTitle('Soporte'),
+            _buildSectionTitle('Soporte'),
             _buildSettingOption(
               icon: Icons.lock,
               title: 'Terminos y servicios',
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TermsAndConditionsPage(),));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TermsAndConditionsPage(),
+                    ));
               },
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),

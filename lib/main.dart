@@ -103,7 +103,6 @@ class MainApp extends StatelessWidget {
             }
             return null;
           });
-
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(

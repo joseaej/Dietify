@@ -1,5 +1,3 @@
-import 'package:dietify/models/goal.dart';
-
 class Profile {
   String? uuid;
   String? email;
@@ -9,7 +7,7 @@ class Profile {
   double? height;
   int? age;
   String? activityLevel;
-  Sex? sex;
+  String? sex;
 
   Profile(
       {this.uuid,
@@ -50,7 +48,7 @@ class Profile {
     String? uuid,
     String? email,
     String? username,
-    Sex? sex,
+    String? sex,
     String? urlPhoto,
     double? weight,
     double? height,

@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +6,8 @@ import '../../utils/theme.dart';
 import '../../widgets/form_rectangular.dart';
 
 enum activityLevel { sedentario, ligero, moderado, activo, muyactivo }
+
+enum Sex { male, female }
 
 class OnBoardPage3 extends StatefulWidget {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -20,7 +21,22 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
-  activityLevel? _selectedActivityLevel = activityLevel.activo;
+  final List<DropdownMenuItem<String>> _selectedActivityLevel = [
+    DropdownMenuItem(
+        value: activityLevel.ligero.toString(), child: Text('Ligero')),
+    DropdownMenuItem(
+        value: activityLevel.sedentario.toString(), child: Text('Sedentario')),
+    DropdownMenuItem(
+        value: activityLevel.activo.toString(), child: Text('Activo')),
+    DropdownMenuItem(
+        value: activityLevel.moderado.toString(), child: Text('Moderado')),
+    DropdownMenuItem(
+        value: activityLevel.muyactivo.toString(), child: Text('Muy Activo')),
+  ];
+  final List<DropdownMenuItem<String>> _sex = [
+    DropdownMenuItem(value: Sex.male.toString(), child: Text('Masculino')),
+    DropdownMenuItem(value: Sex.female.toString(), child: Text('Femenino')),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +81,9 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                             if (double.tryParse(value) == null) {
                               return 'Número inválido';
                             }
+                            if (double.tryParse(value)! > 400) {
+                              return 'El número no puede ser mas grande de 4m';
+                            }
                             provider.updateHeight(
                                 double.parse(_heightController.text));
                             return null;
@@ -88,7 +107,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                               return 'Inserta tu peso';
                             }
                             if (double.tryParse(value) == null) {
-                              return 'Número inválido';
+                              return 'Debes escribir un numero';
                             }
                             if (double.parse(value) > 500) {
                               return 'Número inválido';
@@ -107,7 +126,7 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                             if (value == null || value.isEmpty) {
                               return 'Inserta tu edad';
                             } else if (int.tryParse(value) == null) {
-                              return 'Número inválido';
+                              return 'Debes escribir un numero';
                             } else if (int.parse(value) > 100 ||
                                 int.parse(value) < 0) {
                               return 'Número inválido';
@@ -117,60 +136,57 @@ class _OnBoardPage3State extends State<OnBoardPage3> {
                           },
                         ),
                         SizedBox(height: size.height * 0.03),
-                        DropdownButtonFormField<activityLevel>(
-                          value: _selectedActivityLevel,
+                        DropdownButtonFormField(
+                          items: _selectedActivityLevel,
                           decoration: InputDecoration(
-                            labelText: "Nivel de actividad",
-                            labelStyle: TextStyle(color: blue, fontSize: 20),
+                            labelText: 'Actividad',
+                            labelStyle: TextStyle(
+                                color: darkfont, fontWeight: FontWeight.w600),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: blue, width: 2),
+                              borderSide: BorderSide(color: blue),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: blue, width: 2),
+                              borderSide: BorderSide(color: blue),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: blue, width: 2.5),
+                              borderSide: BorderSide(color: blue, width: 2),
                             ),
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                                horizontal: 16, vertical: 14),
                           ),
-                          dropdownColor: Colors.white,
-                          style:
-                              const TextStyle(fontSize: 16, color: Colors.black),
-                          items: activityLevel.values
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(
-                                      e.name,
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ))
-                              .toList(),
                           onChanged: (value) {
                             setState(() {
-                              _selectedActivityLevel = value;
-                              switch (value) {
-                                case activityLevel.activo:
-                                  provider.updateActivityLevel("activo");
-                                  break;
-                                case activityLevel.ligero:
-                                  provider.updateActivityLevel("ligero");
-                                  break;
-                                case activityLevel.moderado:
-                                  provider.updateActivityLevel("moderado");
-                                  break;
-                                case activityLevel.sedentario:
-                                  provider.updateActivityLevel("sedentario");
-                                  break;
-                                default:
-                                  provider.updateActivityLevel("muy activo");
-                                  break;
-                              }
+                              provider.updateActivityLevel(value!);
                             });
+                          },
+                        ),
+                        SizedBox(height: size.height * 0.03),
+                        DropdownButtonFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Sexo',
+                            labelStyle: TextStyle(
+                                color: darkfont, fontWeight: FontWeight.w600),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: blue),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: blue),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: blue, width: 2),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                          ),
+                          items: _sex,
+                          onChanged: (value) {
+                            provider.updateSex(value.toString());
                           },
                         ),
                         SizedBox(height: 20),

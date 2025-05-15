@@ -1,4 +1,3 @@
-import 'package:dietify/models/goal.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
@@ -45,6 +44,7 @@ class _HomePageState extends State<HomePage> {
     goalProvider.getMaxProtein(profileProvider.profile?.weight ?? 0);
     return Scaffold(
       appBar: AppBar(
+        elevation: 30,
         title: Text((profileProvider.profile != null)
             ? profileProvider.profile!.username!
             : ""),
@@ -65,13 +65,36 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Expanded(
-                    child: _buildPieChart(goalProvider.goal?.maxCarbs ?? 0,
-                        goalProvider.goal?.carbs ?? 0,Colors.deepOrange.shade400)),
+                    child: _buildPieChart(
+                        ((goalProvider.goal!.maxCarbs ??
+                                    0 - goalProvider.goal!.carbs) <
+                                0
+                            ? 0
+                            : (goalProvider.goal!.maxCarbs??0 -
+                                goalProvider.goal!.carbs)),
+                        goalProvider.goal?.carbs ?? 0,
+                        Colors.deepOrange.shade400)),
                 Expanded(
-                    child: _buildPieChart(goalProvider.goal?.maxFats ?? 0,
-                        goalProvider.goal?.fat ?? 0,Colors.amber.shade600)),
+                    child: _buildPieChart(
+                        ((goalProvider.goal!.maxFats ??
+                                    0 - goalProvider.goal!.fat) <
+                                0
+                            ? 0
+                            : (goalProvider.goal!.maxFats??0 -
+                                goalProvider.goal!.fat)),
+                        goalProvider.goal?.fat ?? 0,
+                        Colors.amber.shade600)),
                 Expanded(
-                    child: _buildPieChart(goalProvider.goal?.maxProtein ?? 0,goalProvider.goal?.protein ?? 0,Colors.green.shade600,)),
+                    child: _buildPieChart(
+                  ((goalProvider.goal!.maxProtein ??
+                              0 - goalProvider.goal!.protein) <
+                          0
+                      ? 0
+                      : (goalProvider.goal!.maxProtein??0 -
+                          goalProvider.goal!.protein)),
+                  goalProvider.goal?.protein ?? 0,
+                  Colors.green.shade600,
+                )),
               ],
             ),
             _buildCaloriesCard(),
@@ -84,7 +107,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPieChart(double maxValue, double currentValue,Color colorSection) {
+  Widget _buildPieChart(
+      double maxValue, double currentValue, Color colorSection) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
@@ -106,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                         title: '${currentValue.ceil()}g')
                   ]),
             ),
-            Text("${maxValue.ceil()}")
+            Text("${(maxValue.ceil() == 0) ? "" : maxValue.ceil()}")
           ],
         ),
       ),
@@ -173,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       (goalProvider.goal != null &&
                               profileProvider.profile != null)
-                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? Sex.male , profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
+                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
                           : "No hay datos disponibles",
                       style: TextStyle(
                         fontSize: 15.0,
@@ -248,8 +272,7 @@ class _HomePageState extends State<HomePage> {
                       workoutProvider.lastWorkout?.name ??
                           "No hay actividad reciente",
                       style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
                         color: (isDarkTheme) ? font : darkfont,
                       ),
                     ),
@@ -507,7 +530,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildAddWaterDialog() {
     return AlertDialog(
-      backgroundColor: settingsProvider.settings!.isDarkTheme?background:lightBackground,
+      backgroundColor:
+          settingsProvider.settings!.isDarkTheme ? background : lightBackground,
       title: Center(
         child: Text(
           "Añadir agua",

@@ -128,6 +128,9 @@ class _SignupPageState extends State<SignupPage> {
                     if (value == null || value.isEmpty) {
                       return "Debes ingresar una contraseña";
                     }
+                    if (value != _passwordController.text) {
+                      return "Las contraseñas deben coincidir";
+                    }
                     return null;
                   },
                 ),
@@ -153,18 +156,23 @@ class _SignupPageState extends State<SignupPage> {
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async {
-        if (_formKey.currentState!.validate() && _passwordController.text == _confirmpassController.text) {
-          Profile? profile = await service.signUpWithEmailPassword(
-              _emailController.text.trim(),
-              _passwordController.text.trim(),
-              _username.text.trim());
-          ProfileProvider provider =
-              Provider.of<ProfileProvider>(context, listen: false);
-          if (profile != null) {
-            provider.setProfile(profile);
-            SharedPreferenceService.setProfileFromLocal(profile);
+        try {
+          if (_formKey.currentState!.validate() &&
+              _passwordController.text == _confirmpassController.text) {
+            Profile? profile = await service.signUpWithEmailPassword(
+                _emailController.text.trim(),
+                _passwordController.text.trim(),
+                _username.text.trim());
+            ProfileProvider provider =
+                Provider.of<ProfileProvider>(context, listen: false);
+            if (profile != null) {
+              provider.setProfile(profile);
+              SharedPreferenceService.setProfileFromLocal(profile);
+            }
+            Navigator.pushReplacementNamed(context, "/onboarding");
           }
-          Navigator.pushReplacementNamed(context, "/onboarding");
+        } catch (e) {
+          Navigator.pushReplacementNamed(context, "/login");
         }
       },
       child: Text(

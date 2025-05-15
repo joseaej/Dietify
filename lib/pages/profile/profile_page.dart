@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onTap: () => _showPhotoOptions(),
           child: CircleAvatar(
             radius: 30.sp,
-            backgroundColor: skyBlue,
+            backgroundColor: blue,
             backgroundImage: (photo != null)
                 ? FileImage(File(photo!.path))
                 : (profileProvider.profile?.urlPhoto != null &&
@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     : null,
             child: (photo == null &&
                     (profileProvider.profile?.urlPhoto?.isEmpty ?? true))
-                ? const Icon(Icons.person, size: 40, color: Colors.white)
+                ? const Icon(Icons.camera_alt_rounded, size: 40, color: Color.fromARGB(150, 255, 255, 255))
                 : null,
           ),
         ),
@@ -159,18 +159,6 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               profileProvider.profile?.email ?? "",
               style: TextStyle(fontSize: 16.sp, color: Colors.grey),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, "/settings"),
-              child: Text(
-                "Editar perfil",
-                style: TextStyle(
-                  color: blue,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
-                ),
-              ),
             ),
           ],
         ),
