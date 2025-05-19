@@ -26,6 +26,7 @@ import 'pages/auth/login_page.dart';
 import 'pages/onboarding/onboarding_page.dart';
 import 'utils/theme.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -57,11 +58,12 @@ void main() async {
   ));
 }
 
+// ignore: must_be_immutable
 class MainApp extends StatelessWidget {
-  final String route;
+  String route;
   final Settings? initialSettings;
 
-  const MainApp({super.key, required this.route, this.initialSettings});
+  MainApp({super.key, required this.route, this.initialSettings});
 
   @override
   Widget build(BuildContext context) {
@@ -89,23 +91,34 @@ class MainApp extends StatelessWidget {
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
+              workoutProvider.getRandomWorkout();
+              goalsProvider.savaGoalToLocal();
+              workoutProvider.saveLastWorkout();
+              await SharedPreferenceService.saveLastGoalDate(DateTime.now());
+              debugPrint("PAUSED");
+            }
+            if (msg == AppLifecycleState.resumed.toString()) {
               DateTime? lastGoalsSaved =
                   await SharedPreferenceService.getLastGoalDate();
 
               if (lastGoalsSaved != null &&
                   DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
                 SharedPreferenceService.clearGoals();
+                Future.microtask(() {
+                  goalsProvider.clearGoals();
+                });
+                navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                  "/spash",
+                  (route) => false,
+                );
               }
-              workoutProvider.getRandomWorkout();
-              goalsProvider.savaGoalToLocal();
-              workoutProvider.saveLastWorkout();
-              await SharedPreferenceService.saveLastGoalDate(DateTime.now());
             }
             return null;
           });
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 debugShowCheckedModeBanner: false,
                 title: 'Dietify',
                 theme: lightTheme,

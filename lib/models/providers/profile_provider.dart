@@ -84,9 +84,9 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-   void updateSex(String activityLevel) {
+   void updateSex(String sex) {
     if (_profile != null) {
-      _profile = _profile!.copyWith(activityLevel: activityLevel);
+      _profile = _profile!.copyWith(sex: sex);
       notifyListeners();
     }
   }

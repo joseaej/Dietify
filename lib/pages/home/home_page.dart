@@ -27,8 +27,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => Provider.of<WorkoutProvider>(context, listen: false)
-        .getRandomWorkout());
+    Future.microtask(() {
+      Provider.of<WorkoutProvider>(context, listen: false).getRandomWorkout();
+    });
   }
 
   @override
@@ -39,9 +40,7 @@ class _HomePageState extends State<HomePage> {
     workoutProvider = Provider.of<WorkoutProvider>(context);
 
     isDarkTheme = settingsProvider.settings!.isDarkTheme;
-    goalProvider.getMaxCarbs();
-    goalProvider.getMaxFats();
-    goalProvider.getMaxProtein(profileProvider.profile?.weight ?? 0);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 30,
@@ -65,36 +64,27 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Expanded(
-                    child: _buildPieChart(
-                        ((goalProvider.goal!.maxCarbs ??
-                                    0 - goalProvider.goal!.carbs) <
-                                0
-                            ? 0
-                            : (goalProvider.goal!.maxCarbs??0 -
-                                goalProvider.goal!.carbs)),
-                        goalProvider.goal?.carbs ?? 0,
-                        Colors.deepOrange.shade400)),
-                Expanded(
-                    child: _buildPieChart(
-                        ((goalProvider.goal!.maxFats ??
-                                    0 - goalProvider.goal!.fat) <
-                                0
-                            ? 0
-                            : (goalProvider.goal!.maxFats??0 -
-                                goalProvider.goal!.fat)),
-                        goalProvider.goal?.fat ?? 0,
-                        Colors.amber.shade600)),
-                Expanded(
-                    child: _buildPieChart(
-                  ((goalProvider.goal!.maxProtein ??
-                              0 - goalProvider.goal!.protein) <
-                          0
-                      ? 0
-                      : (goalProvider.goal!.maxProtein??0 -
-                          goalProvider.goal!.protein)),
-                  goalProvider.goal?.protein ?? 0,
-                  Colors.green.shade600,
+                    child: Expanded(
+                  child: _buildPieChart(
+                    _calculateRemainingCarbs(goalProvider),
+                    goalProvider.goal?.carbs ?? 0,
+                    Colors.deepOrange.shade400,
+                  ),
                 )),
+                Expanded(
+                  child: _buildPieChart(
+                    _calculateRemainingFat(goalProvider),
+                    goalProvider.goal?.fat ?? 0,
+                    Colors.yellow.shade400,
+                  ),
+                ),
+                Expanded(
+                  child: _buildPieChart(
+                    _calculateRemainingProtein(goalProvider),
+                    goalProvider.goal?.protein ?? 0,
+                    Colors.green.shade400,
+                  ),
+                ),
               ],
             ),
             _buildCaloriesCard(),
@@ -197,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       (goalProvider.goal != null &&
                               profileProvider.profile != null)
-                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight!, profileProvider.profile!.height!, profileProvider.profile!.age!)?.ceilToDouble()} kcal'
+                          ? '${goalProvider.goal!.currentCalories} kcal / ${goalProvider.goal!.getTotalCalories(profileProvider.profile!.sex ?? "male", profileProvider.profile!.weight ?? 0, profileProvider.profile!.height ?? 0, profileProvider.profile!.age ?? 0)?.ceilToDouble()} kcal'
                           : "No hay datos disponibles",
                       style: TextStyle(
                         fontSize: 15.0,
@@ -447,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       (goalProvider.goal != null &&
                               profileProvider.profile != null)
-                          ? '${goalProvider.goal!.currentWaterIntake} ml / ${goalProvider.goal!.getMaxWaterIntake(profileProvider.profile!.weight!)} ml'
+                          ? '${goalProvider.goal!.currentWaterIntake} ml / ${goalProvider.goal!.getMaxWaterIntake(profileProvider.profile!.weight ?? 0)} ml'
                           : "No hay datos disponibles",
                       style: TextStyle(
                         fontSize: 15.0,
@@ -569,5 +559,29 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
     );
+  }
+
+  double _calculateRemainingCarbs(GoalProvider goalProvider) {
+    goalProvider.getMaxCarbs();
+    final maxCarbs = goalProvider.goal?.maxCarbs ?? 0;
+    final carbs = goalProvider.goal?.carbs ?? 0;
+    final remaining = maxCarbs - carbs;
+    return remaining < 0 ? 0 : remaining;
+  }
+
+  double _calculateRemainingFat(GoalProvider goalProvider) {
+    goalProvider.getMaxFats();
+    final maxFats = goalProvider.goal?.maxFats ?? 0;
+    final fats = goalProvider.goal?.fat ?? 0;
+    final remaining = maxFats - fats;
+    return remaining < 0 ? 0 : remaining;
+  }
+
+  double _calculateRemainingProtein(GoalProvider goalProvider) {
+    goalProvider.getMaxProtein(profileProvider.profile!.weight??0);
+    final maxProtein = goalProvider.goal?.maxProtein ?? 0;
+    final protein = goalProvider.goal?.protein ?? 0;
+    final remaining = maxProtein - protein;
+    return remaining < 0 ? 0 : remaining;
   }
 }

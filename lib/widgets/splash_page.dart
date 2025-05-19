@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dietify/models/providers/profile_provider.dart';
-import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -22,18 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
   late ProfileProvider profileProvider;
   @override
   void initState() {
-    checkLastSave();
     super.initState();
     _startTimer();
-  }
-
-  void checkLastSave() async {
-    DateTime? lastGoalsSaved = await SharedPreferenceService.getLastGoalDate();
-
-    if (lastGoalsSaved != null &&
-        DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
-      SharedPreferenceService.clearGoals();
-    }
   }
 
   void _startTimer() {

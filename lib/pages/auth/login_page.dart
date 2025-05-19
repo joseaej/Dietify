@@ -79,11 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Debes ingresar una contraseña";
-                  }
-                  if (value.length < 6) {
+                  } else if (value.length < 6) {
                     return "Debe contener al menos 6 caracteres";
-                  }
-                  if (!_passwordRegex.hasMatch(value)) {
+                  } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return "La contraseña debe contener al menos una mayuscula";
+                  } else if (!value.contains(RegExp(r'[0-9]'))) {
+                    return "La contraseña debe contener un numero";
+                  } else if (!_passwordRegex.hasMatch(value)) {
                     return 'Incluir una letra y un número';
                   }
 

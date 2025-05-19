@@ -71,6 +71,7 @@ class Goal {
 
   double getMaxProtein(double weight) {
     maxProtein = weight * 0.8;
+
     return maxProtein!;
   }
 
