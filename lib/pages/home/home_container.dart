@@ -45,7 +45,7 @@ class _HomeContainerState extends State<HomeContainer> {
         items: [
           TabItem(icon: Icons.home, title: 'Inicio'),
           TabItem(icon: Icons.apple_outlined, title: 'Recetas'),
-          TabItem(icon: Icons.fitness_center_rounded, title: 'Entrenamientos'),
+          TabItem(icon: Icons.fitness_center_rounded, title: 'Ejercicios'),
           TabItem(icon: Icons.person, title: 'Perfil'),
         ],
         initialActiveIndex: _currentIndex,

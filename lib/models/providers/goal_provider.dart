@@ -36,7 +36,7 @@ class GoalProvider with ChangeNotifier {
   }
 
   void clearGoals() {
-    goal = null;
+    goal = Goal();
     SharedPreferenceService.clearGoals();
     notifyListeners();
   }

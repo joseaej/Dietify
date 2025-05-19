@@ -41,12 +41,12 @@ class WorkoutCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(163, 137, 208, 243),
+                color: skyBlue,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.fitness_center_rounded,
-                color: blue,
+                color: font,
                 size: 28,
               ),
             ),

@@ -45,9 +45,9 @@ class Goal {
     return maxWaterIntake!;
   }
 
-  double? getTotalCalories(Sex sex, double weight, double height, int age) {
+  double? getTotalCalories(String sex, double weight, double height, int age) {
     if (weight <= 0 || height <= 0 || age <= 0) return null;
-    totalCalories = sex == Sex.male
+    totalCalories = sex == "male"
         ? 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
         : 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
     return totalCalories;
@@ -71,6 +71,7 @@ class Goal {
 
   double getMaxProtein(double weight) {
     maxProtein = weight * 0.8;
+
     return maxProtein!;
   }
 

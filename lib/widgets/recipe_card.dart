@@ -89,14 +89,18 @@ class RecipeCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      _buildMacroChip(
-                          Icons.fastfood, "Grasa", recipe.fat!, Colors.orange),
-                      SizedBox(width: 2.w),
                       _buildMacroChip(Icons.breakfast_dining, "Carbs",
-                          recipe.carbs!, Colors.blue),
+                          recipe.carbs!, Colors.deepOrange.shade400),
+                      SizedBox(width: 2.w),
+                      _buildMacroChip(
+                        Icons.fastfood,
+                        "Grasa",
+                        recipe.fat!,
+                        Colors.amber.shade600,
+                      ),
                       SizedBox(width: 2.w),
                       _buildMacroChip(Icons.fitness_center, "Prot",
-                          recipe.protein!, Colors.green),
+                          recipe.protein!, Colors.green.shade600),
                     ],
                   ),
                 ],

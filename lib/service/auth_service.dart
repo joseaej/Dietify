@@ -32,10 +32,12 @@ class AuthService with ChangeNotifier {
     try {
       AuthResponse reponse =
           await supabase.client.auth.signUp(email: email, password: password);
-          
+
       if (reponse.user != null) {
-        Profile newProfile =
-            profile!.copyWith(uuid: supabase.client.auth.currentUser!.id,email: email, username: username);
+        Profile newProfile = profile!.copyWith(
+            uuid: supabase.client.auth.currentUser!.id,
+            email: email,
+            username: username);
         _profileRepository.createProfile(newProfile);
         return newProfile;
       }
@@ -44,13 +46,13 @@ class AuthService with ChangeNotifier {
       if (e is AuthException) {
         if (e.message == "User already registered") {
           debugPrint("Usuario repetido");
-
         }
       }
       return null;
     }
   }
-    Future<void> changePasswordForEmail(String email) async {
+
+  Future<void> changePasswordForEmail(String email) async {
     try {
       await supabase.client.auth.resetPasswordForEmail(email);
     } catch (e) {
@@ -59,37 +61,41 @@ class AuthService with ChangeNotifier {
   }
 
   Future<Profile?> nativeGoogleSignIn() async {
-    var webClientId =dotenv.env['WEB_CLIENT_ID'];
-    //const iosClientId = 'my-ios.apps.googleusercontent.com';
+    try {
+      var webClientId = dotenv.env['WEB_CLIENT_ID'];
+      //const iosClientId = 'my-ios.apps.googleusercontent.com';
 
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      //clientId: iosClientId,
-      serverClientId: webClientId,
-    );
-    final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        //clientId: iosClientId,
+        serverClientId: webClientId,
+      );
+      final googleUser = await googleSignIn.signIn();
+      final googleAuth = await googleUser!.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
 
-    if (accessToken == null) {
-      throw 'No Access Token found.';
-    }
-    if (idToken == null) {
-      throw 'No ID Token found.';
-    }
+      if (accessToken == null) {
+        throw 'No Access Token found.';
+      }
+      if (idToken == null) {
+        throw 'No ID Token found.';
+      }
 
-    AuthResponse reponse = await supabase.client.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
-    );
+      AuthResponse reponse = await supabase.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
 
-    if (reponse.user != null) {
-      Profile newProfile = profile!.copyWith(email: reponse.user!.email, username: reponse.user!.email);
-      return newProfile;
+      if (reponse.user != null) {
+        Profile newProfile = profile!.copyWith(
+            email: reponse.user!.email, username: reponse.user!.email);
+        return newProfile;
+      }
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
     }
     return null;
   }
-
-
 }

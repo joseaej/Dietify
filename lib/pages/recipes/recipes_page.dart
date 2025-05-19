@@ -79,7 +79,9 @@ class _RecipePageState extends State<RecipePage> {
         child: Column(
           children: [
             _buildSearchBar(),
-            SizedBox(height: 2.h,),
+            SizedBox(
+              height: 2.h,
+            ),
             Wrap(
               spacing: 5,
               children: [
@@ -89,6 +91,9 @@ class _RecipePageState extends State<RecipePage> {
                   onSelected: (bool selected) {
                     setState(() {
                       isPostreSelected = selected;
+                      isEntranteSelected = false;
+                      isBebidaSelected = false;
+                      isPrimeroSelected = false;
                       _applyFilters();
                     });
                   },
@@ -99,6 +104,9 @@ class _RecipePageState extends State<RecipePage> {
                   onSelected: (bool selected) {
                     setState(() {
                       isEntranteSelected = selected;
+                      isPostreSelected = false;
+                      isBebidaSelected = false;
+                      isPrimeroSelected = false;
                       _applyFilters();
                     });
                   },
@@ -109,6 +117,9 @@ class _RecipePageState extends State<RecipePage> {
                   onSelected: (bool selected) {
                     setState(() {
                       isPrimeroSelected = selected;
+                      isEntranteSelected = false;
+                      isBebidaSelected = false;
+                      isPostreSelected = false;
                       _applyFilters();
                     });
                   },
@@ -119,6 +130,9 @@ class _RecipePageState extends State<RecipePage> {
                   onSelected: (bool selected) {
                     setState(() {
                       isBebidaSelected = selected;
+                      isEntranteSelected = false;
+                      isPostreSelected = false;
+                      isPrimeroSelected = false;
                       _applyFilters();
                     });
                   },
@@ -224,12 +238,16 @@ class _RecipePageState extends State<RecipePage> {
           !isPostreSelected || recipe.category?.toLowerCase() == 'postre';
       final matchesSaludable =
           !isEntranteSelected || recipe.category?.toLowerCase() == 'entrante';
-      final matchesBebida=
+      final matchesBebida =
           !isBebidaSelected || recipe.category?.toLowerCase() == 'bebida';
       final matchesPrimero =
           !isPrimeroSelected || recipe.category?.toLowerCase() == 'primero';
 
-      return matchesQuery && matchesPostre && matchesSaludable && matchesBebida && matchesPrimero;
+      return matchesQuery &&
+          matchesPostre &&
+          matchesSaludable &&
+          matchesBebida &&
+          matchesPrimero;
     }).toList();
   }
 }

@@ -85,7 +85,7 @@ class _SignupPageState extends State<SignupPage> {
                   isPassword: false,
                   (value) {
                     if (value == null || value.isEmpty) {
-                      return "Debes ingresar un usuario valido";
+                      return "Debes ingresar un usuario válido";
                     } else if (value.length < 4) {
                       return "El nombre de usuario debe mas de 4 caracteres";
                     }
@@ -104,11 +104,13 @@ class _SignupPageState extends State<SignupPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Debes ingresar una contraseña";
-                    }
-                    if (value.length < 6) {
+                    } else if (value.length < 6) {
                       return "Debe contener al menos 6 caracteres";
-                    }
-                    if (!_passwordRegex.hasMatch(value)) {
+                    } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                      return "La contraseña debe contener al menos una mayuscula";
+                    } else if (!value.contains(RegExp(r'[0-9]'))) {
+                      return "La contraseña debe contener un numero";
+                    } else if (!_passwordRegex.hasMatch(value)) {
                       return 'Incluir una letra y un número';
                     }
 
@@ -127,6 +129,8 @@ class _SignupPageState extends State<SignupPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Debes ingresar una contraseña";
+                    } else if (value != _passwordController.text) {
+                      return "Las contraseñas deben coincidir";
                     }
                     return null;
                   },
@@ -153,18 +157,23 @@ class _SignupPageState extends State<SignupPage> {
         minimumSize: WidgetStateProperty.all(Size(300, 50)),
       ),
       onPressed: () async {
-        if (_formKey.currentState!.validate() && _passwordController.text == _confirmpassController.text) {
-          Profile? profile = await service.signUpWithEmailPassword(
-              _emailController.text.trim(),
-              _passwordController.text.trim(),
-              _username.text.trim());
-          ProfileProvider provider =
-              Provider.of<ProfileProvider>(context, listen: false);
-          if (profile != null) {
-            provider.setProfile(profile);
-            SharedPreferenceService.setProfileFromLocal(profile);
+        try {
+          if (_formKey.currentState!.validate() &&
+              _passwordController.text == _confirmpassController.text) {
+            Profile? profile = await service.signUpWithEmailPassword(
+                _emailController.text.trim(),
+                _passwordController.text.trim(),
+                _username.text.trim());
+            ProfileProvider provider =
+                Provider.of<ProfileProvider>(context, listen: false);
+            if (profile != null) {
+              provider.setProfile(profile);
+              SharedPreferenceService.setProfileFromLocal(profile);
+            }
+            Navigator.pushReplacementNamed(context, "/onboarding");
           }
-          Navigator.pushReplacementNamed(context, "/onboarding");
+        } catch (e) {
+          Navigator.pushReplacementNamed(context, "/login");
         }
       },
       child: Text(

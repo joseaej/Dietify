@@ -83,7 +83,7 @@ class SharedPreferenceService {
     final prefs = await SharedPreferences.getInstance();
     String? dateStr = prefs.getString('lastGoalDate');
     if (dateStr != null) {
-      debugPrint(dateStr);
+      debugPrint(DateTime.tryParse(dateStr)!.day.toString());
       return DateTime.tryParse(dateStr);
     }
     return null;
@@ -92,6 +92,7 @@ class SharedPreferenceService {
   static void clearGoals() async {
     await _initPreferences();
     _preferences?.remove("goals");
+    
   }
 
   //lastWorkout

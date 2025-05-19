@@ -84,6 +84,12 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+   void updateSex(String sex) {
+    if (_profile != null) {
+      _profile = _profile!.copyWith(sex: sex);
+      notifyListeners();
+    }
+  }
 
   void clearProfile() {
     _profile = null;

@@ -15,7 +15,7 @@ class ProfileRepository {
     final response = await _supabase
         .from('profile')
         .update(profile.toMap())
-        .eq('id', profile.uuid!)
+        .eq('email', profile.email!)
         .select();
     print(response);
   }
