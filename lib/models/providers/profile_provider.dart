@@ -8,7 +8,7 @@ class ProfileProvider with ChangeNotifier {
   Profile? _profile;
   bool _isLoading = true;
   final WorkoutRepository _repository = WorkoutRepository();
-  List<Workout> savedWorkout = List.empty(growable: true);
+  List<Workout> savedWorkouts = List.empty(growable: true);
 
   Profile? get profile => _profile;
   bool get isLoading => _isLoading;
@@ -84,7 +84,8 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-   void updateSex(String sex) {
+
+  void updateSex(String sex) {
     if (_profile != null) {
       _profile = _profile!.copyWith(sex: sex);
       notifyListeners();
@@ -98,19 +99,25 @@ class ProfileProvider with ChangeNotifier {
 
   //Guardar Workouts;
   Future<void> addWorkoutToList(Workout savedWorkout) async {
-    await _repository.saveWorkoutToProfile(savedWorkout, profile!);
-    notifyListeners();
+    final alreadyExists =
+        await _repository.workoutExistsInProfile(savedWorkout, profile!);
+
+    if (!savedWorkouts.contains(savedWorkout) && !alreadyExists) {
+      await _repository.saveWorkoutToProfile(savedWorkout, profile!);
+      savedWorkouts
+          .add(savedWorkout);
+      notifyListeners();
+    }
   }
 
   Future<List<Workout>> getAllWorkoutsToProfile() async {
     if (profile != null) {
-      final list = await _repository.getAllWorkoutsToProfile(profile!);
-      if (list != null) {
-        if (list.isNotEmpty) {
-          return list;
-        }
-        return list;
+      savedWorkouts = await _repository.getAllWorkoutsToProfile(profile!) ??
+          List.empty(growable: true);
+      if (savedWorkouts.isNotEmpty) {
+        return savedWorkouts;
       }
+      return savedWorkouts;
     }
     return List.empty();
   }

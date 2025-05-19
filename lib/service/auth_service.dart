@@ -74,6 +74,7 @@ class AuthService with ChangeNotifier {
       final accessToken = googleAuth.accessToken;
       final idToken = googleAuth.idToken;
 
+      debugPrint("No error 1");
       if (accessToken == null) {
         throw 'No Access Token found.';
       }
@@ -89,7 +90,8 @@ class AuthService with ChangeNotifier {
 
       if (reponse.user != null) {
         Profile newProfile = profile!.copyWith(
-            email: reponse.user!.email, username: reponse.user!.email);
+            email: reponse.user!.email, username: reponse.user!.email,uuid: supabase.client.auth.currentUser!.id);
+        _profileRepository.createProfile(newProfile);
         return newProfile;
       }
       return null;

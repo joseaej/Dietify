@@ -25,6 +25,7 @@ class WorkoutRepository with ChangeNotifier {
     return Workout.fromMap(
         await _supabase.from("workout").select().eq("id", id).single());
   }
+
   Future<Workout> getRandomWorkouts() async {
     Workout randomWorkout = Workout();
     int rowCountNumber = await _supabase.from("workout").count();
@@ -45,7 +46,29 @@ class WorkoutRepository with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveWorkoutToProfile(Workout wokout, Profile profile) async {
+  Future<bool> workoutExistsInProfile(Workout workout, Profile profile) async {
+    try {
+      final profileResponse = await _supabase
+          .from("profile")
+          .select("id")
+          .eq("email", profile.email!)
+          .single();
+
+      final existing = await _supabase
+          .from("profile_workout")
+          .select("id")
+          .eq("profile_id", profileResponse['id'])
+          .eq("workout_id", workout.id!)
+          .maybeSingle();
+
+      return existing != null;
+    } catch (e) {
+      debugPrint("Error checking workout existence: $e");
+      return false;
+    }
+  }
+
+  Future<void> saveWorkoutToProfile(Workout workout, Profile profile) async {
     try {
       final profileResponse = await _supabase
           .from("profile")
@@ -55,10 +78,10 @@ class WorkoutRepository with ChangeNotifier {
 
       await _supabase.from("profile_workout").insert({
         'profile_id': profileResponse['id'],
-        'workout_id': wokout.id,
-      }).select();
+        'workout_id': workout.id,
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error saving workout to profile: $e");
     }
   }
 

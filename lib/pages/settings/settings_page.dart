@@ -162,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
               trailing: Text(
-                "${profileProvider.profile!.weight} KG",
+                "${profileProvider.profile?.weight} KG",
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
             ),
