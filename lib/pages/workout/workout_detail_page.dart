@@ -59,6 +59,10 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
           IconButton(
               onPressed: () {
                 profileProvider.addWorkoutToList(workout);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(""),
+                  duration: Duration(seconds: 2),
+                ));
               },
               icon: Icon(
                 Icons.save_as_sharp,

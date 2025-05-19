@@ -39,31 +39,38 @@ class Workout {
       'muscles': muscles,
       'calories': calories,
       'notes': notes,
-      'video_url':urlVideo
+      'video_url': urlVideo
     };
   }
 
-  Workout copyWith({
-    String? id,
-    String? name,
-    int? duration,
-    String? type,
-    String? intensity,
-    String? notes,
-    String? muscles,
-    double? calories,
-    String? urlVideo
-  }) {
+  Workout copyWith(
+      {String? id,
+      String? name,
+      int? duration,
+      String? type,
+      String? intensity,
+      String? notes,
+      String? muscles,
+      double? calories,
+      String? urlVideo}) {
     return Workout(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      duration: duration ?? this.duration,
-      type: type ?? this.type,
-      intensity: intensity ?? this.intensity,
-      notes: notes ?? this.notes,
-      muscles: muscles ?? this.muscles,
-      calories: calories ?? this.calories,
-      urlVideo: urlVideo ?? this.urlVideo
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        duration: duration ?? this.duration,
+        type: type ?? this.type,
+        intensity: intensity ?? this.intensity,
+        notes: notes ?? this.notes,
+        muscles: muscles ?? this.muscles,
+        calories: calories ?? this.calories,
+        urlVideo: urlVideo ?? this.urlVideo);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return (name == (other as Workout).name) &&
+        (duration == (other).duration) &&
+        (type == (other).type) &&
+        (muscles == (other).muscles) &&
+        (calories == (other).calories);
   }
 }
