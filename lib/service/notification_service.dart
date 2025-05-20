@@ -46,6 +46,7 @@ class NotificationService {
       iOS: iOSPlatformChannelSpecifics,
     );
   }
+
   Future<void> showNotification({
     required int id,
     required String title,
@@ -58,5 +59,4 @@ class NotificationService {
       notificationDetails(),
     );
   }
-
 }

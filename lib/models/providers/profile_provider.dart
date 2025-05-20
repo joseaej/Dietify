@@ -98,16 +98,17 @@ class ProfileProvider with ChangeNotifier {
   }
 
   //Guardar Workouts;
-  Future<void> addWorkoutToList(Workout savedWorkout) async {
+  Future<bool> addWorkoutToList(Workout savedWorkout) async {
     final alreadyExists =
         await _repository.workoutExistsInProfile(savedWorkout, profile!);
 
     if (!savedWorkouts.contains(savedWorkout) && !alreadyExists) {
       await _repository.saveWorkoutToProfile(savedWorkout, profile!);
-      savedWorkouts
-          .add(savedWorkout);
+      savedWorkouts.add(savedWorkout);
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
   Future<List<Workout>> getAllWorkoutsToProfile() async {
