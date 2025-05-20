@@ -57,12 +57,33 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         elevation: 0,
         actions: [
           IconButton(
-              onPressed: () {
-                profileProvider.addWorkoutToList(workout);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(""),
-                  duration: Duration(seconds: 2),
-                ));
+              onPressed: () async {
+                try {
+                  bool isWorkoutSaved =
+                      await profileProvider.addWorkoutToList(workout);
+
+                  if (isWorkoutSaved) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: blue,
+                          content: Text("Entrenamiento guardado con éxito"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text("Ocurrió un error: $e"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                }
               },
               icon: Icon(
                 Icons.save_as_sharp,

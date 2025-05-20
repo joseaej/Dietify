@@ -1,4 +1,5 @@
 import 'package:dietify/models/goal.dart';
+import 'package:dietify/service/notification_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class GoalProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
-  
+
   Future<void> savaGoalToLocal() async {
     _isLoading = true;
     notifyListeners();
@@ -43,8 +44,18 @@ class GoalProvider with ChangeNotifier {
 
   //updateo propiedades
   void updateWaterIntake(double waterInc) {
-    goal!.currentWaterIntake += waterInc;
-    notifyListeners();
+    if (goal != null) {
+      goal!.currentWaterIntake += waterInc;
+      if (goal!.currentWaterIntake > (goal!.maxWaterIntake! + 1000)) {
+        NotificationService notificationService = NotificationService();
+        notificationService.initialize();
+        notificationService.showNotification(
+            title: "Demasiado agua por hoy",
+            id: 3,
+            body: "¡Cuidado es peligroso tomar demasiada agua!");
+      }
+      notifyListeners();
+    }
   }
 
   int getWaterPercent() {
@@ -75,6 +86,14 @@ class GoalProvider with ChangeNotifier {
       goal!.currentCalories -= calories;
     } else {
       goal!.currentCalories += calories;
+      if (goal!.currentCalories > (goal!.totalCalories! + 5000)) {
+        NotificationService notificationService = NotificationService();
+        notificationService.initialize();
+        notificationService.showNotification(
+            title: "Demasiadas calorias",
+            id: 5,
+            body: "¡Cuidado con tomar demasiada calorias!");
+      }
     }
     notifyListeners();
   }
@@ -93,6 +112,7 @@ class GoalProvider with ChangeNotifier {
           break;
       }
     }
+    notifyListeners();
   }
 
   void getMaxCarbs() {

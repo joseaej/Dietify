@@ -91,6 +91,12 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 "Músculos",
                 _musclesController,
                 cursorColor: blue,
+                validator: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "Debes introducir algun musculo";
+                  }
+                  return null;
+                },
               ),
               numberInput(
                 backgroundColor: (settingsProvider.settings!.isDarkTheme)
@@ -103,6 +109,16 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 "Minutos",
                 _timeController,
                 cursorColor: blue,
+                validator: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "Debes introducir una duracion";
+                  } else if (int.tryParse(p0) == null) {
+                    return "Debes introducir un numero";
+                  } else if (int.parse(p0) > 3600) {
+                    return "No puedes crear un entrenamiento tan largo";
+                  }
+                  return null;
+                },
               ),
               numberInput(
                 backgroundColor: (settingsProvider.settings!.isDarkTheme)
@@ -115,6 +131,14 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 "Calorías",
                 _caloriesController,
                 cursorColor: blue,
+                validator: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "Debes introducir las calorias del entrenamiento";
+                  } else if (int.tryParse(p0) == null) {
+                    return "Debes introducir un numero";
+                  }
+                  return null;
+                },
               ),
               DropdownButtonFormField<String>(
                 focusColor: blue,
@@ -130,9 +154,11 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 ),
                 decoration: InputDecoration(
                   labelText: "Tipo de entrenamiento",
-                  labelStyle: TextStyle(color: (settingsProvider.settings!.isDarkTheme)
-                    ? font
-                    : backgroundTextField,),
+                  labelStyle: TextStyle(
+                    color: (settingsProvider.settings!.isDarkTheme)
+                        ? font
+                        : backgroundTextField,
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: blue),
@@ -154,9 +180,14 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                     selectedType = val;
                   });
                 },
-                validator: (val) => val == null ? 'Selecciona un tipo' : null,
+                validator: (val) => val == null
+                    ? 'Selecciona algun tipo de entrenamiento'
+                    : null,
               ),
               DropdownButtonFormField<String>(
+                validator: (val) => val == null
+                    ? 'Selecciona la intensidad del entrenamiento'
+                    : null,
                 focusColor: blue,
                 borderRadius: const BorderRadius.all(Radius.circular(3)),
                 dropdownColor: (settingsProvider.settings!.isDarkTheme)
@@ -170,9 +201,11 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                 ),
                 decoration: InputDecoration(
                   labelText: "Intensidad",
-                  labelStyle: TextStyle(color: (settingsProvider.settings!.isDarkTheme)
-                    ? font
-                    : backgroundTextField,),
+                  labelStyle: TextStyle(
+                    color: (settingsProvider.settings!.isDarkTheme)
+                        ? font
+                        : backgroundTextField,
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: blue),
@@ -218,6 +251,13 @@ class _WorkoutAddState extends State<WorkoutAdd> {
                         intensity: selectedIntensity,
                         urlVideo: null);
                     workoutProvider.insertWorkout(addWorkout);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: blue,
+                        content: Text("Entrenamiento creado con exito"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
                     Navigator.pop(context);
                   }
                 },

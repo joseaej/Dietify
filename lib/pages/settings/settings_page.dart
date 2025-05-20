@@ -144,7 +144,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            setState(() => profileProvider.updateWeight(double.tryParse(_weightController.text)??profileProvider.profile!.weight!));
+                            setState(() => profileProvider.updateWeight(
+                                double.tryParse(_weightController.text) ??
+                                    profileProvider.profile!.weight!));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -221,7 +223,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            setState(() => profileProvider.updateHeight(double.tryParse(_heightController.text)??profileProvider.profile!.weight!));
+                            setState(() => profileProvider.updateHeight(
+                                double.tryParse(_heightController.text) ??
+                                    profileProvider.profile!.weight!));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -265,10 +269,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 value: _notificationsEnabled,
                 onChanged: (enabled) async {
                   if (enabled) {
-                    final status = await Permission.notification.request();
-                    setState(() {
-                      _notificationsEnabled = status.isGranted;
-                    });
+                    try {
+                      final status = await Permission.notification.request();
+                      setState(() {
+                        _notificationsEnabled = status.isGranted;
+                      });
+                    } catch (e) {}
                   } else {
                     openAppSettings();
                   }
