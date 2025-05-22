@@ -3,6 +3,7 @@ import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/service/export_service.dart';
 import 'package:dietify/service/file_service.dart';
+import 'package:dietify/widgets/youtube_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -105,6 +106,22 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              
+              (widget.workout.urlVideo != null)?
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: blue,
+                  ),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Youtubevideoplayer(
+                    url: (widget.workout.urlVideo?.isNotEmpty ?? false)
+                        ? widget.workout.urlVideo!
+                        : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
+                  ),
+                ),
+              ):SizedBox(height: 2.h,),
               _buildCardItem(
                   Icons.timer, "Duración", "${workout.duration ?? 0} min"),
               _buildCardItem(

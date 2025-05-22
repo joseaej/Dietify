@@ -10,6 +10,7 @@ import 'package:dietify/widgets/vertical_workout_card.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
+import 'package:dietify/widgets/workout_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -104,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ],
                       ),
-                      child: VerticalWorkoutCard(
+                      child: WorkoutCardVertical(
                         workout: workout,
                         onTap: () {
                           Navigator.push(
@@ -144,7 +145,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     : null,
             child: (photo == null &&
                     (profileProvider.profile?.urlPhoto?.isEmpty ?? true))
-                ? const Icon(Icons.camera_alt_rounded, size: 40, color: Color.fromARGB(150, 255, 255, 255))
+                ? const Icon(Icons.camera_alt_rounded,
+                    size: 40, color: Color.fromARGB(150, 255, 255, 255))
                 : null,
           ),
         ),

@@ -1,7 +1,7 @@
 name: dietify
 description: "Dietify is a fitness and nutrition app that helps users track their health and share recipes."
 publish_to: 'none'
-version: 0.7.2
+version: 0.8.0
 
 environment:
   sdk: ^3.6.1
