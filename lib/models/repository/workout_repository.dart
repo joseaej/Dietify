@@ -27,18 +27,22 @@ class WorkoutRepository with ChangeNotifier {
   }
 
   Future<Workout> getRandomWorkouts() async {
-    Workout randomWorkout = Workout();
-    int rowCountNumber = await _supabase.from("workout").count();
-    Random rdn = Random();
-    int randomNumber = rdn.nextInt(rowCountNumber);
-    final result = await _supabase
-        .from("workout")
-        .select()
-        .range(randomNumber, randomNumber)
-        .single();
+    try {
+      Workout randomWorkout = Workout();
+      int rowCountNumber = await _supabase.from("workout").count();
+      Random rdn = Random();
+      int randomNumber = rdn.nextInt(rowCountNumber);
+      final result = await _supabase
+          .from("workout")
+          .select()
+          .range(randomNumber, randomNumber)
+          .single();
 
-    randomWorkout = Workout.fromMap(result);
-    return randomWorkout;
+      randomWorkout = Workout.fromMap(result);
+      return randomWorkout;
+    } catch (e) {
+      return Workout();
+    }
   }
 
   void insertWorkoutToSupabase(Workout workout) async {
