@@ -1,4 +1,3 @@
-import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -12,7 +11,13 @@ class Youtubevideoplayer extends StatefulWidget {
 }
 
 class _YoutubevideoplayerState extends State<Youtubevideoplayer> {
+  
   late YoutubePlayerController controller;
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
   @override
   void initState() {
     final videoID = YoutubePlayer.convertUrlToId(widget.url);
@@ -25,8 +30,6 @@ class _YoutubevideoplayerState extends State<Youtubevideoplayer> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [YoutubePlayer(controller: controller)],
-    );
+    return YoutubePlayer(controller: controller);
   }
 }

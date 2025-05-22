@@ -106,7 +106,22 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Youtubevideoplayer(url: "https://www.youtube.com/watch?v=e0fJXdljMVM"),
+              
+              (widget.workout.urlVideo != null)?
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: blue,
+                  ),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Youtubevideoplayer(
+                    url: (widget.workout.urlVideo?.isNotEmpty ?? false)
+                        ? widget.workout.urlVideo!
+                        : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
+                  ),
+                ),
+              ):SizedBox(height: 2.h,),
               _buildCardItem(
                   Icons.timer, "Duración", "${workout.duration ?? 0} min"),
               _buildCardItem(

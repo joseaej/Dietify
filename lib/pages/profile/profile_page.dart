@@ -144,7 +144,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     : null,
             child: (photo == null &&
                     (profileProvider.profile?.urlPhoto?.isEmpty ?? true))
-                ? const Icon(Icons.camera_alt_rounded, size: 40, color: Color.fromARGB(150, 255, 255, 255))
+                ? const Icon(Icons.camera_alt_rounded,
+                    size: 40, color: Color.fromARGB(150, 255, 255, 255))
                 : null,
           ),
         ),
