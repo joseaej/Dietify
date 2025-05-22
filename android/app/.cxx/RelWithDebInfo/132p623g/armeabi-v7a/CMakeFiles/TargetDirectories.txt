@@ -1,0 +1,2 @@
+C:/Users/arman/Desktop/ProyectoFlutter/Dietify/android/app/.cxx/RelWithDebInfo/132p623g/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/arman/Desktop/ProyectoFlutter/Dietify/android/app/.cxx/RelWithDebInfo/132p623g/armeabi-v7a/CMakeFiles/rebuild_cache.dir
