@@ -1,15 +1,16 @@
 import 'dart:io';
 
+import 'package:dietify/models/achievements.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/storage_service.dart';
-import 'package:dietify/widgets/vertical_workout_card.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
+import 'package:dietify/widgets/achivements_item.dart';
 import 'package:dietify/widgets/workout_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,6 +57,10 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileHeader(),
+            SizedBox(height: 3.h),
+            AchivementsItem(achievement: Achievements(title: "Prueba", description: "dasds", currentPercent: 30, maxPercent: null),onTap: () {
+              
+            },),
             SizedBox(height: 3.h),
             Text(
               "Mis entrenamientos",
