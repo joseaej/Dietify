@@ -3,6 +3,7 @@ import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
+import 'package:dietify/pages/achivements/achivement_page.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
 import 'package:dietify/pages/permisions/permisions_handler_page.dart';
@@ -125,6 +126,7 @@ class MainApp extends StatelessWidget {
                         seconds: 4,
                       ),
                   '/permissions': (context) => PermisionsHandlerPage(),
+                  '/achivements': (context) => AchivementPage()
                 },
               );
             },

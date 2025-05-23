@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dietify/models/achievements.dart';
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
@@ -28,6 +29,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileProvider profileProvider;
   late SettingsProvider settings;
+  late AchievementsProvider achievementsProvider;
   late StorageService storageService;
   late AuthService authService;
   ProfileRepository repository = ProfileRepository();
@@ -45,7 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
     storageService = Provider.of<StorageService>(context);
     authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
-
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mi perfil"),
@@ -58,9 +61,35 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             _buildProfileHeader(),
             SizedBox(height: 3.h),
-            AchivementsItem(achievement: Achievements(title: "Prueba", description: "dasds", currentPercent: 30, maxPercent: null),onTap: () {
-              
-            },),
+            AchivementsItem(
+              achievement: Achievements(
+                  title: "Rompiendo el vicio",
+                  description: "Completa 7 dias sin azucar",
+                  currentPercent: 3,
+                  maxPercent: 7),
+              onTap: () {},
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/achivements');
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: blue,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              child: Text(
+                'Mostrar más',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             SizedBox(height: 3.h),
             Text(
               "Mis entrenamientos",
