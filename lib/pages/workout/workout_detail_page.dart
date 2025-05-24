@@ -1,3 +1,5 @@
+import 'package:dietify/models/achievements.dart';
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
@@ -25,6 +27,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
   late WorkoutProvider workoutProvider;
   late GoalProvider goalProvider;
   late ProfileProvider profileProvider;
+  late AchievementsProvider achievementsProvider;
   @override
   void initState() {
     super.initState();
@@ -36,7 +39,8 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     settingsProvider = Provider.of<SettingsProvider>(context);
     workoutProvider = Provider.of<WorkoutProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
-    profileProvider = Provider.of<ProfileProvider>(context);
+    profileProvider = Provider.of<ProfileProvider>(context);  
+    achievementsProvider = Provider.of<AchievementsProvider>(context);  
     final ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
@@ -62,8 +66,16 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                 try {
                   bool isWorkoutSaved =
                       await profileProvider.addWorkoutToList(workout);
-
+                  Achievements? achivement = achievementsProvider.getAchievementByTitle("Guardar es Ganar");
+                  if (profileProvider.savedWorkouts.length >= 10) {
+                    if (achivement != null) {
+                      achievementsProvider.sendAchievementNotification(achivement);
+                    }
+                  }
                   if (isWorkoutSaved) {
+                    debugPrint(achivement!.currentPercent.toString());
+                    achivement!.currentPercent = (achivement.currentPercent ?? 0) + 1;
+                    achievementsProvider.updateAchievementProcess(achivement);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
