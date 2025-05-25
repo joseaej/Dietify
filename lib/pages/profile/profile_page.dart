@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dietify/models/achievements.dart';
 import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
@@ -48,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
     authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
     achievementsProvider = Provider.of<AchievementsProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mi perfil"),
@@ -62,16 +61,14 @@ class _ProfilePageState extends State<ProfilePage> {
             _buildProfileHeader(),
             SizedBox(height: 3.h),
             AchivementsItem(
-              achievement: Achievements(
-                  title: "Rompiendo el vicio",
-                  description: "Completa 7 dias sin azucar",
-                  currentPercent: 3,
-                  maxPercent: 7),
-              onTap: () {},
+              achievement: achievementsProvider.achievements.first,
+              onTap: () {
+                Navigator.pushNamed(context, "/achivements");
+              },
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/achivements');
+                Navigator.pushNamed(context, '/achivements');
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,

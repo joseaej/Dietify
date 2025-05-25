@@ -1,3 +1,5 @@
+import 'package:dietify/models/achievements.dart';
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   late ProfileProvider profileProvider;
   late WorkoutProvider workoutProvider;
   late SettingsProvider settingsProvider;
+  late AchievementsProvider achievementsProvider;
   bool isDarkTheme = false;
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     goalProvider = Provider.of<GoalProvider>(context);
     settingsProvider = Provider.of<SettingsProvider>(context);
     workoutProvider = Provider.of<WorkoutProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
 
     isDarkTheme = settingsProvider.settings!.isDarkTheme;
 
@@ -384,89 +388,93 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget _buildResetGoals() {
-  final isDarkTheme = settingsProvider.settings!.isDarkTheme;
+  Widget _buildResetGoals() {
+    final isDarkTheme = settingsProvider.settings!.isDarkTheme;
 
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: () {
-        SharedPreferenceService.clearGoals();
-        goalProvider.clearGoals();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplashScreen(route: "/home", seconds: 2),));
-      },
-      child: Ink(
-        decoration: BoxDecoration(
-          color: isDarkTheme ? backgroundTextField : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: borderColor, width: 1.2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [skyBlue, blue],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.replay_outlined,
-                  size: 30,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Resetear Macros',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isDarkTheme ? font : darkfont,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Reinicia tus objetivos diarios de nutrición',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: isDarkTheme ? Colors.grey[300] : Colors.grey[700],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: Colors.grey,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          SharedPreferenceService.clearGoals();
+          goalProvider.clearGoals();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SplashScreen(route: "/home", seconds: 2),
+              ));
+        },
+        child: Ink(
+          decoration: BoxDecoration(
+            color: isDarkTheme ? backgroundTextField : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: borderColor, width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [skyBlue, blue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.replay_outlined,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Resetear Macros',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkTheme ? font : darkfont,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Reinicia tus objetivos diarios de nutrición',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color:
+                              isDarkTheme ? Colors.grey[300] : Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 18,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildWaterCard() {
     return Padding(
@@ -635,6 +643,14 @@ class _HomePageState extends State<HomePage> {
     return ElevatedButton(
       onPressed: () {
         goalProvider.updateWaterIntake(water);
+        Achievements achievevent =
+            achievementsProvider.getAchievementByTitle("Modo Hidratado ON")!;
+        if (goalProvider.goal!.currentWaterIntake <= 2000) {
+          achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
+          achievementsProvider.updateAchievementProcess(achievevent);
+          achievementsProvider.sendAchievementNotification(achievevent);
+        }
+        if (goalProvider.goal!.currentWaterIntake == 2000) {}
         Navigator.pop(context);
       },
       style: ElevatedButton.styleFrom(

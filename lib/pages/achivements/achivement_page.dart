@@ -1,10 +1,10 @@
 import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
-import 'package:dietify/models/settings.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class AchivementPage extends StatelessWidget {
   AchivementPage({super.key});
   late SettingsProvider settingsProvider;
@@ -16,7 +16,9 @@ class AchivementPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Logros'),
         centerTitle: true,
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back)),
       ),
       body: Consumer<AchievementsProvider>(
         builder: (context, achievementsProvider, child) {
@@ -36,28 +38,58 @@ class AchivementPage extends StatelessWidget {
             itemCount: achievements.length,
             itemBuilder: (context, index) {
               final achievement = achievements[index];
+              final isAchivementCompleted =
+                  (achievement.currentPercent! == achievement.maxPercent);
+              double achivementMaxPercent =
+                  (achievement.maxPercent! * 100) / achievement.currentPercent!;
+              if (achivementMaxPercent == double.infinity) {
+                achivementMaxPercent = 0;
+              }
               return Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  tileColor: isDarkTheme ? background : lightBackground,
-                  textColor: isDarkTheme ? font : darkfont,
-                  leading: Icon(Icons.emoji_events, color: Colors.amber),
-                  title: Text(
-                    achievement.title,
-                    style: TextStyle(
-                        color: isDarkTheme ? font : background),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  subtitle: Text(
-                    achievement.description,
-                    style: TextStyle(
-                        color: isDarkTheme ? font : background),
-                  ),
-                ),
-              );
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    tileColor: isDarkTheme ? background : lightBackground,
+                    textColor: isDarkTheme ? font : darkfont,
+                    leading: Icon(Icons.emoji_events,
+                        color:
+                            (isAchivementCompleted) ? Colors.amber : lightGray),
+                    title: Text(
+                      achievement.title,
+                      style: TextStyle(color: isDarkTheme ? font : background),
+                    ),
+                    subtitle: Text(
+                      achievement.description,
+                      style: TextStyle(color: isDarkTheme ? font : background),
+                    ),
+                    trailing: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(
+                            value: achievement.currentPercent! /
+                                achievement.maxPercent!,
+                            strokeWidth: 6,
+                            backgroundColor: Colors.grey.shade300,
+                            valueColor: AlwaysStoppedAnimation(blue),
+                          ),
+                        ),
+                        Text(
+                          '${achivementMaxPercent.ceil()}%',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: (isDarkTheme) ? font : darkfont,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
             },
           );
         },

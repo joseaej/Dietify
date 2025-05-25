@@ -39,8 +39,8 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     settingsProvider = Provider.of<SettingsProvider>(context);
     workoutProvider = Provider.of<WorkoutProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
-    profileProvider = Provider.of<ProfileProvider>(context);  
-    achievementsProvider = Provider.of<AchievementsProvider>(context);  
+    profileProvider = Provider.of<ProfileProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
     final ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
@@ -66,15 +66,18 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                 try {
                   bool isWorkoutSaved =
                       await profileProvider.addWorkoutToList(workout);
-                  Achievements? achivement = achievementsProvider.getAchievementByTitle("Guardar es Ganar");
+                  Achievements? achivement = achievementsProvider
+                      .getAchievementByTitle("Guardar es Ganar");
                   if (profileProvider.savedWorkouts.length >= 10) {
                     if (achivement != null) {
-                      achievementsProvider.sendAchievementNotification(achivement);
+                      achievementsProvider
+                          .sendAchievementNotification(achivement);
                     }
                   }
                   if (isWorkoutSaved) {
                     debugPrint(achivement!.currentPercent.toString());
-                    achivement!.currentPercent = (achivement.currentPercent ?? 0) + 1;
+                    achivement.currentPercent =
+                        (achivement.currentPercent ?? 0) + 1;
                     achievementsProvider.updateAchievementProcess(achivement);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -118,22 +121,24 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              
-              (widget.workout.urlVideo != null)?
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: blue,
-                  ),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: Youtubevideoplayer(
-                    url: (widget.workout.urlVideo?.isNotEmpty ?? false)
-                        ? widget.workout.urlVideo!
-                        : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
-                  ),
-                ),
-              ):SizedBox(height: 2.h,),
+              (widget.workout.urlVideo != null)
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: blue,
+                        ),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Youtubevideoplayer(
+                          url: (widget.workout.urlVideo?.isNotEmpty ?? false)
+                              ? widget.workout.urlVideo!
+                              : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 2.h,
+                    ),
               _buildCardItem(
                   Icons.timer, "Duración", "${workout.duration ?? 0} min"),
               _buildCardItem(
@@ -152,6 +157,25 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
               _buildAddButton(() {
                 workoutProvider.updateLastWorkout(workout);
                 goalProvider.updateCalories(workout.calories!, "-");
+                Achievements achievevent = achievementsProvider
+                    .getAchievementByTitle("¡Tutorial Superado!")!;
+                if (achievevent.currentPercent! < 1) {
+                  achievevent.currentPercent =
+                      (achievevent.currentPercent ?? 0) + 1;
+                  achievementsProvider.updateAchievementProcess(achievevent);
+                  achievementsProvider.sendAchievementNotification(achievevent);
+                }
+                if (workout.intensity == "Alto") {
+                  Achievements achievevent = achievementsProvider
+                      .getAchievementByTitle("Mas duro que el Acero")!;
+                  if (achievevent.currentPercent! < 1) {
+                    achievevent.currentPercent =
+                        (achievevent.currentPercent ?? 0) + 1;
+                    achievementsProvider.updateAchievementProcess(achievevent);
+                    achievementsProvider
+                        .sendAchievementNotification(achievevent);
+                  }
+                }
                 Navigator.pop(context);
               }),
             ],

@@ -29,6 +29,8 @@ class _AchivementsItemState extends State<AchivementsItem> {
   Widget build(BuildContext context) {
     settingsProvider = Provider.of<SettingsProvider>(context);
     bool isDarkTheme = settingsProvider.settings!.isDarkTheme;
+    final achievementMaxPercent =
+        (achievement.maxPercent! * 100) / achievement.currentPercent!;
     return GestureDetector(
       onTap: widget.onTap,
       child: Padding(
@@ -90,9 +92,7 @@ class _AchivementsItemState extends State<AchivementsItem> {
                   ),
                 ),
                 Consumer(
-                  
                   builder: (context, value, child) {
-                    double valueCircular = achievement.currentPercent! / achievement.maxPercent!;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -104,14 +104,14 @@ class _AchivementsItemState extends State<AchivementsItem> {
                               width: 14.w,
                               height: 8.h,
                               child: CircularProgressIndicator(
-                                value: valueCircular,
+                                value: achievementMaxPercent,
                                 strokeWidth: 6,
                                 backgroundColor: Colors.grey.shade300,
                                 valueColor: AlwaysStoppedAnimation(blue),
                               ),
                             ),
                             Text(
-                              '${(achievement.currentPercent!* 10).ceil()}%',
+                              '${achievementMaxPercent.ceil()}%',
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
