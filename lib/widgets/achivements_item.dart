@@ -104,8 +104,8 @@ class _AchivementsItemState extends State<AchivementsItem> {
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          width: 14.w,
-                          height: 8.h,
+                          width: 50,
+                          height: 50,
                           child: CircularProgressIndicator(
                             value: progressPercent,
                             strokeWidth: 6,
