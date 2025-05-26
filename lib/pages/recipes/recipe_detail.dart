@@ -1,3 +1,5 @@
+import 'package:dietify/models/achievements.dart';
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
@@ -25,6 +27,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   late RecipeProvider recipeProvider;
   late GoalProvider goalProvider;
   late ProfileProvider profileProvider;
+  late AchievementsProvider achievementsProvider;
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     recipeProvider = Provider.of<RecipeProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
     profileProvider = Provider.of<ProfileProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
     ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
@@ -113,6 +117,21 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 goalProvider.updateMacro(
                     MacrosEnum.protein, recipe.protein ?? 0);
                 goalProvider.updateMacro(MacrosEnum.carbs, recipe.carbs ?? 0);
+                Achievements achievement = achievementsProvider
+                    .getAchievementByTitle("El placer de la vida")!;
+                if (!achievement.isAchievementCompleted) {
+                  if (achievement.currentPercent! != achievement.maxPercent) {
+                    achievement.currentPercent =
+                        (achievement.currentPercent ?? 0) + 1;
+                    achievementsProvider.updateAchievementProcess(achievement);
+                  }
+                  if (achievement.currentPercent! == achievement.maxPercent) {
+                    achievement.isAchievementCompleted = true;
+                    achievementsProvider.updateAchievementProcess(achievement);
+                    achievementsProvider
+                        .sendAchievementNotification(achievement);
+                  }
+                }
                 Navigator.pop(context);
               }),
             ],
@@ -143,7 +162,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          
           _buildHeaderItem(Icons.timer_outlined, coockingTime.toString()),
           _buildHeaderItem(Icons.local_fire_department, calories.toString()),
           _buildHeaderItem(Icons.person, persons.toString()),

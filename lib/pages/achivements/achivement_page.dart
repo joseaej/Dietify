@@ -34,18 +34,18 @@ class AchivementPage extends StatelessWidget {
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: achievements.length,
-            itemBuilder: (context, index) {
-              final achievement = achievements[index];
-              final isAchivementCompleted =
-                  (achievement.currentPercent! == achievement.maxPercent);
-              double achivementMaxPercent =
-                  (achievement.maxPercent! * 100) / achievement.currentPercent!;
-              if (achivementMaxPercent == double.infinity) {
-                achivementMaxPercent = 0;
-              }
-              return Card(
+              padding: const EdgeInsets.all(12),
+              itemCount: achievements.length,
+              itemBuilder: (context, index) {
+                final achievement = achievements[index];
+                double achievementProgressPercent =
+                    (achievement.currentPercent! / achievement.maxPercent!) *
+                        100;
+                if (achievement.maxPercent == 0) {
+                  achievementProgressPercent = 0;
+                }
+
+                return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -55,8 +55,9 @@ class AchivementPage extends StatelessWidget {
                     tileColor: isDarkTheme ? background : lightBackground,
                     textColor: isDarkTheme ? font : darkfont,
                     leading: Icon(Icons.emoji_events,
-                        color:
-                            (isAchivementCompleted) ? Colors.amber : lightGray),
+                        color: (achievement.isAchievementCompleted)
+                            ? Colors.amber
+                            : lightGray),
                     title: Text(
                       achievement.title,
                       style: TextStyle(color: isDarkTheme ? font : background),
@@ -80,7 +81,7 @@ class AchivementPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${achivementMaxPercent.ceil()}%',
+                          '${achievementProgressPercent.ceil()}%',
                           style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
@@ -89,9 +90,9 @@ class AchivementPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ));
-            },
-          );
+                  ),
+                );
+              });
         },
       ),
     );

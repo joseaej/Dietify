@@ -1,4 +1,3 @@
-import 'package:dietify/models/achievements.dart';
 import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
@@ -643,14 +642,24 @@ class _HomePageState extends State<HomePage> {
     return ElevatedButton(
       onPressed: () {
         goalProvider.updateWaterIntake(water);
-        Achievements achievevent =
-            achievementsProvider.getAchievementByTitle("Modo Hidratado ON")!;
-        if (goalProvider.goal!.currentWaterIntake <= 2000) {
-          achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
-          achievementsProvider.updateAchievementProcess(achievevent);
-          achievementsProvider.sendAchievementNotification(achievevent);
+        final achievement =
+            achievementsProvider.getAchievementByTitle("Modo Hidratado ON");
+
+        if (achievement == null) return;
+
+        final currentIntake = goalProvider.goal?.currentWaterIntake ?? 0;
+
+        if (currentIntake < 2000) {
+          achievement.currentPercent = (achievement.currentPercent ?? 0) + 1;
+          achievementsProvider.updateAchievementProcess(achievement);
+        } else if (currentIntake >= 2000 &&
+            !achievement.isAchievementCompleted) {
+          achievement.currentPercent = achievement.maxPercent;
+          achievement.isAchievementCompleted = true;
+          achievementsProvider.updateAchievementProcess(achievement);
+          achievementsProvider.sendAchievementNotification(achievement);
         }
-        if (goalProvider.goal!.currentWaterIntake == 2000) {}
+
         Navigator.pop(context);
       },
       style: ElevatedButton.styleFrom(

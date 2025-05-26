@@ -1,42 +1,53 @@
-import 'dart:convert';
-
 import 'package:dietify/models/achievements.dart';
 import 'package:dietify/service/notification_service.dart';
+import 'package:dietify/service/shared_preference_service.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AchievementsProvider with ChangeNotifier {
   int achivementsCount = 0;
   List<Achievements> achievements = [
     Achievements(
-      title: '¡Tutorial Superado!',
-      description: 'Completa tu primer entrenamiento. El camino comienza aquí.',
-      currentPercent: 0,
-      maxPercent: 1,
-    ),
+        title: '¡Tutorial Superado!',
+        description:
+            'Completa tu primer entrenamiento. El camino comienza aquí.',
+        currentPercent: 0,
+        maxPercent: 1,
+        isAchievementCompleted: false),
     Achievements(
-      title: 'Modo Hidratado ON',
-      description: 'Bebe 2L de agua en un solo día. ¡Como un verdadero pro!',
-      currentPercent: 0,
-      maxPercent: 2,
-    ),
+        title: 'Modo Hidratado ON',
+        description: 'Bebe 2L de agua en un solo día. ¡Como un verdadero pro!',
+        currentPercent: 0,
+        maxPercent: 2,
+        isAchievementCompleted: false),
     Achievements(
-      title: 'Mas duro que el Acero',
-      description:
-          'Completa un entrenamiento de alta intensidad. ¡A sudar se ha dicho!',
-      currentPercent: 0,
-      maxPercent: 1,
-    ),
+        title: 'El placer de la vida',
+        description: 'Añade 3 comidas en tu dia',
+        currentPercent: 0,
+        maxPercent: 3,
+        isAchievementCompleted: false),
     Achievements(
-      title: 'Guardar es Ganar',
-      description:
-          'Guarda 10 entrenamientos en tu perfil. ¡Tu biblioteca de fitness crece!',
-      currentPercent: 0,
-      maxPercent: 10,
-    ),
+        title: 'Racha Perfecta',
+        description: 'Completa 20 entrenamientos',
+        currentPercent: 0,
+        maxPercent: 20,
+        isAchievementCompleted: false),
+    Achievements(
+        title: 'Mas duro que el Acero',
+        description:
+            'Completa un entrenamiento de alta intensidad. ¡A sudar se ha dicho!',
+        currentPercent: 0,
+        maxPercent: 1,
+        isAchievementCompleted: false),
+    Achievements(
+        title: 'Guardar es Ganar',
+        description:
+            'Guarda 10 entrenamientos en tu perfil. ¡Tu biblioteca de fitness crece!',
+        currentPercent: 0,
+        maxPercent: 10,
+        isAchievementCompleted: false),
   ];
   AchievementsProvider() {
-    Future.microtask(() => loadAchievements());
+    loadAchievements();
   }
   Achievements? getAchievementByTitle(String title) {
     try {
@@ -56,23 +67,22 @@ class AchievementsProvider with ChangeNotifier {
     );
   }
 
-  Future<void> saveAchievements() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> achievementsJson =
-        achievements.map((a) => jsonEncode(a.toMap())).toList();
-    await prefs.setStringList('achievements', achievementsJson);
+  void saveAchievements() {
+    SharedPreferenceService.saveAchievements(achievements);
+    notifyListeners();
   }
 
-  Future<void> loadAchievements() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? achievementsJson = prefs.getStringList('achievements');
-
-    if (achievementsJson != null) {
-      achievements = achievementsJson
-          .map((jsonStr) => Achievements.fromMap(jsonDecode(jsonStr)))
-          .toList();
+  void loadAchievements() async {
+    final loaded = await SharedPreferenceService.loadAchievements();
+    if (loaded.isNotEmpty) {
+      achievements = loaded;
       notifyListeners();
     }
+  }
+
+  void clearAchievements() {
+    SharedPreferenceService.clearAchievements(achievements);
+    notifyListeners();
   }
 
   Future<void> updateAchievementProcess(Achievements achievement) async {

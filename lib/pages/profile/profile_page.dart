@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
             _buildProfileHeader(),
             SizedBox(height: 3.h),
             AchivementsItem(
-              achievement: achievementsProvider.achievements.first,
+              achievement: achievementsProvider.achievements.where((element) => !element.isAchievementCompleted,).first,
               onTap: () {
                 Navigator.pushNamed(context, "/achivements");
               },

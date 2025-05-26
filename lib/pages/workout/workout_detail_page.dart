@@ -68,8 +68,10 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                       await profileProvider.addWorkoutToList(workout);
                   Achievements? achivement = achievementsProvider
                       .getAchievementByTitle("Guardar es Ganar");
+
                   if (profileProvider.savedWorkouts.length >= 10) {
                     if (achivement != null) {
+                      achivement.isAchievementCompleted = true;
                       achievementsProvider
                           .sendAchievementNotification(achivement);
                     }
@@ -157,25 +159,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
               _buildAddButton(() {
                 workoutProvider.updateLastWorkout(workout);
                 goalProvider.updateCalories(workout.calories!, "-");
-                Achievements achievevent = achievementsProvider
-                    .getAchievementByTitle("¡Tutorial Superado!")!;
-                if (achievevent.currentPercent! < 1) {
-                  achievevent.currentPercent =
-                      (achievevent.currentPercent ?? 0) + 1;
-                  achievementsProvider.updateAchievementProcess(achievevent);
-                  achievementsProvider.sendAchievementNotification(achievevent);
-                }
-                if (workout.intensity == "Alto") {
-                  Achievements achievevent = achievementsProvider
-                      .getAchievementByTitle("Mas duro que el Acero")!;
-                  if (achievevent.currentPercent! < 1) {
-                    achievevent.currentPercent =
-                        (achievevent.currentPercent ?? 0) + 1;
-                    achievementsProvider.updateAchievementProcess(achievevent);
-                    achievementsProvider
-                        .sendAchievementNotification(achievevent);
-                  }
-                }
+                _completeAchievements();
                 Navigator.pop(context);
               }),
             ],
@@ -183,6 +167,39 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         ),
       ),
     );
+  }
+
+  void _completeAchievements() {
+    Achievements achievevent =
+        achievementsProvider.getAchievementByTitle("¡Tutorial Superado!")!;
+    Achievements? completeAchievement =
+        achievementsProvider.getAchievementByTitle("Racha Perfecta");
+    if (!completeAchievement!.isAchievementCompleted) {
+      completeAchievement.currentPercent =
+          (achievevent.currentPercent ?? 0) + 1;
+      achievementsProvider.updateAchievementProcess(achievevent);
+      if (completeAchievement.currentPercent! ==
+          completeAchievement.maxPercent!) {
+        completeAchievement.isAchievementCompleted = true;
+        achievementsProvider.sendAchievementNotification(completeAchievement);
+      }
+    }
+    if (achievevent.currentPercent! < 1) {
+      achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
+      achievevent.isAchievementCompleted = true;
+      achievementsProvider.updateAchievementProcess(achievevent);
+      achievementsProvider.sendAchievementNotification(achievevent);
+    }
+    if (workout.intensity == "Alta") {
+      Achievements achievevent =
+          achievementsProvider.getAchievementByTitle("Mas duro que el Acero")!;
+      if (achievevent.currentPercent! < 1) {
+        achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
+        achievevent.isAchievementCompleted = true;
+        achievementsProvider.updateAchievementProcess(achievevent);
+        achievementsProvider.sendAchievementNotification(achievevent);
+      }
+    }
   }
 
   Widget _buildAddButton(Function()? onTap) {
