@@ -1,3 +1,5 @@
+import 'package:dietify/models/achievements.dart';
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/workout.dart';
@@ -25,6 +27,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
   late WorkoutProvider workoutProvider;
   late GoalProvider goalProvider;
   late ProfileProvider profileProvider;
+  late AchievementsProvider achievementsProvider;
   @override
   void initState() {
     super.initState();
@@ -37,6 +40,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
     workoutProvider = Provider.of<WorkoutProvider>(context);
     goalProvider = Provider.of<GoalProvider>(context);
     profileProvider = Provider.of<ProfileProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
     final ExportService exportService = ExportService();
     return Scaffold(
       appBar: AppBar(
@@ -62,8 +66,21 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                 try {
                   bool isWorkoutSaved =
                       await profileProvider.addWorkoutToList(workout);
+                  Achievements? achivement = achievementsProvider
+                      .getAchievementByTitle("Guardar es Ganar");
 
+                  if (profileProvider.savedWorkouts.length >= 10) {
+                    if (achivement != null) {
+                      achivement.isAchievementCompleted = true;
+                      achievementsProvider
+                          .sendAchievementNotification(achivement);
+                    }
+                  }
                   if (isWorkoutSaved) {
+                    debugPrint(achivement!.currentPercent.toString());
+                    achivement.currentPercent =
+                        (achivement.currentPercent ?? 0) + 1;
+                    achievementsProvider.updateAchievementProcess(achivement);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -106,22 +123,24 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              
-              (widget.workout.urlVideo != null)?
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: blue,
-                  ),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: Youtubevideoplayer(
-                    url: (widget.workout.urlVideo?.isNotEmpty ?? false)
-                        ? widget.workout.urlVideo!
-                        : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
-                  ),
-                ),
-              ):SizedBox(height: 2.h,),
+              (widget.workout.urlVideo != null)
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: blue,
+                        ),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Youtubevideoplayer(
+                          url: (widget.workout.urlVideo?.isNotEmpty ?? false)
+                              ? widget.workout.urlVideo!
+                              : 'https://www.youtube.com/watch?v=WCE4OVwNg6A',
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 2.h,
+                    ),
               _buildCardItem(
                   Icons.timer, "Duración", "${workout.duration ?? 0} min"),
               _buildCardItem(
@@ -140,6 +159,7 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
               _buildAddButton(() {
                 workoutProvider.updateLastWorkout(workout);
                 goalProvider.updateCalories(workout.calories!, "-");
+                _completeAchievements();
                 Navigator.pop(context);
               }),
             ],
@@ -147,6 +167,39 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
         ),
       ),
     );
+  }
+
+  void _completeAchievements() {
+    Achievements achievevent =
+        achievementsProvider.getAchievementByTitle("¡Tutorial Superado!")!;
+    Achievements? completeAchievement =
+        achievementsProvider.getAchievementByTitle("Racha Perfecta");
+    if (!completeAchievement!.isAchievementCompleted) {
+      completeAchievement.currentPercent =
+          (achievevent.currentPercent ?? 0) + 1;
+      achievementsProvider.updateAchievementProcess(achievevent);
+      if (completeAchievement.currentPercent! ==
+          completeAchievement.maxPercent!) {
+        completeAchievement.isAchievementCompleted = true;
+        achievementsProvider.sendAchievementNotification(completeAchievement);
+      }
+    }
+    if (achievevent.currentPercent! < 1) {
+      achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
+      achievevent.isAchievementCompleted = true;
+      achievementsProvider.updateAchievementProcess(achievevent);
+      achievementsProvider.sendAchievementNotification(achievevent);
+    }
+    if (workout.intensity == "Alta") {
+      Achievements achievevent =
+          achievementsProvider.getAchievementByTitle("Mas duro que el Acero")!;
+      if (achievevent.currentPercent! < 1) {
+        achievevent.currentPercent = (achievevent.currentPercent ?? 0) + 1;
+        achievevent.isAchievementCompleted = true;
+        achievementsProvider.updateAchievementProcess(achievevent);
+        achievementsProvider.sendAchievementNotification(achievevent);
+      }
+    }
   }
 
   Widget _buildAddButton(Function()? onTap) {

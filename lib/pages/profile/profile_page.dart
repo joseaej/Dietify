@@ -1,15 +1,16 @@
 import 'dart:io';
 
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/service/auth_service.dart';
 import 'package:dietify/service/storage_service.dart';
-import 'package:dietify/widgets/vertical_workout_card.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
+import 'package:dietify/widgets/achivements_item.dart';
 import 'package:dietify/widgets/workout_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +28,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileProvider profileProvider;
   late SettingsProvider settings;
+  late AchievementsProvider achievementsProvider;
   late StorageService storageService;
   late AuthService authService;
   ProfileRepository repository = ProfileRepository();
@@ -44,6 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
     storageService = Provider.of<StorageService>(context);
     authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +59,34 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileHeader(),
+            SizedBox(height: 3.h),
+            AchivementsItem(
+              achievement: achievementsProvider.achievements.where((element) => !element.isAchievementCompleted,).first,
+              onTap: () {
+                Navigator.pushNamed(context, "/achivements");
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/achivements');
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: blue,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              child: Text(
+                'Mostrar más',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             SizedBox(height: 3.h),
             Text(
               "Mis entrenamientos",

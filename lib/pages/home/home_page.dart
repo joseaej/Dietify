@@ -1,9 +1,12 @@
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
 import 'package:dietify/models/workout.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
+import 'package:dietify/service/shared_preference_service.dart';
+import 'package:dietify/widgets/splash_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   late ProfileProvider profileProvider;
   late WorkoutProvider workoutProvider;
   late SettingsProvider settingsProvider;
+  late AchievementsProvider achievementsProvider;
   bool isDarkTheme = false;
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     goalProvider = Provider.of<GoalProvider>(context);
     settingsProvider = Provider.of<SettingsProvider>(context);
     workoutProvider = Provider.of<WorkoutProvider>(context);
+    achievementsProvider = Provider.of<AchievementsProvider>(context);
 
     isDarkTheme = settingsProvider.settings!.isDarkTheme;
 
@@ -91,6 +96,10 @@ class _HomePageState extends State<HomePage> {
             _buildRecentActivityCard(),
             _buildRandomActivityCard(),
             _buildWaterCard(),
+            _buildResetGoals(),
+            SizedBox(
+              height: 5.h,
+            )
           ],
         ),
       ),
@@ -378,6 +387,94 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildResetGoals() {
+    final isDarkTheme = settingsProvider.settings!.isDarkTheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          SharedPreferenceService.clearGoals();
+          goalProvider.clearGoals();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SplashScreen(route: "/home", seconds: 2),
+              ));
+        },
+        child: Ink(
+          decoration: BoxDecoration(
+            color: isDarkTheme ? backgroundTextField : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: borderColor, width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [skyBlue, blue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.replay_outlined,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Resetear Macros',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkTheme ? font : darkfont,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Reinicia tus objetivos diarios de nutrición',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color:
+                              isDarkTheme ? Colors.grey[300] : Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 18,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildWaterCard() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -545,6 +642,24 @@ class _HomePageState extends State<HomePage> {
     return ElevatedButton(
       onPressed: () {
         goalProvider.updateWaterIntake(water);
+        final achievement =
+            achievementsProvider.getAchievementByTitle("Modo Hidratado ON");
+
+        if (achievement == null) return;
+
+        final currentIntake = goalProvider.goal?.currentWaterIntake ?? 0;
+
+        if (currentIntake < 2000) {
+          achievement.currentPercent = (achievement.currentPercent ?? 0) + 1;
+          achievementsProvider.updateAchievementProcess(achievement);
+        } else if (currentIntake >= 2000 &&
+            !achievement.isAchievementCompleted) {
+          achievement.currentPercent = achievement.maxPercent;
+          achievement.isAchievementCompleted = true;
+          achievementsProvider.updateAchievementProcess(achievement);
+          achievementsProvider.sendAchievementNotification(achievement);
+        }
+
         Navigator.pop(context);
       },
       style: ElevatedButton.styleFrom(
@@ -578,7 +693,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   double _calculateRemainingProtein(GoalProvider goalProvider) {
-    goalProvider.getMaxProtein(profileProvider.profile!.weight??0);
+    goalProvider.getMaxProtein(profileProvider.profile!.weight ?? 0);
     final maxProtein = goalProvider.goal?.maxProtein ?? 0;
     final protein = goalProvider.goal?.protein ?? 0;
     final remaining = maxProtein - protein;

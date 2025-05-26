@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dietify/models/achievements.dart';
 import 'package:dietify/models/goal.dart';
 import 'package:dietify/models/profile.dart';
 import 'package:dietify/models/settings.dart';
@@ -79,7 +80,6 @@ class SharedPreferenceService {
   }
 
   static Future<DateTime?> getLastGoalDate() async {
-    
     final prefs = await SharedPreferences.getInstance();
     String? dateStr = prefs.getString('lastGoalDate');
     if (dateStr != null) {
@@ -92,7 +92,6 @@ class SharedPreferenceService {
   static void clearGoals() async {
     await _initPreferences();
     _preferences?.remove("goals");
-    
   }
 
   //lastWorkout
@@ -106,5 +105,31 @@ class SharedPreferenceService {
     final map = _preferences?.getString("lastWorkout");
     if (map == null) return null;
     return Workout.fromMap(jsonDecode(map));
+  }
+
+  static saveAchievements(List<Achievements> achievements) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> achievementsJson =
+        achievements.map((a) => jsonEncode(a.toMap())).toList();
+    debugPrint(achievementsJson.toString());
+    await prefs.setStringList('achievements', achievementsJson);
+  }
+
+  static Future<List<Achievements>> loadAchievements() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? achievementsJson = prefs.getStringList('achievements');
+
+    if (achievementsJson != null) {
+      return achievementsJson
+          .map((jsonStr) => Achievements.fromMap(jsonDecode(jsonStr)))
+          .toList();
+    } else {
+      return [];
+    }
+  }
+
+  static clearAchievements(List<Achievements> achievements) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("achievements");
   }
 }

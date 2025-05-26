@@ -1,7 +1,9 @@
+import 'package:dietify/models/providers/achievements_provider.dart';
 import 'package:dietify/models/providers/goal_provider.dart';
 import 'package:dietify/models/providers/recipe_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/providers/workout_provider.dart';
+import 'package:dietify/pages/achivements/achivement_page.dart';
 import 'package:dietify/pages/auth/sign_up_page.dart';
 import 'package:dietify/pages/home/home_container.dart';
 import 'package:dietify/pages/permisions/permisions_handler_page.dart';
@@ -72,6 +74,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutProvider()),
+        ChangeNotifierProvider(create: (context) => AchievementsProvider()),
         ChangeNotifierProvider(create: (context) => RecipeProvider()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
@@ -88,37 +91,21 @@ class MainApp extends StatelessWidget {
         builder: (context, settingsProvider, child) {
           GoalProvider goalsProvider = context.read<GoalProvider>();
           WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
+          AchievementsProvider achievementsProvider = context.read<AchievementsProvider>();
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
               workoutProvider.getRandomWorkout();
               goalsProvider.savaGoalToLocal();
               workoutProvider.saveLastWorkout();
+              achievementsProvider.saveAchievements();
               await SharedPreferenceService.saveLastGoalDate(DateTime.now());
-              debugPrint("PAUSED");
-            }
-            if (msg == AppLifecycleState.resumed.toString()) {
-              DateTime? lastGoalsSaved =
-                  await SharedPreferenceService.getLastGoalDate();
-
-              if (lastGoalsSaved != null &&
-                  DateTime.now().difference(lastGoalsSaved).inDays >= 1) {
-                SharedPreferenceService.clearGoals();
-                Future.microtask(() {
-                  goalsProvider.clearGoals();
-                });
-                navigatorKey.currentState?.pushNamedAndRemoveUntil(
-                  "/spash",
-                  (route) => false,
-                );
-              }
             }
             return null;
           });
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
-                
                 navigatorKey: navigatorKey,
                 debugShowCheckedModeBanner: false,
                 title: 'Dietify',
@@ -141,6 +128,7 @@ class MainApp extends StatelessWidget {
                         seconds: 4,
                       ),
                   '/permissions': (context) => PermisionsHandlerPage(),
+                  '/achivements': (context) => AchivementPage()
                 },
               );
             },
