@@ -1,5 +1,7 @@
+import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class WorkoutCardVertical extends StatelessWidget {
@@ -14,17 +16,19 @@ class WorkoutCardVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final isDark = settingsProvider.settings!.isDarkTheme;
+
+    final Color textColor = isDark ? font : darkfont;
+    final Color subTextColor = isDark ? Colors.grey[400]! : Colors.grey[700]!;
+    final Color iconColor = isDark ? Colors.grey[300]! : Colors.grey[600]!;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          gradient: LinearGradient(
-            colors: [blue, skyBlue],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: (isDark)?background:lightBackground,
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -32,51 +36,59 @@ class WorkoutCardVertical extends StatelessWidget {
               offset: const Offset(0, 4),
             ),
           ],
+          border: Border.all(color: Colors.black45),
         ),
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(4.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Text(
               workout.name ?? 'Sin nombre',
               style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w700,
+                color: textColor,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
 
-            const SizedBox(height: 6),
+            SizedBox(height: 1.2.h),
 
             Row(
               children: [
-                Icon(Icons.timer, color: Colors.white70, size: 16),
-                const SizedBox(width: 4),
-                Text('${workout.duration ?? "--"} min',
-                    style: TextStyle(color: Colors.white70, fontSize: 18.sp)),
+                Icon(Icons.timer_outlined, size: 18.sp, color: iconColor),
+                SizedBox(width: 2.w),
+                Text(
+                  '${workout.duration ?? "--"} min',
+                  style: TextStyle(fontSize: 16.sp, color: subTextColor),
+                ),
                 const Spacer(),
-                Icon(Icons.bolt, color: Colors.white70, size: 18.sp),
-                const SizedBox(width: 4),
-                Text(workout.intensity ?? '--',
-                    style: TextStyle(color: Colors.white70, fontSize: 18.sp)),
+                Icon(Icons.bolt_outlined, size: 18.sp, color: iconColor),
+                SizedBox(width: 2.w),
+                Text(
+                  workout.intensity ?? '--',
+                  style: TextStyle(fontSize: 16.sp, color: subTextColor),
+                ),
               ],
             ),
 
-            const SizedBox(height: 6),
+            SizedBox(height: 1.2.h),
 
             if (workout.muscles != null)
               Row(
                 children: [
-                  Icon(Icons.accessibility_new, color: Colors.white70, size: 18.sp),
-                  const SizedBox(width: 4),
+                  Icon(Icons.fitness_center_outlined, size: 18.sp, color: iconColor),
+                  SizedBox(width: 2.w),
                   Expanded(
                     child: Text(
                       workout.muscles!,
-                      style: TextStyle(color: Colors.white, fontSize: 15.sp),
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: subTextColor,
+                      ),
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ),
                 ],
@@ -87,11 +99,16 @@ class WorkoutCardVertical extends StatelessWidget {
             if (workout.calories != null)
               Row(
                 children: [
-                  Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 18.sp),
-                  const SizedBox(width: 4),
+                  Icon(Icons.local_fire_department_outlined,
+                      size: 18.sp, color: Colors.orangeAccent),
+                  SizedBox(width: 2.w),
                   Text(
                     '${workout.calories!.toStringAsFixed(0)} kcal',
-                    style:  TextStyle(color: Colors.white, fontSize: 18.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
                   ),
                 ],
               ),
