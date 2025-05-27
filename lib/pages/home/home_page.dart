@@ -693,7 +693,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   double _calculateRemainingProtein(GoalProvider goalProvider) {
-    goalProvider.getMaxProtein(profileProvider.profile!.weight ?? 0);
+    goalProvider.getMaxProtein(profileProvider.profile?.weight ?? 0);
     final maxProtein = goalProvider.goal?.maxProtein ?? 0;
     final protein = goalProvider.goal?.protein ?? 0;
     final remaining = maxProtein - protein;
