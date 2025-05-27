@@ -31,7 +31,10 @@ import 'utils/theme.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await dotenv.load();
 
   await Supabase.initialize(
@@ -91,7 +94,8 @@ class MainApp extends StatelessWidget {
         builder: (context, settingsProvider, child) {
           GoalProvider goalsProvider = context.read<GoalProvider>();
           WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
-          AchievementsProvider achievementsProvider = context.read<AchievementsProvider>();
+          AchievementsProvider achievementsProvider =
+              context.read<AchievementsProvider>();
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {

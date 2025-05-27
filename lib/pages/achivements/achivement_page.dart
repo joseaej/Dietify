@@ -57,7 +57,7 @@ class AchivementPage extends StatelessWidget {
                     leading: Icon(Icons.emoji_events,
                         color: (achievement.isAchievementCompleted)
                             ? Colors.amber
-                            : lightGray),
+                            : (isDarkTheme)?lightGray:Colors.black45),
                     title: Text(
                       achievement.title,
                       style: TextStyle(color: isDarkTheme ? font : background),
