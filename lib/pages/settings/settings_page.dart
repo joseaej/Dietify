@@ -97,7 +97,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: Theme.of(context).cardColor,
+                      backgroundColor: (settings.settings!.isDarkTheme)
+                          ? backgroundBlack
+                          : lightBackground,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       titlePadding:
@@ -112,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Text(
                             'Cambiar peso',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),
@@ -128,7 +130,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: TextStyle(fontSize: 14),
                           ),
                           SizedBox(height: 16),
-                          numberInput("KG", "Peso", _weightController),
+                          numberInput(
+                            "KG",
+                            "Peso",
+                            _weightController,
+                            backgroundColor: (settings.settings!.isDarkTheme)
+                                ? backgroundBlack
+                                : lightBackground,
+                            textColor: (settings.settings!.isDarkTheme)
+                                ? font
+                                : darkfont,
+                          ),
                         ],
                       ),
                       actions: [
@@ -176,7 +188,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: Theme.of(context).cardColor,
+                      backgroundColor: (settings.settings!.isDarkTheme)
+                                ? background
+                                : lightBackground,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       titlePadding:
@@ -207,7 +221,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: TextStyle(fontSize: 14),
                           ),
                           SizedBox(height: 16),
-                          numberInput("CM", "Altura", _heightController),
+                          numberInput(
+                            "CM",
+                            "Altura",
+                            _heightController,
+                            backgroundColor: (settings.settings!.isDarkTheme)
+                                ? backgroundBlack
+                                : lightBackground,
+                            textColor: (settings.settings!.isDarkTheme)
+                                ? font
+                                : darkfont,
+                          ),
                         ],
                       ),
                       actions: [
@@ -243,7 +267,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
               trailing: Text(
-                "${profileProvider.profile!.height} CM",
+                "${profileProvider.profile?.height} CM",
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
             ),
