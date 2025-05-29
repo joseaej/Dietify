@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Workout', () {
-    test('toMap and fromMap should be consistent', () {
+    test('toMap and fromMap', () {
       final workout = Workout(
         id: '1',
         name: 'Push Ups',
@@ -29,7 +29,7 @@ void main() {
       expect(recreated.urlVideo, workout.urlVideo);
     });
 
-    test('copyWith should override selected fields', () {
+    test('copyWith', () {
       final original = Workout(
         id: '1',
         name: 'Plank',
@@ -49,7 +49,7 @@ void main() {
       expect(modified.intensity, 'High');
     });
 
-    test('equality should compare selected fields', () {
+    test('equals', () {
       final a = Workout(
         name: 'Run',
         duration: 20,
