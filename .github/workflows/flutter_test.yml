@@ -2,7 +2,7 @@ name: Run Flutter Tests
 
 on:
   push:
-    branches: [feature/test, dev]
+    branches: [main, dev]
   pull_request:
     branches: [main, dev]
 
@@ -16,10 +16,13 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.32.0'
+        flutter-version: '3.22.0'
 
     - name: Install dependencies
       run: flutter pub get
+
+    - name: Create .env file from example
+      run: cp .env.example .env
 
     - name: Run tests
       run: flutter test
