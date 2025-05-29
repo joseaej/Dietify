@@ -21,5 +21,8 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Run unit tests only
-      run: flutter test --no-pub
+    - name: Create dummy .env file
+      run: cp .env.example .env
+
+    - name: Run unit tests
+      run: flutter test
