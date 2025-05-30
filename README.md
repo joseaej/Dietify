@@ -22,10 +22,9 @@
 - **Flutter**: Framework principal para el desarrollo multiplataforma.
 - **Dart**: Lenguaje de programación utilizado.
 - **Supabase**: Backend como servicio para autenticación, base de datos y almacenamiento.
-- **Firebase** *(opcional)*: Puede integrarse para notificaciones push o analíticas.
-- **Provider / Riverpod** *(según versión)*: Gestión del estado de la app.
-- **SharedPreferences / Hive**: Almacenamiento local de datos.
-- **REST API**: Comunicación con servicios externos para datos y entrenamientos.
+- **Provider**: Gestión del estado de la app.
+- **SharedPreferences**: Almacenamiento local de datos.
+- **FoodFyApi**: [API](https://github.com/joseaej/FoodFyAPI) con recetas de la aplicacion.
 
 ---
 
@@ -117,7 +116,7 @@ Dietify evolucionará hacia una red social saludable, permitiendo a los usuarios
 
 ## 🌐 **Entorno de Desarrollo Recomendado**
 
-- **Flutter SDK:** 3.10.0 o superior
+- **Flutter SDK:** 3.32.0 o superior
 - **Dart SDK:** 3.0 o superior
 - **VS Code** o **Android Studio** con extensiones de Flutter
 - **Dispositivo físico** o **Emulador AVD** con Android 11+
@@ -130,8 +129,6 @@ Puedes visualizar el diseño general de la app en el siguiente recurso:
 
 ![Diseño](./assets/board.png)
 
-También puedes consultar el prototipo interactivo (si se dispone de Figma o similar).
-
 ---
 
 ## 🤝 **Colaboración**
@@ -141,7 +138,7 @@ También puedes consultar el prototipo interactivo (si se dispone de Figma o sim
 1. **Forkea** el repositorio.
 2. Crea una rama nueva:  
    ```bash
-   git checkout -b feature/nombre-de-tu-funcionalidad
+   git checkout -b feature/nombre
    ```
 3. Realiza tus cambios y haz commit:
    ```bash
