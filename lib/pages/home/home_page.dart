@@ -9,6 +9,8 @@ import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/widgets/splash_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -28,12 +30,31 @@ class _HomePageState extends State<HomePage> {
   late SettingsProvider settingsProvider;
   late AchievementsProvider achievementsProvider;
   bool isDarkTheme = false;
+
+  late Stream<StepCount> _stepCountStream;
+  String _steps = '0';
+
+  void onStepCount(StepCount event) {
+    setState(() {
+      _steps = event.steps.toString();
+    });
+  }
+
+  void onStepCountError(error) {
+    setState(() {
+      _steps = 'Error al obtener pasos.';
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
       Provider.of<WorkoutProvider>(context, listen: false).getRandomWorkout();
     });
+    _checkPermissionAndStart();
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
   }
 
   @override
@@ -203,6 +224,7 @@ class _HomePageState extends State<HomePage> {
                         color: (isDarkTheme) ? lightGray : darkfont,
                       ),
                     ),
+                    Text("Pasos actuales ${(_steps == 'Permiso denegado') ? "0" : _steps}"),
                   ],
                 ),
               ),
@@ -698,5 +720,25 @@ class _HomePageState extends State<HomePage> {
     final protein = goalProvider.goal?.protein ?? 0;
     final remaining = maxProtein - protein;
     return remaining < 0 ? 0 : remaining;
+  }
+
+  Future<void> _checkPermissionAndStart() async {
+    if (await Permission.activityRecognition.isGranted) {
+      _startStepCountStream();
+    } else {
+      final result = await Permission.activityRecognition.request();
+      if (result.isGranted) {
+        _startStepCountStream();
+      } else {
+        setState(() {
+          _steps = 'Permiso denegado';
+        });
+      }
+    }
+  }
+
+  void _startStepCountStream() {
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
   }
 }
