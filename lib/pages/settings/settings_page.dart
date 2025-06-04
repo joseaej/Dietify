@@ -358,6 +358,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               trailing: Icon(Icons.chevron_right, color: Colors.grey),
             ),
+            SizedBox(height: 8.h),
           ],
         ),
       ),
