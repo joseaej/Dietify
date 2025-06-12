@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class RecipeRepository {
   Future<List<Recipe>> getAllRecipes() async {
-    String url = "https://foodfyapi-production.up.railway.app/recipes";
+    String url = "https://foodfyapi.onrender.com/recipes";
 
     try {
       final response = await http.get(Uri.parse(url));
