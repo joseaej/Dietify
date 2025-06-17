@@ -5,16 +5,16 @@ import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/models/providers/settings_provider.dart';
 import 'package:dietify/models/repository/profile_repository.dart';
 import 'package:dietify/models/workout.dart';
+import 'package:dietify/pages/test_page.dart';
 import 'package:dietify/service/auth_service.dart';
+import 'package:dietify/service/image_service.dart';
 import 'package:dietify/service/storage_service.dart';
 import 'package:dietify/pages/workout/workout_detail_page.dart';
-import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:dietify/widgets/achivements_item.dart';
 import 'package:dietify/widgets/workout_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,13 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late StorageService storageService;
   late AuthService authService;
   ProfileRepository repository = ProfileRepository();
-  XFile? photo;
-
-  @override
-  void initState() {
-    super.initState();
-    loadImageFromLocal();
-  }
+  late ImageService imageService;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +41,17 @@ class _ProfilePageState extends State<ProfilePage> {
     authService = Provider.of<AuthService>(context);
     settings = Provider.of<SettingsProvider>(context);
     achievementsProvider = Provider.of<AchievementsProvider>(context);
-
+    imageService = Provider.of<ImageService>(context);
+    imageService.loadImageFromLocal();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mi perfil"),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TestPage(),));
+          }, icon: Icon(Icons.search))
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
@@ -167,14 +167,14 @@ class _ProfilePageState extends State<ProfilePage> {
           child: CircleAvatar(
             radius: 30.sp,
             backgroundColor: blue,
-            backgroundImage: (photo != null)
-                ? FileImage(File(photo!.path))
+            backgroundImage: (imageService.photo != null)
+                ? FileImage(File(imageService.photo !.path))
                 : (profileProvider.profile?.urlPhoto != null &&
                         profileProvider.profile!.urlPhoto!.isNotEmpty)
                     ? NetworkImage(profileProvider.profile!.urlPhoto!)
                         as ImageProvider
                     : null,
-            child: (photo == null &&
+            child: (imageService.photo  == null &&
                     (profileProvider.profile?.urlPhoto?.isEmpty ?? true))
                 ? const Icon(Icons.camera_alt_rounded,
                     size: 40, color: Color.fromARGB(150, 255, 255, 255))
@@ -198,7 +198,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
   }
-
   void _showPhotoOptions() {
     showModalBottomSheet<void>(
       context: context,
@@ -217,51 +216,17 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               leading: const Icon(Icons.camera_alt, color: Colors.blue),
               title: const Text('Cámara'),
-              onTap: () => getImage(ImageSource.camera),
+              onTap: () => imageService.getImage(ImageSource.camera,profileProvider),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library, color: Colors.green),
               title: const Text('Galería'),
-              onTap: () => getImage(ImageSource.gallery),
+              onTap: () => imageService.getImage(ImageSource.gallery,profileProvider),
             ),
           ],
         ),
       ),
     );
   }
-
-  Future<void> getImage(ImageSource source) async {
-    try {
-      final pickedFile = await ImagePicker().pickImage(source: source);
-      if (pickedFile != null) {
-        await saveImageLocally(pickedFile);
-        setState(() {
-          photo = pickedFile;
-        });
-        final filePath = 'uploads/${DateTime.now().millisecondsSinceEpoch}.jpg';
-        final url =
-            await storageService.savePhotoToBucket(filePath, File(photo!.path));
-        profileProvider.updatePhotoUrl(url);
-        repository.updateProfile(profileProvider.profile!);
-        if (mounted) Navigator.pop(context);
-      }
-    } catch (e) {}
-  }
-
-  Future<void> saveImageLocally(XFile image) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/profile.jpg';
-    final localImage = File(path);
-    await localImage.writeAsBytes(await image.readAsBytes());
-    photo = XFile(localImage.path);
-    await SharedPreferenceService.saveProfilePhotoPath(path);
-  }
-
-  Future<void> loadImageFromLocal() async {
-    final savedPath = await SharedPreferenceService.getProfilePhotoPath();
-    if (savedPath != null && File(savedPath).existsSync()) {
-      photo = XFile(savedPath);
-      setState(() {});
-    }
-  }
+  
 }

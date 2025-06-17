@@ -11,6 +11,7 @@ import 'package:dietify/pages/profile/profile_page.dart';
 import 'package:dietify/pages/recipes/recipes_page.dart';
 import 'package:dietify/pages/settings/settings_page.dart';
 import 'package:dietify/service/auth_service.dart';
+import 'package:dietify/service/image_service.dart';
 import 'package:dietify/service/notification_service.dart';
 import 'package:dietify/service/shared_preference_service.dart';
 import 'package:dietify/service/storage_service.dart';
@@ -79,6 +80,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => WorkoutProvider()),
         ChangeNotifierProvider(create: (context) => AchievementsProvider()),
         ChangeNotifierProvider(create: (context) => RecipeProvider()),
+        ChangeNotifierProvider(create: (context) => ImageService()),
         ChangeNotifierProvider(create: (context) => StorageService()),
         ChangeNotifierProvider(
             create: (context) =>
