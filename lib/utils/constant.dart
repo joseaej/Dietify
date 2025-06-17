@@ -1,0 +1,1 @@
+const kTranslationModelV3 = "text-davinci-003";

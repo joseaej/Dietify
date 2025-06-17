@@ -1,7 +1,8 @@
 import 'package:dietify/models/providers/profile_provider.dart';
 import 'package:dietify/service/image_service.dart';
-import 'package:dietify/service/recognized_process_ia.dart';
+import 'package:dietify/service/ia_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +16,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   late ProfileProvider profileProvider;
   final ImageService imageService = ImageService();
-  final RecognizedProcessIAService recognizedProcessIAService =
-      RecognizedProcessIAService();
+  final IAService iaService = IAService();
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
@@ -36,10 +36,13 @@ class _TestPageState extends State<TestPage> {
               },
               child: Icon(Icons.show_chart)),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (imageService.photo != null) {
-                  recognizedProcessIAService
-                      .processImage(imageService.photo!.path);
+                  final iaTextRecognizerResponse =
+                      await iaService.processImage(imageService.photo!.path);
+                  final prompt =
+                      dotenv.env["IA_PROMPT"]! + iaTextRecognizerResponse;
+                  iaService.generatePrompt(context, prompt);
                 }
               },
               child: Text("Reconocer text"))
