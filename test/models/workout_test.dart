@@ -1,4 +1,4 @@
-import 'package:dietify/models/workout.dart';
+import 'package:dietify/domain/models/workout.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

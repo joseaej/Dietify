@@ -1,32 +1,34 @@
-import 'package:dietify/models/providers/achievements_provider.dart';
-import 'package:dietify/models/providers/goal_provider.dart';
-import 'package:dietify/models/providers/recipe_provider.dart';
-import 'package:dietify/models/providers/settings_provider.dart';
-import 'package:dietify/models/providers/workout_provider.dart';
-import 'package:dietify/pages/achivements/achivement_page.dart';
-import 'package:dietify/pages/auth/sign_up_page.dart';
-import 'package:dietify/pages/home/home_container.dart';
-import 'package:dietify/pages/permisions/permisions_handler_page.dart';
-import 'package:dietify/pages/profile/profile_page.dart';
-import 'package:dietify/pages/recipes/recipes_page.dart';
-import 'package:dietify/pages/settings/settings_page.dart';
-import 'package:dietify/service/auth_service.dart';
-import 'package:dietify/service/image_service.dart';
-import 'package:dietify/service/notification_service.dart';
-import 'package:dietify/service/shared_preference_service.dart';
-import 'package:dietify/service/storage_service.dart';
-import 'package:dietify/widgets/splash_page.dart';
+import 'package:dietify/domain/providers/achievements_provider.dart';
+import 'package:dietify/domain/providers/goal_provider.dart';
+import 'package:dietify/domain/providers/history_provider.dart';
+import 'package:dietify/domain/providers/recipe_provider.dart';
+import 'package:dietify/domain/providers/settings_provider.dart';
+import 'package:dietify/domain/providers/workout_provider.dart';
+import 'package:dietify/presentation/pages/achivements/achivement_page.dart';
+import 'package:dietify/presentation/pages/auth/sign_up_page.dart';
+import 'package:dietify/presentation/pages/home/home_container.dart';
+import 'package:dietify/presentation/pages/permisions/permisions_handler_page.dart';
+import 'package:dietify/presentation/pages/profile/profile_page.dart';
+import 'package:dietify/presentation/pages/recipes/recipes_page.dart';
+import 'package:dietify/presentation/pages/settings/settings_page.dart';
+import 'package:dietify/presentation/pages/workout/workout_page.dart';
+import 'package:dietify/data/service/auth_service.dart';
+import 'package:dietify/data/service/image_service.dart';
+import 'package:dietify/data/service/notification_service.dart';
+import 'package:dietify/data/service/shared_preference_service.dart';
+import 'package:dietify/data/service/storage_service.dart';
+import 'package:dietify/presentation/widgets/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'models/profile.dart';
-import 'models/providers/profile_provider.dart';
-import 'models/settings.dart';
-import 'pages/auth/login_page.dart';
-import 'pages/onboarding/onboarding_page.dart';
+import 'domain/models/profile.dart';
+import 'domain/providers/profile_provider.dart';
+import 'domain/models/settings.dart';
+import 'presentation/pages/auth/login_page.dart';
+import 'presentation/pages/onboarding/onboarding_page.dart';
 import 'utils/theme.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -78,6 +80,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => GoalProvider()),
         ChangeNotifierProvider(create: (context) => WorkoutProvider()),
+        ChangeNotifierProvider(create: (context) => HistoryProvider()),
         ChangeNotifierProvider(create: (context) => AchievementsProvider()),
         ChangeNotifierProvider(create: (context) => RecipeProvider()),
         ChangeNotifierProvider(create: (context) => ImageService()),
@@ -124,6 +127,7 @@ class MainApp extends StatelessWidget {
                 routes: {
                   '/home': (context) => HomeContainer(),
                   '/profile': (context) => ProfilePage(),
+                  '/workout': (context) => WorkoutPage(),
                   '/login': (context) => LoginScreen(),
                   '/signup': (context) => SignupPage(),
                   '/recipes': (context) => RecipePage(),

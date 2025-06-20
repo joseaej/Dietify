@@ -1,4 +1,4 @@
-import 'package:dietify/models/achievements.dart';
+import 'package:dietify/domain/models/achievements.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

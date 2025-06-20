@@ -1,4 +1,4 @@
-import 'package:dietify/models/settings.dart';
+import 'package:dietify/domain/models/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

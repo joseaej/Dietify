@@ -6,11 +6,11 @@
 import 'dart:async' as _i5;
 import 'dart:ui' as _i6;
 
-import 'package:dietify/models/providers/settings_provider.dart' as _i7;
-import 'package:dietify/models/providers/workout_provider.dart' as _i3;
-import 'package:dietify/models/repository/workout_repository.dart' as _i2;
-import 'package:dietify/models/settings.dart' as _i8;
-import 'package:dietify/models/workout.dart' as _i4;
+import 'package:dietify/domain/providers/settings_provider.dart' as _i7;
+import 'package:dietify/domain/providers/workout_provider.dart' as _i3;
+import 'package:dietify/domain/repository/workout_repository.dart' as _i2;
+import 'package:dietify/domain/models/settings.dart' as _i8;
+import 'package:dietify/domain/models/workout.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint

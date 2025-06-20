@@ -1,10 +1,10 @@
-import 'package:dietify/models/settings.dart';
-import 'package:dietify/pages/workout/workout_add.dart';
+import 'package:dietify/domain/models/settings.dart';
+import 'package:dietify/presentation/pages/workout/workout_add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:dietify/models/providers/workout_provider.dart';
-import 'package:dietify/models/providers/settings_provider.dart';
+import 'package:dietify/domain/providers/workout_provider.dart';
+import 'package:dietify/domain/providers/settings_provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
