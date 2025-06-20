@@ -108,13 +108,18 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   ),
                 ),
                 SizedBox(height: 2.h),
-                const Text(
-                  "Workout History",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Historial de entrenamientos",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 1.5.h),
                 Consumer<HistoryProvider>(
                   builder: (context, history, child) {
                     history.getHistoryFromLocal();
@@ -122,19 +127,39 @@ class _WorkoutPageState extends State<WorkoutPage> {
                       return Text(
                           "No has completado ningun entrenamiento todavia");
                     } else {
-                      return Column(
-                        children: history.history
-                            .map((entry) => WorkoutTile(
-                                  date: entry.formattedDate,
-                                  label: entry.label ?? "",
-                                  duration: entry.minutes ?? 0,
-                                ))
-                            .toList(),
+                      return SizedBox(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Column(
+                                children: history.history
+                                    .map((entry) => WorkoutTile(
+                                          date: entry.formattedDate,
+                                          label: entry.label ?? "",
+                                          duration: entry.minutes ?? 0,
+                                        ))
+                                    .toList()
+                                    .reversed
+                                    .toList()
+                                    .getRange(0, 3)
+                                    .toList(),
+                              ),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Ver historial completo",
+                                    style: TextStyle(
+                                      color: blue,
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        ),
                       );
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 4.h),
               ],
             ),
           ),
