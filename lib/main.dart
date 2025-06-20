@@ -99,11 +99,13 @@ class MainApp extends StatelessWidget {
         builder: (context, settingsProvider, child) {
           GoalProvider goalsProvider = context.read<GoalProvider>();
           WorkoutProvider workoutProvider = context.read<WorkoutProvider>();
+          HistoryProvider historyProvider = context.read<HistoryProvider>();
           AchievementsProvider achievementsProvider =
               context.read<AchievementsProvider>();
 
           SystemChannels.lifecycle.setMessageHandler((msg) async {
             if (msg == AppLifecycleState.paused.toString()) {
+              historyProvider.saveHistoryFromLocal();
               workoutProvider.getRandomWorkout();
               goalsProvider.savaGoalToLocal();
               workoutProvider.saveLastWorkout();

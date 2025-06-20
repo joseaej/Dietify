@@ -113,7 +113,6 @@ class SharedPreferenceService {
     final prefs = await SharedPreferences.getInstance();
     final List<String> achievementsJson =
         achievements.map((a) => jsonEncode(a.toMap())).toList();
-    debugPrint(achievementsJson.toString());
     await prefs.setStringList('achievements', achievementsJson);
   }
 
@@ -136,26 +135,19 @@ class SharedPreferenceService {
   }
 
   //history
-  static saveHistory(List<HistoryItem> history) async {
+  static Future<void> saveHistory(List<HistoryItem> history) async {
     final prefs = await SharedPreferences.getInstance();
-    final historyJson = history
-        .map(
-          (e) => jsonEncode(e.toMap()),
-        )
-        .toList();
-    await prefs.setStringList('history', historyJson);
+    List<String> encodedList =
+        history.map((item) => jsonEncode(item.toMap())).toList();
+    await prefs.setStringList('history', encodedList);
   }
 
   static Future<List<HistoryItem>> loadHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? historyJson = prefs.getStringList('history');
-
-    if (historyJson != null) {
-      return historyJson
-          .map((jsonStr) => HistoryItem.fromMap(jsonDecode(jsonStr)))
-          .toList();
-    } else {
-      return [];
-    }
+    List<String>? encodedList = prefs.getStringList('history');
+    if (encodedList == null) return [];
+    return encodedList
+        .map((item) => HistoryItem.fromMap(jsonDecode(item)))
+        .toList();
   }
 }

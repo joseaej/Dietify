@@ -1,7 +1,9 @@
 import 'package:dietify/domain/providers/history_provider.dart';
+import 'package:dietify/presentation/widgets/charts/daily_chart.dart';
+import 'package:dietify/presentation/widgets/charts/monthly_chart.dart';
+import 'package:dietify/presentation/widgets/charts/weekly_chart.dart';
 import 'package:dietify/utils/theme.dart';
 import 'package:dietify/presentation/widgets/workout_tile.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -18,6 +20,10 @@ class WorkoutPage extends StatefulWidget {
 
 class _WorkoutPageState extends State<WorkoutPage> {
   late HistoryProvider historyProvider;
+  String label = "";
+  bool isDailyPresed = true;
+  bool isWeeklyPresed = false;
+  bool isMonthlyPResed = false;
   @override
   Widget build(BuildContext context) {
     historyProvider = Provider.of<HistoryProvider>(context);
@@ -36,9 +42,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextButton(onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutListPage(),));
-                }, child: Text("dsa")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WorkoutListPage(),
+                          ));
+                    },
+                    child: Text("dsa")),
                 const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
@@ -48,85 +60,80 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          FilterChipWidget(label: "Day",selected: true,),
-                          FilterChipWidget(label: "Week", selected: false),
-                          FilterChipWidget(label: "Month"),
+                          FilterChipWidget(
+                            label: "Diario",
+                            selected: isDailyPresed,
+                            onTap: () {
+                              setState(() {
+                                isDailyPresed = true;
+                                isMonthlyPResed = false;
+                                isWeeklyPresed = false;
+                                label = "Diario";
+                              });
+                            },
+                          ),
+                          FilterChipWidget(
+                            label: "Semanal",
+                            selected: isWeeklyPresed,
+                            onTap: () {
+                              setState(() {
+                                isDailyPresed = false;
+                                isMonthlyPResed = false;
+                                isWeeklyPresed = true;
+                                label = "Semanal";
+                              });
+                            },
+                          ),
+                          FilterChipWidget(
+                            label: "Mensual",
+                            selected: isMonthlyPResed,
+                            onTap: () {
+                              setState(() {
+                                isDailyPresed = false;
+                                isMonthlyPResed = true;
+                                isWeeklyPresed = false;
+                                label = "Mensual";
+                              });
+                            },
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 180,
-                        child: BarChart(
-                          BarChartData(
-                            borderData: FlBorderData(show: false),
-                            titlesData: FlTitlesData(
-                              bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  getTitlesWidget: (value, meta) {
-                                    const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-                                    return Text(
-                                      days[value.toInt()],
-                                      style: const TextStyle(color: font),
-                                    );
-                                  },
-                                  interval: 1,
-                                ),
-                              ),
-                              leftTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                              topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                              rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                            ),
-                            barGroups: [
-                              for (int i = 0; i < 7; i++)
-                                BarChartGroupData(
-                                  x: i,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: (i + 1) * 2.0,
-                                      color: blue,
-                                      width: 14,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                  ],
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
+                      SizedBox(height: 3.h),
+                      _buildChart(label),
+                      SizedBox(height: 2.h),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 2.h),
                 const Text(
                   "Workout History",
-                  style: TextStyle(fontSize: 20,),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
                 const SizedBox(height: 12),
-                Consumer<HistoryProvider>(builder: (context, history, child) {
-                  history.getHistoryFromLocal();
-                  if (history.history.isEmpty) {
-                    return Text("No has completado ningun entrenamiento todavia");
-                  } else {
-                    return Column(
-                      children: history.history.map((entry) => WorkoutTile(
-                        date: entry.date!.toIso8601String(),
-                        label: entry.label??"",
-                        duration: entry.minutes??0,
-                      )).toList(),
-                    );
-                  }
-                  
-                },),
+                Consumer<HistoryProvider>(
+                  builder: (context, history, child) {
+                    history.getHistoryFromLocal();
+                    if (history.history.isEmpty) {
+                      return Text(
+                          "No has completado ningun entrenamiento todavia");
+                    } else {
+                      return Column(
+                        children: history.history
+                            .map((entry) => WorkoutTile(
+                                  date: entry.formattedDate,
+                                  label: entry.label ?? "",
+                                  duration: entry.minutes ?? 0,
+                                ))
+                            .toList(),
+                      );
+                    }
+                  },
+                ),
                 SizedBox(height: 20),
               ],
             ),
@@ -134,5 +141,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildChart(String label) {
+    switch (label) {
+      case 'Mensual':
+        return MonthlyChart();
+      case 'Semanal':
+        return WeeklyChart();
+      default:
+        return DailyChart();
+    }
   }
 }
